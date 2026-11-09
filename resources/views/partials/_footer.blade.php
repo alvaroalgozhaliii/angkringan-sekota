@@ -4,7 +4,7 @@
             <div>
                 <div class="footer-brand">
                     <div class="footer-logo-circle">
-                        <span>🏠</span>
+                        <img src="{{ $profil->logo_url ?? asset('images/logo.png') }}" alt="{{ $profil->nama_usaha ?? 'Angkringan Sekota' }}">
                     </div>
                     <div>
                         <div class="footer-brand-text">{{ $profil->nama_usaha ?? 'Angkringan Sekota' }}</div>

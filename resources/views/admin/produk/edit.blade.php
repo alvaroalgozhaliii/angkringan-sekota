@@ -47,7 +47,7 @@
             <label class="form-label">Foto Produk</label>
             @if($produk->gambar)
                 <div style="margin-bottom:.6rem">
-                    <img src="{{ asset('storage/'.$produk->gambar) }}" style="max-width:120px;border-radius:8px;border:1px solid var(--border)">
+                    <img src="{{ $produk->gambar_url }}" style="max-width:120px;border-radius:8px;border:1px solid var(--border);background:#f9f9f9;padding:4px">
                     <div style="font-size:.75rem;color:var(--muted);margin-top:.25rem">Foto saat ini</div>
                 </div>
             @endif

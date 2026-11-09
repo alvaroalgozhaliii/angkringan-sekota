@@ -12,8 +12,8 @@
         .split-left{width:420px;background:#C8102E;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:3rem 2.5rem;min-height:100vh;position:relative;overflow:hidden;flex-shrink:0}
         .split-left::before{content:'';position:absolute;top:-30%;left:-30%;width:80%;height:80%;background:radial-gradient(ellipse,rgba(255,255,255,.08) 0%,transparent 70%);border-radius:50%}
         .split-left::after{content:'';position:absolute;bottom:-20%;right:-20%;width:60%;height:60%;background:radial-gradient(ellipse,rgba(0,0,0,.12) 0%,transparent 70%);border-radius:50%}
-        .brand-logo{width:90px;height:90px;background:#fff;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;margin-bottom:1.5rem;box-shadow:0 10px 30px rgba(0,0,0,.2);position:relative;z-index:1}
-        .brand-logo-emoji{font-size:2.2rem;line-height:1}
+        .brand-logo{width:90px;height:90px;background:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:1.5rem;box-shadow:0 10px 30px rgba(0,0,0,.2);position:relative;z-index:1;overflow:hidden;padding:4px}
+        .brand-logo img{width:100%;height:100%;object-fit:contain;border-radius:50%}
         .brand-name{font-size:1.6rem;font-weight:800;color:#fff;text-transform:uppercase;letter-spacing:.04em;line-height:1.1;text-align:center;position:relative;z-index:1;margin-bottom:.5rem}
         .brand-sub{font-size:.88rem;color:rgba(255,255,255,.75);text-align:center;position:relative;z-index:1}
         .brand-desc{margin-top:2rem;font-size:.8rem;color:rgba(255,255,255,.65);text-align:center;line-height:1.7;position:relative;z-index:1;max-width:280px}
@@ -42,7 +42,7 @@
 
 <div class="split-left">
     <div class="brand-logo">
-        <span class="brand-logo-emoji">🏠</span>
+        <img src="{{ asset('images/logo.png') }}" alt="Angkringan Sekota">
     </div>
     <div class="brand-name">Angkringan<br>Sekota</div>
     <div class="brand-sub">Tulungagung</div>

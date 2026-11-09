@@ -71,17 +71,25 @@
             cursor: pointer;
         }
         .navbar-logo-circle {
-            width: 42px; height: 42px;
+            width: 44px; height: 44px;
             background: var(--white);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            border: 2px solid rgba(255,255,255,0.3);
+            border: 2px solid rgba(255,255,255,0.4);
             overflow: hidden;
             flex-shrink: 0;
+            padding: 2px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
         }
-        .navbar-logo-circle svg { width: 28px; height: 28px; }
+        .navbar-logo-circle img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border-radius: 50%;
+            display: block;
+        }
         .navbar-brand-text {
             color: var(--white);
             font-size: 0.85rem;
@@ -373,21 +381,26 @@
         .btn-outline:hover { background: rgba(255,255,255,0.15); border-color: var(--white); transform: translateY(-2px); }
         .hero-logo-wrap { flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
         .hero-logo-circle {
-            width: 200px; height: 200px;
+            width: 230px; height: 230px;
             background: var(--white);
             border-radius: 50%;
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
-            border: 6px solid rgba(255,255,255,0.3);
-            box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+            border: 6px solid rgba(255,255,255,0.35);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.28);
             animation: float 3s ease-in-out infinite;
+            overflow: hidden;
+            padding: 8px;
         }
         @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
-        .hero-logo-icon { font-size: 3.5rem; line-height: 1; margin-bottom: 0.5rem; }
-        .hero-logo-text { font-size: 0.75rem; font-weight: 800; color: var(--red); text-transform: uppercase; letter-spacing: 0.15em; text-align: center; line-height: 1.3; }
-        .hero-logo-sub  { font-size: 0.6rem; font-weight: 600; color: var(--red-dark); text-transform: uppercase; letter-spacing: 0.1em; }
+        .hero-logo-circle img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border-radius: 50%;
+            display: block;
+        }
 
         /* Produk terlaris strip (inside beranda page, cream bg) */
         .bestsellers {
@@ -1259,8 +1272,10 @@
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
+            overflow: hidden;
+            padding: 2px;
         }
-        .footer-logo-circle span { font-size: 1.5rem; }
+        .footer-logo-circle img { width: 100%; height: 100%; object-fit: contain; border-radius: 50%; display: block; }
         .footer-brand-text { font-size: 0.85rem; font-weight: 700; color: var(--white); text-transform: uppercase; letter-spacing: 0.05em; line-height: 1.3; }
         .footer-brand-sub { font-size: 0.7rem; font-weight: 400; color: rgba(255,255,255,0.7); }
         .footer-desc { font-size: 0.82rem; line-height: 1.7; color: rgba(255,255,255,0.75); }
@@ -1333,10 +1348,7 @@
 <nav class="navbar" id="navbar">
     <a class="navbar-brand" onclick="goTo('beranda')">
         <div class="navbar-logo-circle">
-            <svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="30" cy="30" r="30" fill="#C8102E"/>
-                <path d="M30 12L10 28h6v18h10V35h8v11h10V28h6L30 12z" fill="white"/>
-            </svg>
+            <img src="{{ $profil->logo_url ?? asset('images/logo.png') }}" alt="{{ $profil->nama_usaha ?? 'Angkringan Sekota' }}">
         </div>
         <div class="navbar-brand-text">Angkringan<br><span style="font-size:.95em">Sekota</span></div>
     </a>
@@ -1382,9 +1394,7 @@
             </div>
             <div class="hero-logo-wrap">
                 <div class="hero-logo-circle">
-                    <div class="hero-logo-icon">🏠</div>
-                    <div class="hero-logo-text">ANGKRINGAN</div>
-                    <div class="hero-logo-sub">SEKOTA</div>
+                    <img src="{{ $profil->logo_url ?? asset('images/logo.png') }}" alt="{{ $profil->nama_usaha ?? 'Angkringan Sekota' }}">
                 </div>
             </div>
         </div>

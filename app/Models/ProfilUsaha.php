@@ -13,6 +13,23 @@ class ProfilUsaha extends Model
     ];
 
     /**
+     * Get logo URL helper
+     */
+    public function getLogoUrlAttribute(): string
+    {
+        if ($this->logo) {
+            if (str_starts_with($this->logo, 'http')) {
+                return $this->logo;
+            }
+            if (str_starts_with($this->logo, 'images/')) {
+                return asset($this->logo);
+            }
+            return asset('storage/' . $this->logo);
+        }
+        return asset('images/logo.png');
+    }
+
+    /**
      * Get singleton profile (always use record ID 1)
      */
     public static function getSingleton(): self

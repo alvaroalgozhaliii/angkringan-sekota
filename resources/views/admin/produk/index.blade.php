@@ -31,7 +31,7 @@
                     <td>
                         <div style="display:flex;align-items:center;gap:.75rem">
                             @if($p->gambar)
-                                <img src="{{ asset('storage/'.$p->gambar) }}" style="width:40px;height:40px;border-radius:8px;object-fit:cover">
+                                <img src="{{ $p->gambar_url }}" style="width:40px;height:40px;border-radius:8px;object-fit:contain;background:#F9F9F9;padding:2px">
                             @else
                                 <div style="width:40px;height:40px;border-radius:8px;background:#F3F4F6;display:flex;align-items:center;justify-content:center;font-size:1.2rem">🍽️</div>
                             @endif
