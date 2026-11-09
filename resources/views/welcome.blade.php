@@ -1236,17 +1236,43 @@
         .info-item { display: flex; align-items: flex-start; gap: 0.75rem; font-size: 0.88rem; color: var(--text-gray); }
         .info-item .ico { font-size: 1rem; flex-shrink: 0; margin-top: 1px; }
         .map-box {
-            background: var(--cream-dark);
+            background: #e5e3df;
             border-radius: 12px;
-            height: 220px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-top: 1rem;
-            border: 2px dashed rgba(200,16,46,0.2);
+            height: 320px;
+            width: 100%;
+            margin-top: 0.75rem;
+            border: 1px solid rgba(0,0,0,0.08);
+            box-shadow: inset 0 2px 6px rgba(0,0,0,0.06);
             overflow: hidden;
+            position: relative;
         }
-        .map-box iframe { width: 100%; height: 100%; border: none; border-radius: 12px; }
+        .map-box iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: block;
+        }
+        .btn-open-maps {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: var(--cream);
+            color: var(--red);
+            border: 1px solid rgba(200,16,46,0.25);
+            padding: 0.45rem 0.85rem;
+            border-radius: 8px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+        .btn-open-maps:hover {
+            background: var(--red);
+            color: var(--white);
+            border-color: var(--red);
+            transform: translateY(-1px);
+        }
 
         /* ===================================================
            FOOTER (shared in every page)
@@ -1648,8 +1674,14 @@
             <div>
                 <div class="contact-card">
                     <h4><span class="ico">💬</span> WhatsApp</h4>
-                    <div class="contact-wa-num">0812-3456-7890</div>
-                    <a href="https://wa.me/6281358391267" target="_blank" class="btn-wa">
+                    <div class="contact-wa-num">{{ $profil->whatsapp ?? '0812-3456-7890' }}</div>
+                    @php
+                        $cleanWa = preg_replace('/[^0-9]/', '', $profil->whatsapp ?? '6281234567890');
+                        if (str_starts_with($cleanWa, '0')) {
+                            $cleanWa = '62' . substr($cleanWa, 1);
+                        }
+                    @endphp
+                    <a href="https://wa.me/{{ $cleanWa }}" target="_blank" class="btn-wa">
                         💬&nbsp;Chat WhatsApp
                     </a>
                 </div>
@@ -1659,33 +1691,61 @@
                     <div class="info-list">
                         <div class="info-item">
                             <span class="ico">📍</span>
-                            <span>Jl. Contoh No. 123, Tulungagung, Jawa Timur</span>
+                            <span>{{ $profil->alamat ?? 'Tulungagung, Jawa Timur' }}</span>
                         </div>
                         <div class="info-item">
                             <span class="ico">🕐</span>
-                            <span>Senin – Minggu: 17.00 – 23.00 WIB</span>
+                            <span>{{ $profil->jam_buka ?? '17.00 – 23.00 WIB' }}</span>
                         </div>
+                        @if(!empty($profil->instagram))
                         <div class="info-item">
                             <span class="ico">📸</span>
-                            <span>@angkringan.sekota</span>
+                            <span>{{ $profil->instagram }}</span>
                         </div>
+                        @endif
+                        @if(!empty($profil->facebook))
                         <div class="info-item">
                             <span class="ico">📘</span>
-                            <span>Angkringan Sekota Tulungagung</span>
+                            <span>{{ $profil->facebook }}</span>
                         </div>
+                        @endif
                     </div>
                 </div>
             </div>
 
             <div>
-                <div class="contact-card" style="height:100%">
-                    <h4><span class="ico">🗺️</span> Lokasi Kami</h4>
-                    <div class="map-box">
-                        <span style="color:#aaa;font-size:0.9rem">📍 Peta Google Maps</span>
+                <div class="contact-card" style="height:100%; display: flex; flex-direction: column;">
+                    <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom: 0.25rem;">
+                        <h4 style="margin-bottom:0;"><span class="ico">🗺️</span> Lokasi Kami</h4>
+                        <span style="font-size:0.75rem; color:#059669; font-weight:600; display:inline-flex; align-items:center; gap:5px; background:#ECFDF5; padding:3px 8px; border-radius:20px;">
+                            <span style="width:7px; height:7px; background:#10B981; border-radius:50%; display:inline-block;"></span> Interaktif
+                        </span>
                     </div>
-                    <p style="font-size:0.8rem;color:var(--text-gray);margin-top:0.75rem;line-height:1.6">
-                        Temukan kami di Google Maps dengan kata kunci <strong>"Angkringan Sekota Tulungagung"</strong>
-                    </p>
+
+                    <div class="map-box">
+                        <iframe 
+                            src="https://maps.google.com/maps?q=-8.0593353,111.9106113&hl=id&z=17&output=embed"
+                            width="100%" 
+                            height="100%" 
+                            style="border:0;" 
+                            allowfullscreen="" 
+                            loading="lazy" 
+                            referrerpolicy="no-referrer-when-downgrade">
+                        </iframe>
+                    </div>
+
+                    <div style="display:flex; align-items:center; justify-content:space-between; margin-top:0.85rem; gap:0.5rem; flex-wrap:wrap;">
+                        <p style="font-size:0.8rem;color:var(--text-gray);line-height:1.5;margin:0;flex:1;">
+                            📍 <strong>Sekota Everyday (24 JAM)</strong>
+                            <br><span style="font-size:0.75rem;color:#888;">Tulungagung &bull; Peta dapat digeser &amp; di-zoom langsung.</span>
+                        </p>
+                        <a href="https://maps.app.goo.gl/NyuN7yDHJ21HJt4L7" 
+                           target="_blank" 
+                           class="btn-open-maps" 
+                           title="Buka rute di aplikasi Google Maps">
+                            Buka di Maps ↗
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
