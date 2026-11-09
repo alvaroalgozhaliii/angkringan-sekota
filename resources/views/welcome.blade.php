@@ -44,6 +44,8 @@
             align-items: center;
             justify-content: space-between;
             box-shadow: 0 2px 16px rgba(0,0,0,0.18);
+            user-select: none;
+            -webkit-user-select: none;
         }
         .navbar-brand {
             display: flex;
@@ -91,6 +93,8 @@
             border: none;
             background: none;
             font-family: 'Poppins', sans-serif;
+            user-select: none;
+            -webkit-user-select: none;
         }
         .navbar-nav a:hover { background: rgba(255,255,255,0.15); color: var(--white); }
         .navbar-nav a.active  { background: rgba(255,255,255,0.22); color: var(--white); font-weight: 600; }
@@ -140,13 +144,13 @@
             font-family: 'Poppins', sans-serif;
             width: 100%;
             text-align: left;
+            user-select: none;
+            -webkit-user-select: none;
         }
         .mobile-menu ul a:hover, .mobile-menu ul a.active { background: rgba(255,255,255,0.18); }
 
         /* ===================================================
-           PAGE SYSTEM
-           All pages sit below navbar, fill the viewport.
-           Slide from right → active, exit to left.
+           PAGE SYSTEM (Smooth Bidirectional Slider)
            =================================================== */
         .page {
             position: fixed;
@@ -154,25 +158,50 @@
             left: 0; right: 0; bottom: 0;
             overflow-y: auto;
             overflow-x: hidden;
-            /* Start off-screen to the right */
-            transform: translateX(100%);
-            transition: transform 0.38s cubic-bezier(0.4, 0, 0.2, 1);
-            will-change: transform;
+            opacity: 0;
+            visibility: hidden;
             pointer-events: none;
+            transform: translateX(100%);
+            transition: transform 0.48s cubic-bezier(0.22, 1, 0.36, 1),
+                        opacity 0.42s cubic-bezier(0.22, 1, 0.36, 1),
+                        visibility 0.48s;
+            will-change: transform, opacity;
         }
         .page.active {
+            opacity: 1;
+            visibility: visible;
             transform: translateX(0);
-            pointer-events: all;
+            pointer-events: auto;
         }
-        .page.exiting {
-            transform: translateX(-22%);
+        /* Forward movement: current exits left, new enters from right */
+        .page.exit-left {
+            opacity: 0;
+            visibility: visible;
+            transform: translateX(-15%);
+            pointer-events: none;
+        }
+        .page.enter-right {
+            opacity: 0;
+            visibility: visible;
+            transform: translateX(20%);
+            pointer-events: none;
+        }
+        /* Backward movement: current exits right, new enters from left */
+        .page.exit-right {
+            opacity: 0;
+            visibility: visible;
+            transform: translateX(15%);
+            pointer-events: none;
+        }
+        .page.enter-left {
+            opacity: 0;
+            visibility: visible;
+            transform: translateX(-20%);
             pointer-events: none;
         }
         .page.no-anim {
             transition: none !important;
         }
-        /* Beranda starts visible */
-        #page-beranda { transform: translateX(0); pointer-events: all; }
 
         /* ===================================================
            PAGE HEADER BANNER (merah, like the screenshot)
@@ -786,12 +815,6 @@
             <h2>Menu Kami</h2>
             <p>Pilihan lauk, sate, dan minuman khas angkringan.</p>
         </div>
-        <div class="page-banner-logo">
-            <svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="30" cy="30" r="30" fill="#C8102E"/>
-                <path d="M30 12L10 28h6v18h10V35h8v11h10V28h6L30 12z" fill="white"/>
-            </svg>
-        </div>
     </div>
 
     <div class="menu-content">
@@ -908,12 +931,6 @@
             <h2>Tentang Kami</h2>
             <p>Warung angkringan khas Jawa Timur sejak bertahun-tahun.</p>
         </div>
-        <div class="page-banner-logo">
-            <svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="30" cy="30" r="30" fill="#C8102E"/>
-                <path d="M30 12L10 28h6v18h10V35h8v11h10V28h6L30 12z" fill="white"/>
-            </svg>
-        </div>
     </div>
 
     <div class="about-content-wrap">
@@ -972,12 +989,6 @@
         <div class="page-banner-text">
             <h2>Lokasi &amp; Kontak</h2>
             <p>Temukan kami dan hubungi langsung via WhatsApp.</p>
-        </div>
-        <div class="page-banner-logo">
-            <svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="30" cy="30" r="30" fill="#C8102E"/>
-                <path d="M30 12L10 28h6v18h10V35h8v11h10V28h6L30 12z" fill="white"/>
-            </svg>
         </div>
     </div>
 
@@ -1044,31 +1055,48 @@ let busy = false;
 
 function goTo(pageId) {
     if (pageId === currentPage || busy) return;
+
+    const fromIdx = PAGE_ORDER.indexOf(currentPage);
+    const toIdx   = PAGE_ORDER.indexOf(pageId);
+    if (toIdx === -1) return;
+
     busy = true;
 
-    const fromEl = document.getElementById('page-' + currentPage);
-    const toEl   = document.getElementById('page-' + pageId);
+    const fromEl    = document.getElementById('page-' + currentPage);
+    const toEl      = document.getElementById('page-' + pageId);
+    const isForward = toIdx > fromIdx;
 
-    // Slide current page out to the left
-    fromEl.classList.add('exiting');
-    fromEl.classList.remove('active');
+    // 1. Siapkan posisi awal toEl tanpa transisi
+    toEl.classList.add('no-anim');
+    toEl.classList.remove('active', 'exit-left', 'exit-right', 'enter-left', 'enter-right');
+    toEl.classList.add(isForward ? 'enter-right' : 'enter-left');
+    toEl.scrollTop = 0; // reset scroll ke atas
 
-    // Slide new page in from the right
-    toEl.classList.add('active');
-    toEl.scrollTop = 0; // reset scroll position
+    // Force reflow agar posisi awal terdaftar di browser
+    void toEl.offsetWidth;
+
+    // 2. Aktifkan kembali animasi dan luncurkan transisi
+    toEl.classList.remove('no-anim');
+
+    fromEl.classList.remove('active', 'enter-left', 'enter-right');
+    fromEl.classList.add(isForward ? 'exit-left' : 'exit-right');
+
+    requestAnimationFrame(() => {
+        toEl.classList.remove('enter-right', 'enter-left');
+        toEl.classList.add('active');
+    });
 
     currentPage = pageId;
     updateNav(pageId);
 
-    // After animation finishes, reset the old page off-screen (right)
+    // 3. Bersihkan state setelah animasi selesai
     setTimeout(() => {
-        fromEl.classList.remove('exiting');
+        fromEl.classList.remove('exit-left', 'exit-right', 'active');
         fromEl.classList.add('no-anim');
-        // force reflow so the transition won't fire when resetting
         void fromEl.offsetWidth;
         fromEl.classList.remove('no-anim');
         busy = false;
-    }, 420);
+    }, 500);
 }
 
 function updateNav(pageId) {
