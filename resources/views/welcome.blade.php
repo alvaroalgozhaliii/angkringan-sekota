@@ -423,9 +423,26 @@
             transition: all 0.28s;
         }
         .product-card:hover { transform: translateY(-5px); box-shadow: 0 14px 36px rgba(0,0,0,0.14); }
-        .product-card-img { width: 100%; aspect-ratio: 1; overflow: hidden; background: var(--cream); }
-        .product-card-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s; }
-        .product-card:hover .product-card-img img { transform: scale(1.08); }
+        .product-card-img {
+            width: 100%;
+            aspect-ratio: 1;
+            overflow: hidden;
+            background: linear-gradient(145deg, #FAF4EF 0%, #F5ECE4 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.65rem;
+        }
+        .product-card-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            transition: transform 0.35s ease;
+            filter: drop-shadow(0 6px 14px rgba(0,0,0,0.12));
+        }
+        .product-card:hover .product-card-img img {
+            transform: scale(1.08) translateY(-2px);
+        }
         .product-card-body { padding: 0.9rem 1rem; }
         .product-card-name { font-size: 0.88rem; font-weight: 600; color: var(--text-dark); margin-bottom: 0.4rem; line-height: 1.3; }
         .product-card-footer {
@@ -1383,9 +1400,9 @@
                 @forelse($produk->take(6) as $item)
                 <div class="product-card">
                     <div class="product-card-img">
-                        <img src="{{ $item->gambar ? asset('storage/'.$item->gambar) : asset('images/menu/placeholder.jpg') }}"
+                        <img src="{{ $item->gambar_url }}"
                              alt="{{ $item->nama }}"
-                             onerror="this.src='https://images.unsplash.com/photo-1565299507177-b0ac66763828?w=400&q=80'">
+                             loading="lazy">
                     </div>
                     <div class="product-card-body">
                         <div class="product-card-name">{{ $item->nama }}</div>
@@ -1460,9 +1477,9 @@
                 @foreach($pMakanan as $item)
                 <div class="product-card">
                     <div class="product-card-img">
-                        <img src="{{ $item->gambar ? asset('storage/'.$item->gambar) : asset('images/menu/placeholder.jpg') }}"
+                        <img src="{{ $item->gambar_url }}"
                              alt="{{ $item->nama }}"
-                             onerror="this.src='https://images.unsplash.com/photo-1565299507177-b0ac66763828?w=400&q=80'">
+                             loading="lazy">
                     </div>
                     <div class="product-card-body">
                         <div class="product-card-name">{{ $item->nama }}</div>
@@ -1490,9 +1507,9 @@
                 @foreach($pMinuman as $item)
                 <div class="product-card">
                     <div class="product-card-img">
-                        <img src="{{ $item->gambar ? asset('storage/'.$item->gambar) : asset('images/menu/placeholder.jpg') }}"
+                        <img src="{{ $item->gambar_url }}"
                              alt="{{ $item->nama }}"
-                             onerror="this.src='https://images.unsplash.com/photo-1544145945-f90425340c7e?w=400&q=80'">
+                             loading="lazy">
                     </div>
                     <div class="product-card-body">
                         <div class="product-card-name">{{ $item->nama }}</div>
@@ -1520,9 +1537,9 @@
                 @foreach($pLainnya as $item)
                 <div class="product-card">
                     <div class="product-card-img">
-                        <img src="{{ $item->gambar ? asset('storage/'.$item->gambar) : asset('images/menu/placeholder.jpg') }}"
+                        <img src="{{ $item->gambar_url }}"
                              alt="{{ $item->nama }}"
-                             onerror="this.src='https://images.unsplash.com/photo-1565299507177-b0ac66763828?w=400&q=80'">
+                             loading="lazy">
                     </div>
                     <div class="product-card-body">
                         <div class="product-card-name">{{ $item->nama }}</div>
