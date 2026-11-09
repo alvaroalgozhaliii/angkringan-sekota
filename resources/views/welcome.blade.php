@@ -11,7 +11,16 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
     <style>
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            caret-color: transparent !important;
+        }
+
+        input, textarea, select, [contenteditable="true"] {
+            caret-color: auto !important;
+        }
 
         :root {
             --red:        #C8102E;
@@ -28,6 +37,13 @@
             font-family: 'Poppins', sans-serif;
             color: var(--text-dark);
             overflow: hidden; /* pages scroll individually */
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        input, textarea, select {
+            -webkit-user-select: auto;
+            user-select: auto;
         }
 
         /* ===================================================
@@ -412,7 +428,592 @@
         .product-card:hover .product-card-img img { transform: scale(1.08); }
         .product-card-body { padding: 0.9rem 1rem; }
         .product-card-name { font-size: 0.88rem; font-weight: 600; color: var(--text-dark); margin-bottom: 0.4rem; line-height: 1.3; }
-        .product-card-price { display: inline-block; background: var(--red); color: var(--white); font-size: 0.76rem; font-weight: 700; padding: 0.22rem 0.8rem; border-radius: 20px; }
+        .product-card-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.5rem;
+            margin-top: 0.6rem;
+        }
+        .product-card-price {
+            display: inline-block;
+            background: var(--red);
+            color: var(--white);
+            font-size: 0.76rem;
+            font-weight: 700;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            white-space: nowrap;
+        }
+        .btn-pesan-item {
+            background: #FFF0F2;
+            color: var(--red);
+            border: 1.5px solid var(--red);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            white-space: nowrap;
+        }
+        .btn-pesan-item:hover {
+            background: var(--red);
+            color: var(--white);
+            transform: scale(1.04);
+            box-shadow: 0 4px 12px rgba(200,16,46,0.25);
+        }
+        .btn-pesan-item:active { transform: scale(0.96); }
+        .btn-pesan-item.added {
+            background: #059669;
+            color: #fff;
+            border-color: #059669;
+        }
+
+        /* ── FLOATING CART BAR ── */
+        .cart-bar {
+            position: fixed;
+            bottom: 1.25rem;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--red);
+            color: var(--white);
+            padding: 0.75rem 1.25rem;
+            border-radius: 50px;
+            box-shadow: 0 10px 32px rgba(0,0,0,0.35);
+            z-index: 1050;
+            width: calc(100% - 2.5rem);
+            max-width: 480px;
+            transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+            animation: cartPop 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        @keyframes cartPop {
+            from { transform: translate(-50%, 40px); opacity: 0; }
+            to { transform: translate(-50%, 0); opacity: 1; }
+        }
+        .cart-bar-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            width: 100%;
+        }
+        .cart-bar-info {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            cursor: pointer;
+        }
+        .cart-icon {
+            font-size: 1.3rem;
+            background: rgba(255,255,255,0.2);
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .cart-bar-info strong {
+            font-size: 0.88rem;
+            font-weight: 700;
+            display: block;
+            line-height: 1.2;
+        }
+        .cart-total-price {
+            font-size: 0.8rem;
+            color: rgba(255,255,255,0.85);
+        }
+        .btn-cart-view {
+            background: var(--white);
+            color: var(--red);
+            border: none;
+            padding: 0.5rem 1.1rem;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 0.82rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: 'Poppins', sans-serif;
+            white-space: nowrap;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+        }
+        .btn-cart-view:hover {
+            background: #FFF0F2;
+            transform: scale(1.03);
+        }
+
+        /* ── ORDER MODAL ── */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.25s ease;
+        }
+        .modal-overlay.open {
+            opacity: 1;
+            visibility: visible;
+        }
+        .modal-box {
+            background: var(--white);
+            border-radius: 20px;
+            width: 100%;
+            max-width: 520px;
+            max-height: 90vh;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.35);
+            overflow: hidden;
+            transform: translateY(20px) scale(0.97);
+            transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .modal-overlay.open .modal-box {
+            transform: translateY(0) scale(1);
+        }
+        .modal-header {
+            padding: 1rem 1.25rem;
+            background: #FFF5F6;
+            border-bottom: 1.5px solid #FEE2E2;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .modal-title {
+            font-size: 1rem;
+            font-weight: 800;
+            color: var(--red);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .btn-close-modal {
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            color: #888;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+        .btn-close-modal:hover { background: #FEE2E2; color: var(--red); }
+        .modal-body {
+            padding: 1.25rem;
+            overflow-y: auto;
+            flex: 1;
+        }
+        .order-items-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.65rem;
+            margin-bottom: 1.15rem;
+        }
+        .order-item-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.65rem 0.85rem;
+            background: #FAFAFA;
+            border: 1px solid #EBEBEB;
+            border-radius: 12px;
+            gap: 0.75rem;
+        }
+        .order-item-info {
+            flex: 1;
+            min-width: 0;
+        }
+        .order-item-name {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .order-item-price {
+            font-size: 0.75rem;
+            color: var(--text-gray);
+        }
+        .order-qty-control {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+        .btn-qty {
+            width: 26px;
+            height: 26px;
+            border-radius: 6px;
+            border: 1px solid #DDD;
+            background: #fff;
+            color: var(--text-dark);
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            transition: all 0.15s;
+        }
+        .btn-qty:hover {
+            background: var(--red);
+            border-color: var(--red);
+            color: #fff;
+        }
+        .order-qty-val {
+            font-size: 0.85rem;
+            font-weight: 700;
+            min-width: 20px;
+            text-align: center;
+        }
+        .order-item-subtotal {
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: var(--red);
+            min-width: 70px;
+            text-align: right;
+        }
+        .btn-del-item {
+            background: none;
+            border: none;
+            color: #DC2626;
+            cursor: pointer;
+            font-size: 0.95rem;
+            padding: 2px 4px;
+            border-radius: 4px;
+        }
+        .btn-del-item:hover {
+            background: #FEE2E2;
+        }
+        .order-empty-state {
+            text-align: center;
+            padding: 2rem 1rem;
+            color: var(--text-gray);
+            font-size: 0.88rem;
+        }
+        .order-summary-box {
+            background: #FFF7F8;
+            border: 1.5px solid #FEE2E2;
+            border-radius: 12px;
+            padding: 0.85rem 1rem;
+            margin-bottom: 1.25rem;
+        }
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.82rem;
+            color: var(--text-gray);
+            margin-bottom: 0.35rem;
+        }
+        .summary-row.total-highlight {
+            font-size: 0.95rem;
+            color: var(--text-dark);
+            font-weight: 800;
+            border-top: 1px dashed #FECACA;
+            padding-top: 0.5rem;
+            margin-top: 0.5rem;
+            margin-bottom: 0;
+        }
+        .summary-row.total-highlight strong {
+            color: var(--red);
+            font-size: 1.15rem;
+        }
+        .order-form-box {
+            border-top: 1px solid #ECECEC;
+            padding-top: 1rem;
+        }
+        .order-form-title {
+            font-size: 0.88rem;
+            font-weight: 700;
+            color: var(--red);
+            margin-bottom: 0.75rem;
+        }
+        .order-form-group {
+            margin-bottom: 0.75rem;
+        }
+        .order-form-group label {
+            display: block;
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 0.3rem;
+        }
+        .order-input {
+            width: 100%;
+            padding: 0.65rem 0.85rem;
+            border: 1.5px solid #E2E8F0;
+            border-radius: 10px;
+            font-size: 0.86rem;
+            font-family: 'Poppins', sans-serif;
+            color: var(--text-dark);
+            background: #fff;
+            transition: all 0.2s;
+        }
+        .order-input:focus {
+            outline: none;
+            border-color: var(--red);
+            box-shadow: 0 0 0 3px rgba(200, 16, 46, 0.1);
+        }
+        .order-input.is-invalid {
+            border-color: #DC2626 !important;
+            background: #FFF5F5 !important;
+            box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.15) !important;
+            animation: shake 0.4s ease-in-out;
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-6px); }
+            40%, 80% { transform: translateX(6px); }
+        }
+        .input-error-msg {
+            color: #DC2626;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-top: 0.35rem;
+            display: none;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        /* Modern Selectable Tabs for Tipe Pemesanan */
+        .order-type-tabs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.75rem;
+            margin-top: 0.25rem;
+        }
+        .type-tab-card {
+            border: 2px solid #E2E8F0;
+            border-radius: 12px;
+            padding: 0.65rem 0.85rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            transition: all 0.2s ease;
+            background: #fff;
+            user-select: none;
+        }
+        .type-tab-card:hover {
+            border-color: #CBD5E1;
+            background: #F8FAFC;
+        }
+        .type-tab-card.active {
+            border-color: var(--red);
+            background: #FFF5F6;
+        }
+        .type-tab-card .tab-icon {
+            font-size: 1.25rem;
+        }
+        .type-tab-card .tab-title {
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            line-height: 1.2;
+        }
+        .type-tab-card.active .tab-title {
+            color: var(--red);
+        }
+        .type-tab-card .tab-sub {
+            font-size: 0.68rem;
+            color: var(--text-gray);
+            margin-top: 1px;
+        }
+        .modal-footer {
+            padding: 1rem 1.25rem;
+            border-top: 1px solid #ECECEC;
+            background: #FAFAFA;
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+        .btn-order-wa {
+            flex: 1.2;
+            background: #25D366;
+            color: #fff;
+            border: none;
+            padding: 0.75rem 1rem;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 0.86rem;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.45rem;
+            transition: all 0.2s;
+            font-family: 'Poppins', sans-serif;
+            box-shadow: 0 4px 14px rgba(37, 211, 102, 0.3);
+        }
+        .btn-order-wa:hover {
+            background: #1EBE5D;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4);
+        }
+        .btn-order-system {
+            flex: 1;
+            background: var(--red);
+            color: #fff;
+            border: none;
+            padding: 0.75rem 1rem;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 0.86rem;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.45rem;
+            transition: all 0.2s;
+            font-family: 'Poppins', sans-serif;
+            box-shadow: 0 4px 14px rgba(200, 16, 46, 0.25);
+        }
+        .btn-order-system:hover {
+            background: var(--red-dark);
+            transform: translateY(-2px);
+        }
+        .btn-order-system:disabled, .btn-order-wa:disabled {
+            opacity: 0.55;
+            cursor: not-allowed;
+            transform: none !important;
+            box-shadow: none !important;
+        }
+
+        /* ── CUSTOM CONFIRMATION MODAL ── */
+        .confirm-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.65);
+            backdrop-filter: blur(4px);
+            z-index: 2500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.2s ease;
+        }
+        .confirm-overlay.open {
+            opacity: 1;
+            visibility: visible;
+        }
+        .confirm-box {
+            background: #fff;
+            border-radius: 18px;
+            max-width: 380px;
+            width: 100%;
+            padding: 1.75rem 1.5rem 1.5rem;
+            text-align: center;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.35);
+            transform: scale(0.92);
+            transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .confirm-overlay.open .confirm-box {
+            transform: scale(1);
+        }
+        .confirm-icon-wrap {
+            width: 54px;
+            height: 54px;
+            background: #FEE2E2;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 0.85rem;
+        }
+        .confirm-title {
+            font-size: 1.05rem;
+            font-weight: 800;
+            color: var(--text-dark);
+            margin-bottom: 0.4rem;
+        }
+        .confirm-desc {
+            font-size: 0.82rem;
+            color: var(--text-gray);
+            line-height: 1.5;
+            margin-bottom: 1.4rem;
+        }
+        .confirm-actions {
+            display: flex;
+            gap: 0.75rem;
+        }
+        .btn-confirm-cancel {
+            flex: 1;
+            padding: 0.65rem 1rem;
+            border-radius: 10px;
+            border: 1.5px solid #E2E8F0;
+            background: #fff;
+            font-size: 0.84rem;
+            font-weight: 600;
+            color: #64748B;
+            cursor: pointer;
+            transition: all 0.15s;
+            font-family: 'Poppins', sans-serif;
+        }
+        .btn-confirm-cancel:hover {
+            background: #F8FAFC;
+            color: var(--text-dark);
+        }
+        .btn-confirm-ok {
+            flex: 1;
+            padding: 0.65rem 1rem;
+            border-radius: 10px;
+            border: none;
+            background: var(--red);
+            font-size: 0.84rem;
+            font-weight: 700;
+            color: #fff;
+            cursor: pointer;
+            transition: all 0.15s;
+            font-family: 'Poppins', sans-serif;
+            box-shadow: 0 4px 12px rgba(200, 16, 46, 0.3);
+        }
+        .btn-confirm-ok:hover {
+            background: var(--red-dark);
+        }
+
+        .toast-notif {
+            position: fixed;
+            top: 5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1E293B;
+            color: #fff;
+            padding: 0.75rem 1.4rem;
+            border-radius: 50px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            font-size: 0.84rem;
+            font-weight: 600;
+            z-index: 3000;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            pointer-events: none;
+            animation: toastSlideDown 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        @keyframes toastSlideDown {
+            from { transform: translate(-50%, -20px); opacity: 0; }
+            to { transform: translate(-50%, 0); opacity: 1; }
+        }
 
         .btn-cta-full {
             display: block;
@@ -788,7 +1389,12 @@
                     </div>
                     <div class="product-card-body">
                         <div class="product-card-name">{{ $item->nama }}</div>
-                        <span class="product-card-price">Rp{{ number_format($item->harga, 0, ',', '.') }}</span>
+                        <div class="product-card-footer">
+                            <span class="product-card-price">Rp{{ number_format($item->harga, 0, ',', '.') }}</span>
+                            <button type="button" class="btn-pesan-item" onclick="tambahPesanan({{ $item->id }}, '{{ addslashes($item->nama) }}', {{ $item->harga }}, '{{ $item->kategori }}', this)">
+                                + Pesan
+                            </button>
+                        </div>
                     </div>
                 </div>
                 @empty
@@ -830,6 +1436,7 @@
             <button class="filter-btn active" onclick="filterMenu(this,'semua')">Semua</button>
             <button class="filter-btn" onclick="filterMenu(this,'makanan')">Makanan</button>
             <button class="filter-btn" onclick="filterMenu(this,'minuman')">Minuman</button>
+            <button class="filter-btn" onclick="filterMenu(this,'lainnya')">Lainnya</button>
         </div>
 
         @php
@@ -859,7 +1466,12 @@
                     </div>
                     <div class="product-card-body">
                         <div class="product-card-name">{{ $item->nama }}</div>
-                        <span class="product-card-price">Rp{{ number_format($item->harga, 0, ',', '.') }}</span>
+                        <div class="product-card-footer">
+                            <span class="product-card-price">Rp{{ number_format($item->harga, 0, ',', '.') }}</span>
+                            <button type="button" class="btn-pesan-item" onclick="tambahPesanan({{ $item->id }}, '{{ addslashes($item->nama) }}', {{ $item->harga }}, '{{ $item->kategori }}', this)">
+                                + Pesan
+                            </button>
+                        </div>
                     </div>
                 </div>
                 @endforeach
@@ -884,7 +1496,12 @@
                     </div>
                     <div class="product-card-body">
                         <div class="product-card-name">{{ $item->nama }}</div>
-                        <span class="product-card-price">Rp{{ number_format($item->harga, 0, ',', '.') }}</span>
+                        <div class="product-card-footer">
+                            <span class="product-card-price">Rp{{ number_format($item->harga, 0, ',', '.') }}</span>
+                            <button type="button" class="btn-pesan-item" onclick="tambahPesanan({{ $item->id }}, '{{ addslashes($item->nama) }}', {{ $item->harga }}, '{{ $item->kategori }}', this)">
+                                + Pesan
+                            </button>
+                        </div>
                     </div>
                 </div>
                 @endforeach
@@ -909,7 +1526,12 @@
                     </div>
                     <div class="product-card-body">
                         <div class="product-card-name">{{ $item->nama }}</div>
-                        <span class="product-card-price">Rp{{ number_format($item->harga, 0, ',', '.') }}</span>
+                        <div class="product-card-footer">
+                            <span class="product-card-price">Rp{{ number_format($item->harga, 0, ',', '.') }}</span>
+                            <button type="button" class="btn-pesan-item" onclick="tambahPesanan({{ $item->id }}, '{{ addslashes($item->nama) }}', {{ $item->harga }}, '{{ $item->kategori }}', this)">
+                                + Pesan
+                            </button>
+                        </div>
                     </div>
                 </div>
                 @endforeach
@@ -1044,6 +1666,453 @@
 
     @include('partials._footer')
 </div>
+
+{{-- ==============================================================
+     FLOATING CART BAR & MODAL PESANAN
+     ============================================================== --}}
+<div id="cartBar" class="cart-bar" style="display: none;">
+    <div class="cart-bar-content">
+        <div class="cart-bar-info" onclick="bukaModalPesanan()">
+            <span class="cart-icon">🛒</span>
+            <div>
+                <strong id="cartItemCount">0 Menu Dipilih</strong>
+                <div id="cartTotalPrice" class="cart-total-price">Rp 0</div>
+            </div>
+        </div>
+        <button type="button" class="btn-cart-view" onclick="bukaModalPesanan()">
+            Lihat Pesanan (<span id="cartBadgeCount">0</span>) →
+        </button>
+    </div>
+</div>
+
+<!-- Modal Rincian Pesanan -->
+<div id="orderModal" class="modal-overlay">
+    <div class="modal-box">
+        <div class="modal-header">
+            <div class="modal-title">
+                <span>🛒</span> Pesanan Makanan &amp; Minuman
+            </div>
+            <button type="button" class="btn-close-modal" onclick="tutupModalPesanan()" aria-label="Tutup">✕</button>
+        </div>
+
+        <div class="modal-body">
+            <!-- List Item yang dipesan -->
+            <div id="orderItemsContainer" class="order-items-list">
+                <!-- Diisi via JS -->
+            </div>
+
+            <!-- Ringkasan Total -->
+            <div class="order-summary-box">
+                <div class="summary-row">
+                    <span>Total Item:</span>
+                    <strong id="modalTotalItems">0 porsi</strong>
+                </div>
+                <div class="summary-row total-highlight">
+                    <span>Total Pembayaran:</span>
+                    <strong id="modalTotalPrice">Rp 0</strong>
+                </div>
+            </div>
+
+            <!-- Form Pemesan -->
+            <div class="order-form-box">
+                <h5 class="order-form-title">Data Pemesan</h5>
+                <div class="order-form-group">
+                    <label>Nama Pemesan <span style="color:#DC2626">*</span></label>
+                    <input type="text" id="orderNama" class="order-input" placeholder="Masukkan nama Anda..." autocomplete="off">
+                    <div id="orderNamaError" class="input-error-msg">⚠️ Mohon masukkan nama pemesan terlebih dahulu.</div>
+                </div>
+
+                <div class="order-form-group">
+                    <label>Tipe Pemesanan</label>
+                    <div class="order-type-tabs">
+                        <div id="typeTabDineIn" class="type-tab-card active" onclick="pilihTipePemesanan('dine_in')">
+                            <span class="tab-icon">🪑</span>
+                            <div>
+                                <div class="tab-title">Makan di Tempat</div>
+                                <div class="tab-sub">Dine-in di angkringan</div>
+                            </div>
+                        </div>
+                        <div id="typeTabTakeaway" class="type-tab-card" onclick="pilihTipePemesanan('takeaway')">
+                            <span class="tab-icon">🥡</span>
+                            <div>
+                                <div class="tab-title">Bawa Pulang</div>
+                                <div class="tab-sub">Takeaway / bungkus</div>
+                            </div>
+                        </div>
+                    </div>
+                    <input type="hidden" id="orderTypeValue" value="dine_in">
+                </div>
+
+                <div class="order-form-group" id="tableGroup">
+                    <label>Nomor Meja</label>
+                    <input type="text" id="orderMeja" class="order-input" placeholder="Contoh: Meja 03 / Lesehan Depan">
+                </div>
+
+                <div class="order-form-group">
+                    <label>Nomor WhatsApp (Opsional)</label>
+                    <input type="tel" id="orderWa" class="order-input" placeholder="Contoh: 0812-3456-7890">
+                </div>
+
+                <div class="order-form-group">
+                    <label>Catatan Tambahan (Opsional)</label>
+                    <textarea id="orderCatatan" class="order-input" rows="2" placeholder="Contoh: Es manis sedikit, sambal dipisah..."></textarea>
+                </div>
+
+                <div id="orderStatusMsg" style="display:none;margin-top:0.75rem;padding:0.75rem;border-radius:8px;font-size:0.83rem;font-weight:600;"></div>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <button type="button" class="btn-order-wa" id="btnOrderWa" onclick="kirimPesananWhatsApp()">
+                <span>💬</span> Pesan via WhatsApp
+            </button>
+            <button type="button" class="btn-order-system" id="btnOrderSystem" onclick="kirimPesananSistem()">
+                <span>📩</span> Simpan ke Kasir
+            </button>
+            <button type="button" class="btn-order-clear" onclick="kosongkanPesanan()" title="Kosongkan Keranjang">
+                🗑️
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Custom Confirmation Modal -->
+<div id="confirmDialog" class="confirm-overlay">
+    <div class="confirm-box">
+        <div class="confirm-icon-wrap">
+            <span>🗑️</span>
+        </div>
+        <h4 class="confirm-title">Kosongkan Keranjang?</h4>
+        <p class="confirm-desc">Semua daftar menu yang sudah Anda pilih akan dihapus dari pesanan.</p>
+        <div class="confirm-actions">
+            <button type="button" class="btn-confirm-cancel" onclick="tutupConfirmDialog()">Batal</button>
+            <button type="button" class="btn-confirm-ok" onclick="eksekusiKosongkanPesanan()">Ya, Kosongkan</button>
+        </div>
+    </div>
+</div>
+
+<script>
+// =============================================
+//  SISTEM KERANJANG & PEMESANAN MENU
+// =============================================
+let keranjang = {};
+const WA_TARGET = "{{ preg_replace('/[^0-9]/', '', $profil->whatsapp ?? '081234567890') }}";
+
+function formatRupiah(angka) {
+    return 'Rp' + Number(angka).toLocaleString('id-ID');
+}
+
+function tambahPesanan(id, nama, harga, kategori, btnEl) {
+    if (!keranjang[id]) {
+        keranjang[id] = { id, nama, harga, kategori, qty: 1 };
+    } else {
+        keranjang[id].qty++;
+    }
+
+    // Feedback tombol
+    if (btnEl) {
+        const origText = btnEl.innerHTML;
+        btnEl.classList.add('added');
+        btnEl.innerHTML = '✓ ' + keranjang[id].qty + 'x';
+        setTimeout(() => {
+            btnEl.classList.remove('added');
+            btnEl.innerHTML = '+ Pesan';
+        }, 1000);
+    }
+
+    renderKeranjang();
+    showToast('✓ ' + nama + ' dimasukkan ke daftar pesanan!');
+}
+
+function ubahQty(id, delta) {
+    if (!keranjang[id]) return;
+    keranjang[id].qty += delta;
+    if (keranjang[id].qty <= 0) {
+        delete keranjang[id];
+    }
+    renderKeranjang();
+}
+
+function hapusItem(id) {
+    if (keranjang[id]) {
+        delete keranjang[id];
+        renderKeranjang();
+    }
+}
+
+function kosongkanPesanan() {
+    if (Object.keys(keranjang).length === 0) return;
+    document.getElementById('confirmDialog').classList.add('open');
+}
+
+function tutupConfirmDialog() {
+    document.getElementById('confirmDialog').classList.remove('open');
+}
+
+function eksekusiKosongkanPesanan() {
+    tutupConfirmDialog();
+    keranjang = {};
+    renderKeranjang();
+    tutupModalPesanan();
+    showToast('🗑️ Keranjang pesanan telah dikosongkan.');
+}
+
+function hitungTotal() {
+    let totalQty = 0;
+    let totalPrice = 0;
+    for (const key in keranjang) {
+        totalQty += keranjang[key].qty;
+        totalPrice += (keranjang[key].harga * keranjang[key].qty);
+    }
+    return { totalQty, totalPrice };
+}
+
+function renderKeranjang() {
+    const { totalQty, totalPrice } = hitungTotal();
+    const cartBar = document.getElementById('cartBar');
+    const badgeCount = document.getElementById('cartBadgeCount');
+    const itemCount = document.getElementById('cartItemCount');
+    const totalPriceEl = document.getElementById('cartTotalPrice');
+
+    if (totalQty > 0) {
+        cartBar.style.display = 'flex';
+        badgeCount.textContent = totalQty;
+        itemCount.textContent = totalQty + ' Menu Dipilih';
+        totalPriceEl.textContent = formatRupiah(totalPrice);
+    } else {
+        cartBar.style.display = 'none';
+    }
+
+    // Render di dalam Modal
+    const container = document.getElementById('orderItemsContainer');
+    const modalTotalItems = document.getElementById('modalTotalItems');
+    const modalTotalPrice = document.getElementById('modalTotalPrice');
+    const btnOrderWa = document.getElementById('btnOrderWa');
+    const btnOrderSystem = document.getElementById('btnOrderSystem');
+
+    modalTotalItems.textContent = totalQty + ' porsi';
+    modalTotalPrice.textContent = formatRupiah(totalPrice);
+
+    if (totalQty === 0) {
+        container.innerHTML = '<div class="order-empty-state">🍽️ Belum ada menu yang dipilih.<br><span style="font-size:0.8rem;color:#888;">Silakan klik "+ Pesan" pada menu makanan atau minuman.</span></div>';
+        btnOrderWa.disabled = true;
+        btnOrderSystem.disabled = true;
+        return;
+    }
+
+    btnOrderWa.disabled = false;
+    btnOrderSystem.disabled = false;
+
+    let html = '';
+    for (const id in keranjang) {
+        const item = keranjang[id];
+        const subtotal = item.harga * item.qty;
+        html += `
+            <div class="order-item-row">
+                <div class="order-item-info">
+                    <div class="order-item-name">${item.nama}</div>
+                    <div class="order-item-price">${formatRupiah(item.harga)}</div>
+                </div>
+                <div class="order-qty-control">
+                    <button type="button" class="btn-qty" onclick="ubahQty(${item.id}, -1)">−</button>
+                    <span class="order-qty-val">${item.qty}</span>
+                    <button type="button" class="btn-qty" onclick="ubahQty(${item.id}, 1)">+</button>
+                </div>
+                <div class="order-item-subtotal">${formatRupiah(subtotal)}</div>
+                <button type="button" class="btn-del-item" onclick="hapusItem(${item.id})" title="Hapus">✕</button>
+            </div>
+        `;
+    }
+    container.innerHTML = html;
+}
+
+function bukaModalPesanan() {
+    renderKeranjang();
+    const modal = document.getElementById('orderModal');
+    modal.classList.add('open');
+    document.getElementById('orderStatusMsg').style.display = 'none';
+    const err = document.getElementById('orderNamaError');
+    if (err) err.style.display = 'none';
+    const namaInput = document.getElementById('orderNama');
+    if (namaInput) namaInput.classList.remove('is-invalid');
+}
+
+function tutupModalPesanan() {
+    const modal = document.getElementById('orderModal');
+    modal.classList.remove('open');
+}
+
+function pilihTipePemesanan(type) {
+    document.getElementById('orderTypeValue').value = type;
+    const tabDineIn = document.getElementById('typeTabDineIn');
+    const tabTakeaway = document.getElementById('typeTabTakeaway');
+    const tableGroup = document.getElementById('tableGroup');
+
+    if (type === 'dine_in') {
+        tabDineIn.classList.add('active');
+        tabTakeaway.classList.remove('active');
+        if (tableGroup) tableGroup.style.display = 'block';
+    } else {
+        tabTakeaway.classList.add('active');
+        tabDineIn.classList.remove('active');
+        if (tableGroup) tableGroup.style.display = 'none';
+    }
+}
+
+function buatTeksPesanan() {
+    const namaInput = document.getElementById('orderNama');
+    const namaError = document.getElementById('orderNamaError');
+    const nama = namaInput ? namaInput.value.trim() : '';
+
+    if (!nama) {
+        if (namaInput) {
+            namaInput.classList.add('is-invalid');
+            namaInput.focus();
+        }
+        if (namaError) namaError.style.display = 'flex';
+        showToast('⚠️ Silakan masukkan nama pemesan terlebih dahulu.');
+        return null;
+    }
+
+    const { totalQty, totalPrice } = hitungTotal();
+    if (totalQty === 0) {
+        showToast('⚠️ Keranjang pesanan masih kosong.');
+        return null;
+    }
+
+    const orderType = document.getElementById('orderTypeValue')?.value || 'dine_in';
+    const isDineIn = orderType === 'dine_in';
+    const meja = document.getElementById('orderMeja').value.trim();
+    const wa = document.getElementById('orderWa').value.trim();
+    const catatan = document.getElementById('orderCatatan').value.trim();
+
+    let text = "*PESANAN ANGKRINGAN SEKOTA*\n";
+    text += "──────────────────────────\n";
+    text += "👤 *Nama:* " + nama + "\n";
+    text += "🍽️ *Tipe:* " + (isDineIn ? 'Makan di Tempat (Dine-in)' : 'Bawa Pulang (Takeaway)') + "\n";
+    if (isDineIn && meja) {
+        text += "📍 *Meja:* " + meja + "\n";
+    }
+    if (wa) {
+        text += "📱 *No. WA:* " + wa + "\n";
+    }
+    text += "──────────────────────────\n";
+    text += "📋 *Daftar Menu:*\n";
+
+    for (const id in keranjang) {
+        const item = keranjang[id];
+        const subtotal = item.harga * item.qty;
+        text += `• ${item.nama} (${item.qty}x) = ${formatRupiah(subtotal)}\n`;
+    }
+
+    text += "──────────────────────────\n";
+    text += "💰 *TOTAL TAGIHAN:* " + formatRupiah(totalPrice) + "\n";
+    if (catatan) {
+        text += "📝 *Catatan:* " + catatan + "\n";
+    }
+    text += "──────────────────────────\n";
+    text += "Mohon segera diproses ya, terima kasih!";
+
+    return { nama, wa, text, totalPrice };
+}
+
+function kirimPesananWhatsApp() {
+    const data = buatTeksPesanan();
+    if (!data) return;
+
+    let targetWa = WA_TARGET;
+    if (targetWa.startsWith('0')) {
+        targetWa = '62' + targetWa.substring(1);
+    }
+    if (!targetWa) targetWa = '6281234567890';
+
+    const url = 'https://api.whatsapp.com/send?phone=' + targetWa + '&text=' + encodeURIComponent(data.text);
+    window.open(url, '_blank');
+}
+
+function kirimPesananSistem() {
+    const data = buatTeksPesanan();
+    if (!data) return;
+
+    const btn = document.getElementById('btnOrderSystem');
+    const msgEl = document.getElementById('orderStatusMsg');
+    const origText = btn.innerHTML;
+    btn.disabled = true;
+    btn.innerHTML = 'Mengirim...';
+
+    const formData = new FormData();
+    formData.append('_token', '{{ csrf_token() }}');
+    formData.append('nama_pengirim', data.nama);
+    formData.append('nomor_wa', data.wa || '-');
+    formData.append('isi_pesan', data.text);
+
+    fetch('{{ route("pesan.store") }}', {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest'
+        },
+        body: formData
+    })
+    .then(res => res.json())
+    .then(res => {
+        btn.disabled = false;
+        btn.innerHTML = origText;
+        msgEl.style.display = 'block';
+        msgEl.style.background = '#D1FAE5';
+        msgEl.style.color = '#065F46';
+        msgEl.innerHTML = '✅ Pesanan berhasil dicatat oleh sistem kasir/admin! Silakan tunggu pesanan Anda disiapkan.';
+
+        setTimeout(() => {
+            keranjang = {};
+            renderKeranjang();
+            tutupModalPesanan();
+        }, 2200);
+    })
+    .catch(err => {
+        btn.disabled = false;
+        btn.innerHTML = origText;
+        msgEl.style.display = 'block';
+        msgEl.style.background = '#FEE2E2';
+        msgEl.style.color = '#991B1B';
+        msgEl.innerHTML = 'Terjadi kendala saat mengirim ke server. Silakan gunakan tombol "Pesan via WhatsApp".';
+    });
+}
+
+function showToast(msg) {
+    const existing = document.querySelector('.toast-notif');
+    if (existing) existing.remove();
+
+    const toast = document.createElement('div');
+    toast.className = 'toast-notif';
+    toast.innerHTML = msg;
+    document.body.appendChild(toast);
+
+    setTimeout(() => {
+        toast.style.transition = 'opacity 0.3s';
+        toast.style.opacity = '0';
+        setTimeout(() => toast.remove(), 300);
+    }, 2200);
+}
+
+document.getElementById('orderModal')?.addEventListener('click', (e) => {
+    if (e.target.id === 'orderModal') tutupModalPesanan();
+});
+document.getElementById('confirmDialog')?.addEventListener('click', (e) => {
+    if (e.target.id === 'confirmDialog') tutupConfirmDialog();
+});
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+        tutupModalPesanan();
+        tutupConfirmDialog();
+    }
+});
+document.getElementById('orderNama')?.addEventListener('input', function() {
+    this.classList.remove('is-invalid');
+    const err = document.getElementById('orderNamaError');
+    if (err) err.style.display = 'none';
+});
+</script>
 
 <script>
 // =============================================

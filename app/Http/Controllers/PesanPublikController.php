@@ -18,6 +18,13 @@ class PesanPublikController extends Controller
 
         Pesan::create($request->only(['nama_pengirim','nomor_wa','email','isi_pesan']));
 
+        if ($request->wantsJson() || $request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Pesanan Anda berhasil dikirim ke sistem admin!'
+            ]);
+        }
+
         return back()->with('success', 'Pesan Anda berhasil dikirim! Kami akan segera menghubungi Anda.');
     }
 }
