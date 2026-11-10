@@ -1143,6 +1143,26 @@
         }
         .about-text p { font-size: 0.9rem; color: var(--text-gray); line-height: 1.8; margin-bottom: 1rem; }
         .about-text strong { color: var(--red); font-weight: 600; }
+        .about-typewriter-box {
+            min-height: 230px;
+        }
+        .type-cursor {
+            display: inline-block;
+            width: 2.5px;
+            height: 1.15em;
+            background-color: var(--red);
+            margin-left: 2px;
+            vertical-align: -2px;
+            animation: blinkCursor 0.75s infinite;
+            border-radius: 1px;
+        }
+        @keyframes blinkCursor {
+            0%, 49% { opacity: 1; }
+            50%, 100% { opacity: 0; }
+        }
+        .type-cursor.done {
+            animation: blinkCursor 0.75s 3 forwards;
+        }
         .btn-red {
             background: var(--red);
             color: var(--white);
@@ -1615,24 +1635,26 @@
                      alt="Angkringan Sekota"
                      onerror="this.src='https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=600&q=80'">
             </div>
-            <div class="about-text">
+            <div class="about-text" onclick="finishTypewriter()" title="Klik untuk menampilkan seluruh teks langsung">
                 <h3>Siapa Kami</h3>
-                <p>
-                    <strong>Angkringan Sekota</strong> adalah warung makan khas angkringan yang berlokasi di
-                    Tulungagung, Jawa Timur. Kami hadir untuk memberikan pengalaman makan yang nyaman,
-                    hangat, dan penuh keakraban bagi semua kalangan.
-                </p>
-                <p>
-                    Dengan menu yang beragam dan harga yang sangat terjangkau, kami selalu berusaha
-                    menjaga kualitas cita rasa khas angkringan yang autentik. Nikmati berbagai sajian
-                    lezat dari nasi kucing, gorengan, minuman hangat, hingga menu spesial kami yang
-                    menjadi favorit pelanggan setia.
-                </p>
-                <p>
-                    Buka setiap hari mulai pukul <strong>17.00 – 23.00 WIB</strong>. Kami selalu menyambut
-                    Anda dengan hangat dan ramah.
-                </p>
-                <button class="btn-red" onclick="goTo('menu')">Lihat Menu Kami →</button>
+                <div class="about-typewriter-box" id="aboutTypewriterBox">
+                    <p>
+                        <strong>Angkringan Sekota</strong> adalah warung makan khas angkringan yang berlokasi di
+                        Tulungagung, Jawa Timur. Kami hadir untuk memberikan pengalaman makan yang nyaman,
+                        hangat, dan penuh keakraban bagi semua kalangan.
+                    </p>
+                    <p>
+                        Dengan menu yang beragam dan harga yang sangat terjangkau, kami selalu berusaha
+                        menjaga kualitas cita rasa khas angkringan yang autentik. Nikmati berbagai sajian
+                        lezat dari nasi kucing, gorengan, minuman hangat, hingga menu spesial kami yang
+                        menjadi favorit pelanggan setia.
+                    </p>
+                    <p>
+                        Buka setiap hari mulai pukul <strong>17.00 – 23.00 WIB</strong>. Kami selalu menyambut
+                        Anda dengan hangat dan ramah.
+                    </p>
+                </div>
+                <button class="btn-red" onclick="event.stopPropagation(); goTo('menu')">Lihat Menu Kami →</button>
             </div>
         </div>
 
@@ -2245,6 +2267,11 @@ function goTo(pageId) {
     currentPage = pageId;
     updateNav(pageId);
 
+    // Jalankan efek ketikan jika membuka halaman Tentang Kami
+    if (pageId === 'tentang') {
+        setTimeout(startAboutTypewriter, 350);
+    }
+
     // 3. Bersihkan state setelah animasi selesai
     setTimeout(() => {
         fromEl.classList.remove('exit-left', 'exit-right', 'active');
@@ -2288,6 +2315,120 @@ function filterMenu(btn, kat) {
     document.querySelectorAll('#page-menu .menu-cat-block').forEach(block => {
         block.style.display = (kat === 'semua' || block.dataset.kat === kat) ? '' : 'none';
     });
+}
+
+// =============================================
+//  EFEK KETIKAN (TYPEWRITER) - TENTANG KAMI
+// =============================================
+let typewriterTimer = null;
+let isTyping = false;
+
+const aboutParagraphs = [
+    [
+        { tag: 'strong', text: 'Angkringan Sekota' },
+        { tag: null, text: ' adalah warung makan khas angkringan yang berlokasi di Tulungagung, Jawa Timur. Kami hadir untuk memberikan pengalaman makan yang nyaman, hangat, dan penuh keakraban bagi semua kalangan.' }
+    ],
+    [
+        { tag: null, text: 'Dengan menu yang beragam dan harga yang sangat terjangkau, kami selalu berusaha menjaga kualitas cita rasa khas angkringan yang autentik. Nikmati berbagai sajian lezat dari nasi kucing, gorengan, minuman hangat, hingga menu spesial kami yang menjadi favorit pelanggan setia.' }
+    ],
+    [
+        { tag: null, text: 'Buka setiap hari mulai pukul ' },
+        { tag: 'strong', text: '17.00 – 23.00 WIB' },
+        { tag: null, text: '. Kami selalu menyambut Anda dengan hangat dan ramah.' }
+    ]
+];
+
+function startAboutTypewriter() {
+    if (typewriterTimer) {
+        clearTimeout(typewriterTimer);
+        typewriterTimer = null;
+    }
+
+    const box = document.getElementById('aboutTypewriterBox');
+    if (!box) return;
+
+    box.innerHTML = '';
+    isTyping = true;
+
+    const cursor = document.createElement('span');
+    cursor.className = 'type-cursor';
+    cursor.id = 'typeCursor';
+
+    let pIdx = 0;
+    let segIdx = 0;
+    let charIdx = 0;
+    let currentP = null;
+    let currentEl = null;
+
+    function typeNextChar() {
+        if (!isTyping) return;
+
+        if (pIdx >= aboutParagraphs.length) {
+            cursor.classList.add('done');
+            setTimeout(() => { if (cursor.parentNode) cursor.remove(); }, 2500);
+            isTyping = false;
+            return;
+        }
+
+        if (!currentP) {
+            currentP = document.createElement('p');
+            box.appendChild(currentP);
+            currentP.appendChild(cursor);
+            segIdx = 0;
+            charIdx = 0;
+            currentEl = null;
+        }
+
+        const segments = aboutParagraphs[pIdx];
+        if (segIdx >= segments.length) {
+            pIdx++;
+            currentP = null;
+            currentEl = null;
+            typewriterTimer = setTimeout(typeNextChar, 180);
+            return;
+        }
+
+        const seg = segments[segIdx];
+        if (!currentEl) {
+            if (seg.tag) {
+                currentEl = document.createElement(seg.tag);
+                currentP.insertBefore(currentEl, cursor);
+            } else {
+                currentEl = document.createElement('span');
+                currentP.insertBefore(currentEl, cursor);
+            }
+        }
+
+        if (charIdx < seg.text.length) {
+            currentEl.textContent += seg.text[charIdx];
+            charIdx++;
+            const char = seg.text[charIdx - 1];
+            const speed = (char === '.' || char === ',') ? 65 : (12 + Math.random() * 8);
+            typewriterTimer = setTimeout(typeNextChar, speed);
+        } else {
+            segIdx++;
+            charIdx = 0;
+            currentEl = null;
+            typewriterTimer = setTimeout(typeNextChar, 20);
+        }
+    }
+
+    typeNextChar();
+}
+
+function finishTypewriter() {
+    if (!isTyping) return;
+    if (typewriterTimer) clearTimeout(typewriterTimer);
+    isTyping = false;
+
+    const box = document.getElementById('aboutTypewriterBox');
+    if (!box) return;
+
+    box.innerHTML = `
+        <p><strong>Angkringan Sekota</strong> adalah warung makan khas angkringan yang berlokasi di Tulungagung, Jawa Timur. Kami hadir untuk memberikan pengalaman makan yang nyaman, hangat, dan penuh keakraban bagi semua kalangan.</p>
+        <p>Dengan menu yang beragam dan harga yang sangat terjangkau, kami selalu berusaha menjaga kualitas cita rasa khas angkringan yang autentik. Nikmati berbagai sajian lezat dari nasi kucing, gorengan, minuman hangat, hingga menu spesial kami yang menjadi favorit pelanggan setia.</p>
+        <p>Buka setiap hari mulai pukul <strong>17.00 – 23.00 WIB</strong>. Kami selalu menyambut Anda dengan hangat dan ramah.</p>
+    `;
 }
 </script>
 </body>
