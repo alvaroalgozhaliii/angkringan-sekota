@@ -1074,17 +1074,90 @@
             margin: 0 auto;
             padding: 2rem 1.5rem 4rem;
         }
-        .menu-intro {
-            text-align: center;
+        .menu-header-wrap {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1.5rem;
             margin-bottom: 1.75rem;
+            flex-wrap: wrap;
+        }
+        .menu-header-wrap .menu-intro {
+            text-align: left;
+            margin-bottom: 0;
+            flex: 1;
+            min-width: 280px;
         }
         .menu-intro h3 { font-size: 1.25rem; font-weight: 800; color: var(--text-dark); text-transform: uppercase; letter-spacing: 0.03em; }
-        .menu-intro .city { font-size: 0.95rem; font-weight: 700; color: var(--red); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.5rem; }
-        .menu-intro p { font-size: 0.84rem; color: var(--text-gray); line-height: 1.65; max-width: 480px; margin: 0 auto; }
+        .menu-intro .city { font-size: 0.95rem; font-weight: 700; color: var(--red); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.35rem; }
+        .menu-intro p { font-size: 0.84rem; color: var(--text-gray); line-height: 1.65; max-width: 460px; margin: 0; }
 
-        .filter-row { display: flex; justify-content: center; gap: 0.6rem; flex-wrap: wrap; margin-bottom: 2rem; }
+        .menu-search-container {
+            width: 320px;
+            max-width: 100%;
+        }
+        .menu-search-wrap {
+            position: relative;
+            display: flex;
+            align-items: center;
+            width: 100%;
+        }
+        .menu-search-wrap .search-icon {
+            position: absolute;
+            left: 14px;
+            font-size: 0.95rem;
+            color: #9CA3AF;
+            pointer-events: none;
+        }
+        .menu-search-input {
+            width: 100%;
+            padding: 0.65rem 2.4rem 0.65rem 2.5rem;
+            border-radius: 50px;
+            border: 2px solid rgba(200,16,46,0.2);
+            background: var(--white);
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.86rem;
+            color: var(--text-dark);
+            outline: none;
+            transition: all 0.25s;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+        }
+        .menu-search-input:focus {
+            border-color: var(--red);
+            box-shadow: 0 4px 16px rgba(200,16,46,0.15);
+        }
+        .btn-search-clear {
+            position: absolute;
+            right: 12px;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: #E5E7EB;
+            color: #4B5563;
+            border: none;
+            font-size: 0.75rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+        .btn-search-clear:hover {
+            background: var(--red);
+            color: var(--white);
+        }
+        .search-result-note {
+            font-size: 0.78rem;
+            color: var(--red);
+            margin-top: 0.4rem;
+            padding-left: 0.6rem;
+            font-weight: 600;
+        }
+
+        .filter-row { display: flex; justify-content: flex-start; gap: 0.6rem; flex-wrap: wrap; margin-bottom: 2rem; }
         .filter-btn {
-            padding: 0.5rem 1.4rem;
+            padding: 0.5rem 1.25rem;
             border-radius: 50px;
             border: 2px solid var(--red);
             font-size: 0.84rem;
@@ -1094,8 +1167,67 @@
             background: var(--white);
             color: var(--red);
             font-family: 'Poppins', sans-serif;
+            display: inline-flex;
+            align-items: center;
         }
         .filter-btn:hover, .filter-btn.active { background: var(--red); color: var(--white); }
+        .filter-count {
+            display: inline-block;
+            font-size: 0.72rem;
+            padding: 1px 7px;
+            border-radius: 12px;
+            background: rgba(200,16,46,0.1);
+            color: var(--red);
+            margin-left: 6px;
+            font-weight: 700;
+            transition: all 0.2s;
+        }
+        .filter-btn:hover .filter-count, .filter-btn.active .filter-count {
+            background: rgba(255,255,255,0.28);
+            color: var(--white);
+        }
+
+        .menu-empty-state {
+            text-align: center;
+            padding: 3.5rem 1.5rem;
+            background: var(--white);
+            border-radius: 16px;
+            margin: 1.5rem 0;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            border: 1px dashed rgba(200,16,46,0.2);
+        }
+        .menu-empty-state .empty-icon {
+            font-size: 2.8rem;
+            margin-bottom: 0.75rem;
+        }
+        .menu-empty-state h4 {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 0.35rem;
+        }
+        .menu-empty-state p {
+            font-size: 0.85rem;
+            color: var(--text-gray);
+            margin-bottom: 1.25rem;
+        }
+        .btn-reset-filter {
+            background: var(--red);
+            color: var(--white);
+            border: none;
+            padding: 0.55rem 1.4rem;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.82rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: 'Poppins', sans-serif;
+        }
+        .btn-reset-filter:hover {
+            background: var(--red-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(200,16,46,0.25);
+        }
 
         .menu-cat-label {
             text-align: center;
@@ -1368,6 +1500,11 @@
             .about-stats { grid-template-columns: repeat(3, 1fr); }
             .footer-grid { grid-template-columns: 1fr 1fr; }
             .footer-grid > *:first-child { grid-column: 1 / -1; }
+            .menu-header-wrap { flex-direction: column; align-items: stretch; text-align: center; gap: 1.25rem; }
+            .menu-header-wrap .menu-intro { text-align: center; }
+            .menu-header-wrap .menu-intro p { margin: 0 auto; }
+            .menu-search-container { width: 100%; max-width: 100%; }
+            .filter-row { justify-content: center; }
         }
         @media (max-width: 600px) {
             .hero-container { flex-direction: column; text-align: center; padding: 2.5rem 1.25rem; }
@@ -1497,19 +1634,31 @@
     </div>
 
     <div class="menu-content">
-        {{-- Intro --}}
-        <div class="menu-intro">
-            <h3>Angkringan Sekota</h3>
-            <div class="city">Tulungagung</div>
-            <p>Dari obrolan santai sampai cerita panjang, semua terasa lebih seru ditemani hidangan favorit di Angkringan SEKOTA.</p>
-        </div>
-
-        {{-- Filter --}}
-        <div class="filter-row">
-            <button class="filter-btn active" onclick="filterMenu(this,'semua')">Semua</button>
-            <button class="filter-btn" onclick="filterMenu(this,'makanan')">Makanan</button>
-            <button class="filter-btn" onclick="filterMenu(this,'minuman')">Minuman</button>
-            <button class="filter-btn" onclick="filterMenu(this,'lainnya')">Lainnya</button>
+        {{-- Intro & Search Bar --}}
+        <div class="menu-header-wrap">
+            <div class="menu-intro">
+                <h3>Angkringan Sekota</h3>
+                <div class="city">Tulungagung</div>
+                <p>Dari obrolan santai sampai cerita panjang, semua hidangan favorit siap menemani.</p>
+            </div>
+            <div class="menu-search-container">
+                <div class="menu-search-wrap">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" 
+                           id="menuSearchInput" 
+                           class="menu-search-input" 
+                           placeholder="Cari menu (pecel, es teh, dll)..." 
+                           autocomplete="off" 
+                           oninput="handleMenuSearch(this.value)">
+                    <button type="button" 
+                            id="btnSearchClear" 
+                            class="btn-search-clear" 
+                            onclick="clearMenuSearch()" 
+                            style="display:none;" 
+                            title="Hapus pencarian">✕</button>
+                </div>
+                <div id="searchResultNote" class="search-result-note" style="display:none;"></div>
+            </div>
         </div>
 
         @php
@@ -1517,6 +1666,32 @@
             $pMinuman = $produk->filter(fn($p) => strtolower($p->kategori ?? '') === 'minuman');
             $pLainnya = $produk->filter(fn($p) => !in_array(strtolower($p->kategori ?? ''), ['makanan','minuman']));
         @endphp
+
+        {{-- Filter Row --}}
+        <div class="filter-row">
+            <button type="button" class="filter-btn active" onclick="pilihKategori(this,'semua')">
+                Semua <span class="filter-count">{{ $produk->count() }}</span>
+            </button>
+            <button type="button" class="filter-btn" onclick="pilihKategori(this,'makanan')">
+                Makanan <span class="filter-count">{{ $pMakanan->count() }}</span>
+            </button>
+            <button type="button" class="filter-btn" onclick="pilihKategori(this,'minuman')">
+                Minuman <span class="filter-count">{{ $pMinuman->count() }}</span>
+            </button>
+            @if($pLainnya->count())
+            <button type="button" class="filter-btn" onclick="pilihKategori(this,'lainnya')">
+                Lainnya <span class="filter-count">{{ $pLainnya->count() }}</span>
+            </button>
+            @endif
+        </div>
+
+        {{-- Empty State untuk Search --}}
+        <div id="menuNoResults" class="menu-empty-state" style="display:none;">
+            <div class="empty-icon">🍽️🔍</div>
+            <h4>Menu Tidak Ditemukan</h4>
+            <p>Tidak ada hidangan yang cocok dengan pencarian "<strong id="searchQueryEcho"></strong>".</p>
+            <button type="button" class="btn-reset-filter" onclick="resetMenuFilters()">Tampilkan Semua Menu</button>
+        </div>
 
         @if($produk->isEmpty())
         <div class="menu-empty">🍽️ Menu sedang dipersiapkan. Silakan kunjungi kembali.</div>
@@ -1531,7 +1706,7 @@
             </div>
             <div class="cards-grid">
                 @foreach($pMakanan as $item)
-                <div class="product-card">
+                <div class="product-card" data-nama="{{ strtolower($item->nama) }}" data-kategori="makanan">
                     <div class="product-card-img">
                         <img src="{{ $item->gambar_url }}"
                              alt="{{ $item->nama }}"
@@ -1561,7 +1736,7 @@
             </div>
             <div class="cards-grid">
                 @foreach($pMinuman as $item)
-                <div class="product-card">
+                <div class="product-card" data-nama="{{ strtolower($item->nama) }}" data-kategori="minuman">
                     <div class="product-card-img">
                         <img src="{{ $item->gambar_url }}"
                              alt="{{ $item->nama }}"
@@ -1591,7 +1766,7 @@
             </div>
             <div class="cards-grid">
                 @foreach($pLainnya as $item)
-                <div class="product-card">
+                <div class="product-card" data-nama="{{ strtolower($item->nama) }}" data-kategori="lainnya">
                     <div class="product-card-img">
                         <img src="{{ $item->gambar_url }}"
                              alt="{{ $item->nama }}"
@@ -2306,15 +2481,102 @@ hamburgerBtn.addEventListener('click', () => mobileMenu.classList.toggle('open')
 function closeMob() { mobileMenu.classList.remove('open'); }
 
 // =============================================
-//  FILTER MENU
+//  FILTER & SEARCH MENU
 // =============================================
-function filterMenu(btn, kat) {
-    document.querySelectorAll('#page-menu .filter-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
+let currentCategoryFilter = 'semua';
 
-    document.querySelectorAll('#page-menu .menu-cat-block').forEach(block => {
-        block.style.display = (kat === 'semua' || block.dataset.kat === kat) ? '' : 'none';
+function pilihKategori(btn, kat) {
+    document.querySelectorAll('#page-menu .filter-btn').forEach(b => b.classList.remove('active'));
+    if (btn) btn.classList.add('active');
+    currentCategoryFilter = kat;
+    applyMenuFilters();
+}
+
+// Alias untuk backward compatibility
+function filterMenu(btn, kat) {
+    pilihKategori(btn, kat);
+}
+
+function handleMenuSearch(val) {
+    const clearBtn = document.getElementById('btnSearchClear');
+    if (clearBtn) {
+        clearBtn.style.display = val.trim().length > 0 ? 'flex' : 'none';
+    }
+    applyMenuFilters();
+}
+
+function clearMenuSearch() {
+    const input = document.getElementById('menuSearchInput');
+    if (input) {
+        input.value = '';
+        input.focus();
+    }
+    const clearBtn = document.getElementById('btnSearchClear');
+    if (clearBtn) clearBtn.style.display = 'none';
+    applyMenuFilters();
+}
+
+function resetMenuFilters() {
+    clearMenuSearch();
+    const allBtn = document.querySelector('#page-menu .filter-btn');
+    pilihKategori(allBtn, 'semua');
+}
+
+function applyMenuFilters() {
+    const searchInput = document.getElementById('menuSearchInput');
+    const query = searchInput ? searchInput.value.trim().toLowerCase() : '';
+    const kat = currentCategoryFilter;
+
+    let totalVisible = 0;
+    const catBlocks = document.querySelectorAll('#page-menu .menu-cat-block');
+
+    catBlocks.forEach(block => {
+        const blockKat = block.dataset.kat;
+        const matchesCategory = (kat === 'semua' || blockKat === kat);
+
+        let visibleInBlock = 0;
+        const cards = block.querySelectorAll('.product-card');
+
+        cards.forEach(card => {
+            const nama = (card.dataset.nama || '').toLowerCase();
+            const matchesQuery = !query || nama.includes(query);
+
+            if (matchesCategory && matchesQuery) {
+                card.style.display = '';
+                visibleInBlock++;
+                totalVisible++;
+            } else {
+                card.style.display = 'none';
+            }
+        });
+
+        if (visibleInBlock > 0 && matchesCategory) {
+            block.style.display = '';
+        } else {
+            block.style.display = 'none';
+        }
     });
+
+    const noteEl = document.getElementById('searchResultNote');
+    if (noteEl) {
+        if (query.length > 0) {
+            noteEl.style.display = 'block';
+            noteEl.textContent = `Menampilkan ${totalVisible} menu untuk "${query}"`;
+        } else {
+            noteEl.style.display = 'none';
+        }
+    }
+
+    const emptyState = document.getElementById('menuNoResults');
+    const queryEcho = document.getElementById('searchQueryEcho');
+    if (emptyState) {
+        if (totalVisible === 0) {
+            emptyState.style.display = 'block';
+            if (queryEcho) queryEcho.textContent = query || `Kategori ${kat}`;
+        } else {
+            emptyState.style.display = 'none';
+        }
+    }
 }
 
 // =============================================
