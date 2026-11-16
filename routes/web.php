@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\KasirController;
 use App\Http\Controllers\Admin\ProfilController;
 use App\Http\Controllers\Admin\ProdukController;
 use App\Http\Controllers\Admin\PesanController;
@@ -36,6 +37,13 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::middleware(\App\Http\Middleware\AdminMiddleware::class)->group(function () {
 
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+        // Kasir (POS)
+        Route::get('/kasir',                       [KasirController::class, 'index'])->name('kasir.index');
+        Route::post('/kasir/transaksi',            [KasirController::class, 'store'])->name('kasir.store');
+        Route::get('/kasir/transaksi/{transaksi}', [KasirController::class, 'show'])->name('kasir.show');
+        Route::get('/kasir/struk/{transaksi}',     [KasirController::class, 'struk'])->name('kasir.struk');
+        Route::get('/kasir/riwayat',               [KasirController::class, 'riwayat'])->name('kasir.riwayat');
 
         // Profil & Kontak
         Route::get('/profil',         [ProfilController::class, 'index'])->name('profil.index');
