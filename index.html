@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Angkringan Sekota – Employee Dashboard</title>
+  <meta name="description" content="Employee dashboard for managing products, categories, daily info and customer messages. Minimalistic modern UI with premium micro‑animations.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <nav class="sidebar">
+    <div class="logo">Angkringan Sekota</div>
+    <ul class="nav-list">
+      <li><a href="#/dashboard" class="nav-link active" data-section="dashboard">Dashboard</a></li>
+      <li><a href="#/products" class="nav-link" data-section="products">Produk</a></li>
+      <li><a href="#/categories" class="nav-link" data-section="categories">Kategori</a></li>
+      <li><a href="#/daily" class="nav-link" data-section="dailyInfo">Info Harian</a></li>
+      <li><a href="#/messages" class="nav-link" data-section="messages">Pesan</a></li>
+      <li><a href="#/profile" class="nav-link" data-section="profile">Profil</a></li>
+    </ul>
+  </nav>
+
+  <main class="content">
+    <!-- Sections will be injected by JavaScript -->
+    <section id="dashboard" class="section active">
+      <h1 class="section-title">Dashboard</h1>
+      <div class="cards">
+        <div class="card summary-card" id="card-tasks">
+          <h2>Tugas Hari Ini</h2>
+          <p id="task-count">0</p>
+        </div>
+        <div class="card summary-card" id="card-products">
+          <h2>Jumlah Produk</h2>
+          <p id="product-count">0</p>
+        </div>
+        <div class="card summary-card" id="card-messages">
+          <h2>Pesan Masuk</h2>
+          <p id="message-count">0</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="products" class="section">
+      <h1 class="section-title">Kelola Produk</h1>
+      <button class="btn primary" id="add-product-btn">+ Tambah Produk</button>
+      <table class="data-table" id="product-table">
+        <thead>
+          <tr>
+            <th>Foto</th>
+            <th>Nama</th>
+            <th>Kategori</th>
+            <th>Harga</th>
+            <th>Best Seller</th>
+            <th>Status</th>
+            <th>Aksi</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </section>
+
+    <section id="categories" class="section">
+      <h1 class="section-title">Kelola Kategori</h1>
+      <button class="btn primary" id="add-category-btn">+ Tambah Kategori</button>
+      <table class="data-table" id="category-table">
+        <thead>
+          <tr><th>Nama</th><th>Aksi</th></tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </section>
+
+    <section id="dailyInfo" class="section">
+      <h1 class="section-title">Info Harian</h1>
+      <form id="daily-form" class="form">
+        <label>Jam Operasional<br><input type="text" id="operational-hours" placeholder="08:00 - 22:00" required></label>
+        <label>Promo / Pengumuman<br><textarea id="promo-text" rows="3" placeholder="Tuliskan promo atau pengumuman"></textarea></label>
+        <button type="submit" class="btn primary">Simpan</button>
+      </form>
+    </section>
+
+    <section id="messages" class="section">
+      <h1 class="section-title">Pesan Pelanggan</h1>
+      <ul class="message-list" id="message-list"></ul>
+    </section>
+
+    <section id="profile" class="section">
+      <h1 class="section-title">Profil Pegawai</h1>
+      <form id="profile-form" class="form">
+        <label>Nama<br><input type="text" id="profile-name" required></label>
+        <label>Email<br><input type="email" id="profile-email" required></label>
+        <label>Password Baru<br><input type="password" id="profile-password" placeholder="Kosongkan bila tidak diubah"></label>
+        <button type="submit" class="btn primary">Simpan Perubahan</button>
+        <button type="button" class="btn secondary" id="logout-btn">Logout</button>
+      </form>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

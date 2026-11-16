@@ -37,9 +37,8 @@
             font-family: 'Poppins', sans-serif;
             color: var(--text-dark);
             overflow: hidden; /* pages scroll individually */
-            -webkit-user-select: none;
-            user-select: none;
         }
+        button, .filter-btn, .btn-primary, .btn-outline { -webkit-user-select: none; user-select: none; }
 
         input, textarea, select {
             -webkit-user-select: auto;
@@ -289,30 +288,60 @@
         /* ===================================================
            PAGE: BERANDA (HERO)
            =================================================== */
-        #page-beranda { background: var(--red); }
+        #page-beranda { background: #111; }
         .hero {
             min-height: calc(100vh - var(--nav-h));
-            background: var(--red);
+            background: transparent;
             display: flex;
             align-items: center;
             position: relative;
             overflow: hidden;
         }
-        .hero::before {
-            content: '';
+        /* Slideshow background */
+        .hero-slideshow {
             position: absolute;
-            top: -50%; left: -20%;
-            width: 60%; height: 180%;
-            background: radial-gradient(ellipse, rgba(255,255,255,0.06) 0%, transparent 70%);
-            border-radius: 50%;
+            inset: 0;
+            z-index: 0;
         }
-        .hero::after {
-            content: '';
+        .hero-slide {
             position: absolute;
-            bottom: -30%; right: -10%;
-            width: 50%; height: 100%;
-            background: radial-gradient(ellipse, rgba(0,0,0,0.12) 0%, transparent 70%);
+            inset: 0;
+            background-size: cover;
+            background-position: center;
+            opacity: 0;
+            transition: opacity 1.2s ease-in-out;
+        }
+        .hero-slide.active { opacity: 1; }
+        /* Overlay merah transparan di atas foto */
+        .hero-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(185, 15, 15, 0.62);
+            z-index: 1;
+        }
+        /* Dot navigasi slideshow */
+        .hero-dots {
+            position: absolute;
+            bottom: 1.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 0.5rem;
+            z-index: 3;
+        }
+        .hero-dot {
+            width: 8px; height: 8px;
             border-radius: 50%;
+            background: rgba(255,255,255,0.45);
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+            padding: 0;
+        }
+        .hero-dot.active {
+            background: #fff;
+            width: 24px;
+            border-radius: 4px;
         }
         .hero-container {
             max-width: 1100px;
@@ -874,29 +903,6 @@
             gap: 0.75rem;
             flex-wrap: wrap;
         }
-        .btn-order-wa {
-            flex: 1.2;
-            background: #25D366;
-            color: #fff;
-            border: none;
-            padding: 0.75rem 1rem;
-            border-radius: 10px;
-            font-weight: 700;
-            font-size: 0.86rem;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.45rem;
-            transition: all 0.2s;
-            font-family: 'Poppins', sans-serif;
-            box-shadow: 0 4px 14px rgba(37, 211, 102, 0.3);
-        }
-        .btn-order-wa:hover {
-            background: #1EBE5D;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4);
-        }
         .btn-order-system {
             flex: 1;
             background: var(--red);
@@ -919,7 +925,7 @@
             background: var(--red-dark);
             transform: translateY(-2px);
         }
-        .btn-order-system:disabled, .btn-order-wa:disabled {
+        .btn-order-system:disabled {
             opacity: 0.55;
             cursor: not-allowed;
             transform: none !important;
@@ -1357,6 +1363,97 @@
         .social-btn:hover { background: rgba(255,255,255,0.3); transform: translateY(-2px); }
 
         /* ===================================================
+           BERANDA: info hero, keunggulan, testimoni, lokasi
+           =================================================== */
+        .hero-info { display: flex; flex-direction: column; gap: 0.4rem; margin-bottom: 1.8rem; font-size: 0.88rem; color: rgba(255,255,255,0.92); }
+        .hero-info span { display: flex; align-items: flex-start; gap: 0.5rem; line-height: 1.5; }
+        a.btn-outline, a.btn-primary { text-decoration: none; }
+
+        .home-section { padding: 3.5rem 2rem; background: var(--white); }
+        .home-section.alt { background: var(--cream); }
+        .home-container { max-width: 1100px; margin: 0 auto; }
+        .home-heading { text-align: center; font-size: 1.4rem; font-weight: 800; color: var(--text-dark); margin-bottom: 0.4rem; }
+        .home-lead { text-align: center; font-size: 0.88rem; color: var(--text-gray); margin: 0 auto 2rem; max-width: 520px; line-height: 1.65; }
+
+        .feature-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; }
+        .feature-item { padding: 1.4rem 1.25rem; border-left: 4px solid var(--red); background: var(--cream); border-radius: 0 12px 12px 0; }
+        .feature-item .ico { font-size: 1.6rem; display: block; margin-bottom: 0.5rem; }
+        .feature-item h3 { font-size: 0.98rem; font-weight: 700; margin-bottom: 0.3rem; }
+        .feature-item p { font-size: 0.84rem; color: var(--text-gray); line-height: 1.65; }
+
+        .quote-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; }
+        .quote-item { background: var(--white); border-radius: 14px; padding: 1.4rem 1.25rem; box-shadow: 0 4px 16px rgba(0,0,0,0.06); }
+        .quote-item p { font-size: 0.88rem; line-height: 1.7; margin-bottom: 0.9rem; }
+        .quote-item cite { font-size: 0.8rem; font-style: normal; font-weight: 700; color: var(--red); }
+
+        .visit-card { display: grid; grid-template-columns: 1.2fr 1fr; gap: 2rem; align-items: center; background: var(--red); color: var(--white); border-radius: 18px; padding: 2.2rem 2rem; }
+        .visit-card h2 { font-size: 1.5rem; font-weight: 800; margin-bottom: 0.6rem; }
+        .visit-card p { font-size: 0.9rem; line-height: 1.7; color: rgba(255,255,255,0.88); }
+        .visit-actions { display: flex; flex-direction: column; gap: 0.7rem; }
+        .visit-actions .btn-primary, .visit-actions .btn-outline { justify-content: center; }
+
+        /* Hero: logo kiri + judul kanan, penjelasan di bawahnya */
+        .hero-container { flex-direction: column; justify-content: center; gap: 2rem; text-align: center; }
+        .hero-brand { display: flex; align-items: center; justify-content: center; gap: 2.5rem; }
+        .hero-brand .hero-title { margin-bottom: 0; text-align: left; }
+        .hero-brand .hero-logo-circle { width: 190px; height: 190px; }
+        .hero-content { flex: none; max-width: 620px; }
+        .hero-content .hero-subtitle { max-width: none; margin-left: auto; margin-right: auto; }
+        .hero-info { align-items: center; }
+        .hero-info span { justify-content: center; }
+        .hero-actions { justify-content: center; }
+
+        /* ===================================================
+           SPLASH PEMBUKA: logo + nama, cincin loading, lalu tirai naik
+           =================================================== */
+        .splash {
+            position: fixed; inset: 0; z-index: 5000;
+            background: var(--red);
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            gap: 1.6rem; cursor: pointer;
+            transition: transform 0.75s cubic-bezier(0.76, 0, 0.24, 1);
+        }
+        .splash--out { transform: translateY(-100%); pointer-events: none; }
+        .splash-mark { position: relative; width: 168px; height: 168px; display: flex; align-items: center; justify-content: center; }
+        .splash-ring { position: absolute; inset: 0; width: 100%; height: 100%; transform: rotate(-90deg); }
+        .splash-ring circle { fill: none; stroke-width: 4; stroke-linecap: round; }
+        .splash-ring .track { stroke: rgba(255,255,255,0.22); }
+        .splash-ring .bar {
+            stroke: #fff; stroke-dasharray: 503; stroke-dashoffset: 503;
+            animation: splashRing 1.9s 0.3s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+        }
+        .splash-logo {
+            width: 128px; height: 128px; border-radius: 50%;
+            background: #fff; padding: 5px; overflow: hidden;
+            box-shadow: 0 14px 40px rgba(0,0,0,0.28);
+            transform: scale(0.6); opacity: 0;
+            animation: splashPop 0.6s 0.05s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+        .splash-logo img { width: 100%; height: 100%; object-fit: contain; border-radius: 50%; display: block; }
+        .splash-name {
+            font-size: clamp(1.5rem, 5vw, 2.2rem); font-weight: 800; color: #fff;
+            text-transform: uppercase; letter-spacing: 0.06em; line-height: 1.15; text-align: center;
+        }
+        .splash-name span { display: block; overflow: hidden; }
+        .splash-name span i {
+            display: block; font-style: normal; transform: translateY(110%);
+            animation: splashRise 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+        .splash-name span:nth-child(1) i { animation-delay: 0.7s; }
+        .splash-name span:nth-child(2) i { animation-delay: 0.85s; }
+        @keyframes splashRing { to { stroke-dashoffset: 0; } }
+        @keyframes splashPop  { to { transform: scale(1); opacity: 1; } }
+        @keyframes splashRise { to { transform: translateY(0); } }
+        @media (prefers-reduced-motion: reduce) {
+            .splash, .splash-logo, .splash-ring .bar, .splash-name span i { animation: none !important; }
+            .splash { transition: opacity 0.3s; }
+            .splash-logo { transform: none; opacity: 1; }
+            .splash-ring .bar { stroke-dashoffset: 0; }
+            .splash-name span i { transform: none; }
+            .splash--out { transform: none; opacity: 0; }
+        }
+
+        /* ===================================================
            RESPONSIVE
            =================================================== */
         @media (max-width: 900px) {
@@ -1382,11 +1479,32 @@
             .page-banner-text h2 { font-size: 1.5rem; }
             .page-banner-logo { width: 56px; height: 56px; }
             .bestsellers { padding: 2.5rem 1.25rem; }
+            .home-section { padding: 2.5rem 1.25rem; }
+            .feature-grid, .quote-grid, .visit-card { grid-template-columns: 1fr; }
+            .visit-card { padding: 1.6rem 1.25rem; }
+            .hero-brand { gap: 1rem; }
+            .hero-brand .hero-logo-circle { width: 84px; height: 84px; padding: 4px; border-width: 3px; }
+            .hero-brand .hero-title { font-size: 1.45rem; }
             .menu-content, .about-content-wrap, .kontak-content-wrap { padding: 1.5rem 1rem 3rem; }
         }
     </style>
 </head>
 <body>
+
+{{-- SPLASH PEMBUKA --}}
+<div class="splash" id="splash" aria-label="Memuat Angkringan Sekota">
+    <div class="splash-mark">
+        <svg class="splash-ring" viewBox="0 0 168 168" aria-hidden="true">
+            <circle class="track" cx="84" cy="84" r="80"/>
+            <circle class="bar" cx="84" cy="84" r="80"/>
+        </svg>
+        <div class="splash-logo">
+            <img src="{{ $profil->logo_url ?? asset('images/logo.png') }}" alt="{{ $profil->nama_usaha ?? 'Angkringan Sekota' }}">
+        </div>
+    </div>
+    <div class="splash-name"><span><i>Angkringan</i></span><span><i>Sekota</i></span></div>
+</div>
+<noscript><style>.splash { display: none; }</style></noscript>
 
 {{-- ============================================================
      NAVBAR — always fixed, z-index 1000
@@ -1423,34 +1541,61 @@
      PAGE: BERANDA
      ============================================================== --}}
 <div id="page-beranda" class="page active">
+    @php
+        // Isi dengan ulasan ASLI pelanggan, contoh: ['nama' => 'Rani', 'isi' => 'Nasi kucingnya enak...']
+        // Selama kosong, bagian testimoni tidak ditampilkan.
+        $testimoni = [];
+    @endphp
 
     {{-- Hero --}}
     <section class="hero">
+        {{-- Slideshow background --}}
+        <div class="hero-slideshow" id="heroSlideshow">
+            <div class="hero-slide active" style="background-image: url('{{ asset('images/hero/slide1.jpg') }}');"></div>
+            <div class="hero-slide" style="background-image: url('{{ asset('images/hero/slide2.jpg') }}');"></div>
+            <div class="hero-slide" style="background-image: url('{{ asset('images/hero/slide3.jpg') }}');"></div>
+        </div>
+        {{-- Overlay merah transparan --}}
+        <div class="hero-overlay"></div>
+
+        {{-- Konten hero --}}
         <div class="hero-container">
-            <div class="hero-content">
+            <div class="hero-brand">
+                <div class="hero-logo-wrap">
+                    <div class="hero-logo-circle">
+                        <img src="{{ $profil->logo_url ?? asset('images/logo.png') }}" alt="{{ $profil->nama_usaha ?? 'Angkringan Sekota' }}">
+                    </div>
+                </div>
                 <h1 class="hero-title">Angkringan<br>Sekota<br>Tulungagung</h1>
-                <p class="hero-subtitle">
-                    Cari tempat makan yang santai sambil menikmati suasana malam yang nyaman?
-                    Angkringan Sekota hadir dengan menu lezat dan harga terjangkau di Tulungagung.
-                </p>
-                <div class="hero-actions">
-                    <button class="btn-primary" onclick="goTo('menu')">Jelajahi Menu →</button>
-                    <button class="btn-outline" onclick="goTo('tentang')">Tentang Kami</button>
-                </div>
             </div>
-            <div class="hero-logo-wrap">
-                <div class="hero-logo-circle">
-                    <img src="{{ $profil->logo_url ?? asset('images/logo.png') }}" alt="{{ $profil->nama_usaha ?? 'Angkringan Sekota' }}">
-                </div>
+        </div>
+
+        {{-- Dot navigasi --}}
+        <div class="hero-dots" id="heroDots">
+            <button class="hero-dot active" onclick="heroGoTo(0)"></button>
+            <button class="hero-dot" onclick="heroGoTo(1)"></button>
+            <button class="hero-dot" onclick="heroGoTo(2)"></button>
+        </div>
+    </section>
+
+    {{-- Keunggulan --}}
+    <section class="home-section">
+        <div class="home-container">
+            <h2 class="home-heading">Kenapa nongkrong di Sekota</h2>
+            <p class="home-lead">Tempat makan santai untuk ngobrol sampai malam tanpa bikin dompet tipis.</p>
+            <div class="feature-grid">
+                <div class="feature-item"><span class="ico">💸</span><h3>Harga terjangkau</h3><p>Nasi kucing, sate, dan gorengan dengan harga yang ramah untuk semua kalangan.</p></div>
+                <div class="feature-item"><span class="ico">🌙</span><h3>Buka setiap hari</h3><p>Siap menemani malam Anda, dari pulang kerja sampai kumpul bareng teman.</p></div>
+                <div class="feature-item"><span class="ico">🪑</span><h3>Santai dan nyaman</h3><p>Suasana hangat dan akrab, cocok untuk makan sendiri, berdua, atau ramai-ramai.</p></div>
             </div>
         </div>
     </section>
 
-    {{-- Produk Terlaris --}}
-    <section class="bestsellers">
+    {{-- Menu Favorit --}}
+    <section class="bestsellers" style="background: var(--cream);">
         <div class="bestsellers-container">
-            <div class="section-sublabel">Menu Paling Diburu</div>
-            <div class="section-title-red">PRODUK TERLARIS</div>
+            <h2 class="home-heading">Menu favorit</h2>
+            <p class="home-lead">Beberapa pilihan untuk memulai. Klik + Pesan untuk menambahkan ke keranjang.</p>
 
             <div class="cards-grid">
                 @forelse($produk->take(6) as $item)
@@ -1475,7 +1620,37 @@
                 @endforelse
             </div>
 
-            <button class="btn-cta-full" onclick="goTo('menu')">Lihat Seluruh Daftar Menu Selengkapnya</button>
+            <button class="btn-cta-full" onclick="goTo('menu')">Lihat Semua Menu</button>
+        </div>
+    </section>
+
+    {{-- Testimoni (tampil hanya jika $testimoni terisi) --}}
+    @if(count($testimoni))
+    <section class="home-section">
+        <div class="home-container">
+            <h2 class="home-heading">Kata pelanggan</h2>
+            <div class="quote-grid" style="margin-top:1.5rem">
+                @foreach($testimoni as $t)
+                <blockquote class="quote-item"><p>{{ $t['isi'] }}</p><cite>{{ $t['nama'] }}</cite></blockquote>
+                @endforeach
+            </div>
+        </div>
+    </section>
+    @endif
+
+    {{-- Lokasi --}}
+    <section class="home-section">
+        <div class="home-container">
+            <div class="visit-card">
+                <div>
+                    <h2>Mampir ke Angkringan Sekota</h2>
+                    <p>{{ $profil->alamat ?? 'Tulungagung, Jawa Timur' }}<br>Buka setiap hari, {{ $profil->jam_buka ?? '17.00 – 23.00 WIB' }}</p>
+                </div>
+                <div class="visit-actions">
+                    <a class="btn-primary" href="https://maps.app.goo.gl/NyuN7yDHJ21HJt4L7" target="_blank" rel="noopener">Petunjuk arah</a>
+                    <button class="btn-outline" onclick="goTo('kontak')">Lihat peta dan kontak</button>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -1872,9 +2047,6 @@
         </div>
 
         <div class="modal-footer">
-            <button type="button" class="btn-order-wa" id="btnOrderWa" onclick="kirimPesananWhatsApp()">
-                <span>💬</span> Pesan via WhatsApp
-            </button>
             <button type="button" class="btn-order-system" id="btnOrderSystem" onclick="kirimPesananSistem()">
                 <span>📩</span> Simpan ke Kasir
             </button>
@@ -1905,7 +2077,6 @@
 //  SISTEM KERANJANG & PEMESANAN MENU
 // =============================================
 let keranjang = {};
-const WA_TARGET = "{{ preg_replace('/[^0-9]/', '', $profil->whatsapp ?? '081234567890') }}";
 
 function formatRupiah(angka) {
     return 'Rp' + Number(angka).toLocaleString('id-ID');
@@ -1996,7 +2167,6 @@ function renderKeranjang() {
     const container = document.getElementById('orderItemsContainer');
     const modalTotalItems = document.getElementById('modalTotalItems');
     const modalTotalPrice = document.getElementById('modalTotalPrice');
-    const btnOrderWa = document.getElementById('btnOrderWa');
     const btnOrderSystem = document.getElementById('btnOrderSystem');
 
     modalTotalItems.textContent = totalQty + ' porsi';
@@ -2004,12 +2174,10 @@ function renderKeranjang() {
 
     if (totalQty === 0) {
         container.innerHTML = '<div class="order-empty-state">🍽️ Belum ada menu yang dipilih.<br><span style="font-size:0.8rem;color:#888;">Silakan klik "+ Pesan" pada menu makanan atau minuman.</span></div>';
-        btnOrderWa.disabled = true;
         btnOrderSystem.disabled = true;
         return;
     }
 
-    btnOrderWa.disabled = false;
     btnOrderSystem.disabled = false;
 
     let html = '';
@@ -2125,20 +2293,6 @@ function buatTeksPesanan() {
     return { nama, wa, text, totalPrice };
 }
 
-function kirimPesananWhatsApp() {
-    const data = buatTeksPesanan();
-    if (!data) return;
-
-    let targetWa = WA_TARGET;
-    if (targetWa.startsWith('0')) {
-        targetWa = '62' + targetWa.substring(1);
-    }
-    if (!targetWa) targetWa = '6281234567890';
-
-    const url = 'https://api.whatsapp.com/send?phone=' + targetWa + '&text=' + encodeURIComponent(data.text);
-    window.open(url, '_blank');
-}
-
 function kirimPesananSistem() {
     const data = buatTeksPesanan();
     if (!data) return;
@@ -2184,7 +2338,7 @@ function kirimPesananSistem() {
         msgEl.style.display = 'block';
         msgEl.style.background = '#FEE2E2';
         msgEl.style.color = '#991B1B';
-        msgEl.innerHTML = 'Terjadi kendala saat mengirim ke server. Silakan gunakan tombol "Pesan via WhatsApp".';
+        msgEl.innerHTML = 'Terjadi kendala saat mengirim ke server. Silakan coba lagi.';
     });
 }
 
@@ -2227,9 +2381,41 @@ document.getElementById('orderNama')?.addEventListener('input', function() {
 // =============================================
 //  PAGE NAVIGATION SYSTEM
 // =============================================
-const PAGE_ORDER = ['beranda', 'menu', 'tentang', 'kontak'];
+// HERO SLIDESHOW
+// =============================================
+(function() {
+    const slides = document.querySelectorAll('.hero-slide');
+    const dots   = document.querySelectorAll('.hero-dot');
+    let current  = 0;
+    let timer;
+
+    function heroGoToSlide(idx) {
+        slides[current].classList.remove('active');
+        dots[current].classList.remove('active');
+        current = (idx + slides.length) % slides.length;
+        slides[current].classList.add('active');
+        dots[current].classList.add('active');
+    }
+
+    function startAuto() {
+        timer = setInterval(() => heroGoToSlide(current + 1), 5000);
+    }
+
+    // Expose untuk onclick di HTML
+    window.heroGoTo = function(idx) {
+        clearInterval(timer);
+        heroGoToSlide(idx);
+        startAuto();
+    };
+
+    startAuto();
+})();
+
+// =============================================
+
 let currentPage = 'beranda';
 let busy = false;
+const PAGE_ORDER = ['beranda', 'menu', 'tentang', 'kontak'];
 
 function goTo(pageId) {
     if (pageId === currentPage || busy) return;
@@ -2430,6 +2616,35 @@ function finishTypewriter() {
         <p>Buka setiap hari mulai pukul <strong>17.00 – 23.00 WIB</strong>. Kami selalu menyambut Anda dengan hangat dan ramah.</p>
     `;
 }
+</script>
+<script>
+// =============================================
+//  SPLASH PEMBUKA — tampil minimal 2,4 detik, tutup setelah halaman siap
+// =============================================
+(function () {
+    var splash = document.getElementById('splash');
+    if (!splash) return;
+    var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var minMs = reduce ? 700 : 2400;
+    var started = Date.now();
+    var closed = false;
+
+    function close() {
+        if (closed) return;
+        closed = true;
+        splash.classList.add('splash--out');
+        setTimeout(function () { splash.remove(); }, 800);
+    }
+    function closeWhenReady() {
+        setTimeout(close, Math.max(0, minMs - (Date.now() - started)));
+    }
+
+    if (document.readyState === 'complete') closeWhenReady();
+    else window.addEventListener('load', closeWhenReady);
+
+    setTimeout(close, 6000);               // batas aman bila ada gambar yang lambat
+    splash.addEventListener('click', close); // ketuk untuk melewati
+})();
 </script>
 </body>
 </html>

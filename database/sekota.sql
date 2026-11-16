@@ -337,6 +337,29 @@ INSERT INTO `site_settings` (`key`, `value`, `type`, `label`, `created_at`, `upd
   ('about_image',      'images/about_photo.jpg',                                            'image', 'Gambar About',      NOW(), NOW());
 
 
+CREATE TABLE `products` (
+  `id` BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  `name` VARCHAR(255) NOT NULL,
+  `description` TEXT NULL,
+  `price` DECIMAL(10,2) NOT NULL,
+  `photo_path` VARCHAR(255) NULL,
+  `category_id` BIGINT UNSIGNED NOT NULL,
+  `is_best_seller` TINYINT(1) NOT NULL DEFAULT 0,
+  `status` ENUM('tersedia','habis') NOT NULL DEFAULT 'tersedia',
+  `created_at` TIMESTAMP NULL,
+  `updated_at` TIMESTAMP NULL,
+  CONSTRAINT `products_category_id_foreign` FOREIGN KEY (`category_id`) REFERENCES `categories`(`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE `daily_infos` (
+  `id` BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  `opening_hours` VARCHAR(255) NOT NULL,
+  `promo` VARCHAR(255) NULL,
+  `announcement` TEXT NULL,
+  `created_at` TIMESTAMP NULL,
+  `updated_at` TIMESTAMP NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 -- ============================================================
 --  BAGIAN 3: USER ADMIN DEFAULT
 --  Password: admin123
