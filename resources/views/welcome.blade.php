@@ -2130,12 +2130,231 @@
         a.btn-outline, a.btn-primary { text-decoration: none; }
 
         /* ===================================================
+           SECTION: PROMO BANNER CAROUSEL (STYLE SEPERTI TAKAPEDIA)
+           =================================================== */
+        .promo-banner-section {
+            background: var(--cream);
+            padding: 2.25rem 0 1.5rem;
+            position: relative;
+        }
+        .promo-banner-container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+        .promo-banner-wrapper {
+            position: relative;
+            border-radius: 22px;
+            overflow: hidden;
+            background: #141416;
+            box-shadow: 0 14px 34px rgba(0,0,0,0.14), 0 2px 6px rgba(0,0,0,0.06);
+            border: 1px solid rgba(200,16,46,0.18);
+            aspect-ratio: 21 / 8;
+            min-height: 240px;
+            max-height: 380px;
+        }
+        .promo-banner-track {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+        .promo-banner-slide {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            visibility: hidden;
+            transform: scale(1.02);
+            transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+                        transform 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+                        visibility 0.6s;
+            pointer-events: none;
+            z-index: 1;
+        }
+        .promo-banner-slide.active {
+            opacity: 1;
+            visibility: visible;
+            transform: scale(1);
+            pointer-events: auto;
+            z-index: 2;
+        }
+        .promo-banner-card {
+            display: block;
+            width: 100%;
+            height: 100%;
+            position: relative;
+            text-decoration: none;
+            color: inherit;
+            overflow: hidden;
+        }
+        .promo-banner-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            display: block;
+            transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .promo-banner-card:hover .promo-banner-img {
+            transform: scale(1.03);
+        }
+        .promo-banner-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(15,15,18,0.02) 0%, rgba(15,15,18,0.3) 40%, rgba(15,15,18,0.85) 100%);
+            display: flex;
+            align-items: flex-end;
+            padding: 2rem 2.25rem;
+            z-index: 3;
+            pointer-events: none;
+        }
+        .promo-banner-content {
+            max-width: 720px;
+            pointer-events: auto;
+        }
+        .promo-banner-title {
+            color: #FFFFFF;
+            font-size: clamp(1.15rem, 2.6vw, 1.85rem);
+            font-weight: 800;
+            line-height: 1.25;
+            letter-spacing: -0.01em;
+            text-transform: uppercase;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.85);
+            margin: 0;
+        }
+        .promo-banner-desc {
+            color: rgba(255,255,255,0.92);
+            font-size: clamp(0.8rem, 1.4vw, 0.95rem);
+            line-height: 1.5;
+            margin: 0.45rem 0 0;
+            text-shadow: 0 1px 6px rgba(0,0,0,0.85);
+        }
+        .promo-banner-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            margin-top: 0.85rem;
+            background: var(--red);
+            color: #FFFFFF;
+            padding: 0.45rem 1.15rem;
+            border-radius: 99px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+            box-shadow: 0 4px 14px rgba(200,16,46,0.45);
+            transition: all 0.2s ease;
+        }
+        .promo-banner-btn svg {
+            width: 15px;
+            height: 15px;
+            transition: transform 0.2s ease;
+        }
+        .promo-banner-card:hover .promo-banner-btn {
+            background: #E8203A;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(200,16,46,0.6);
+        }
+        .promo-banner-card:hover .promo-banner-btn svg {
+            transform: translateX(3px);
+        }
+
+        /* Navigasi Panah Kiri Kanan */
+        .promo-banner-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: rgba(18, 18, 22, 0.65);
+            backdrop-filter: blur(8px);
+            border: 1.5px solid rgba(255,255,255,0.25);
+            color: #FFFFFF;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 10;
+            transition: all 0.25s ease;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.3);
+        }
+        .promo-banner-arrow:hover {
+            background: var(--red);
+            border-color: var(--red);
+            transform: translateY(-50%) scale(1.1);
+            box-shadow: 0 6px 20px rgba(200,16,46,0.5);
+        }
+        .promo-banner-arrow.prev { left: 16px; }
+        .promo-banner-arrow.next { right: 16px; }
+        .promo-banner-arrow svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* Dot Indicators */
+        .promo-banner-dots {
+            position: absolute;
+            bottom: 14px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            z-index: 10;
+            padding: 4px 10px;
+            background: rgba(0,0,0,0.4);
+            backdrop-filter: blur(6px);
+            border-radius: 99px;
+            border: 1px solid rgba(255,255,255,0.15);
+        }
+        .banner-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 99px;
+            background: rgba(255,255,255,0.45);
+            border: none;
+            padding: 0;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .banner-dot.active {
+            width: 24px;
+            background: #FFFFFF;
+            box-shadow: 0 0 10px rgba(255,255,255,0.85);
+        }
+
+        @media (max-width: 768px) {
+            .promo-banner-section {
+                padding: 1.25rem 0 0.75rem;
+            }
+            .promo-banner-wrapper {
+                border-radius: 16px;
+                aspect-ratio: 16 / 9;
+                min-height: 200px;
+            }
+            .promo-banner-overlay {
+                padding: 1.25rem 1.25rem;
+            }
+            .promo-banner-arrow {
+                width: 34px;
+                height: 34px;
+            }
+            .promo-banner-arrow.prev { left: 8px; }
+            .promo-banner-arrow.next { right: 8px; }
+            .promo-banner-arrow svg {
+                width: 16px;
+                height: 16px;
+            }
+        }
+
+        /* ===================================================
            SECTION: CAROUSEL ULASAN
            =================================================== */
         .reviews-carousel-section {
             background: var(--cream);
-            padding: 3rem 0 3.25rem;
-            border-bottom: 1px solid rgba(200,16,46,0.1);
+            padding: 3.25rem 0 3.5rem;
+            border-top: 1px solid rgba(200,16,46,0.1);
             overflow: hidden;
         }
         .reviews-carousel-head {
@@ -2760,52 +2979,87 @@
     </div>
 
     {{-- ============================================================
-         CAROUSEL ULASAN PENGUNJUNG
-         Menggantikan bagian home-intro
-         Data dari: $ulasan (Testimonial::aktif()->terbaru()->get())
+         BANNER PROMO CAROUSEL (MENGGANTIKAN BEKAS BAGIAN ULASAN)
+         Dapat diganti oleh pegawai melalui web admin
          ============================================================ --}}
-    <section class="reviews-carousel-section" aria-labelledby="rc-heading" id="home-reviews-carousel">
-        @php $totalUlasan = $ulasan->count(); @endphp
-
-        <div class="reviews-carousel-head">
-            <h2 id="rc-heading">Kata pengunjung <span>Angkringan Sekota</span></h2>
-            @if($totalUlasan > 0)
-            <div class="reviews-carousel-nav" role="group" aria-label="Navigasi ulasan">
-                <button type="button" class="btn-carousel-nav" id="rcPrev" aria-label="Ulasan sebelumnya">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg>
-                </button>
-                <button type="button" class="btn-carousel-nav" id="rcNext" aria-label="Ulasan berikutnya">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg>
-                </button>
-            </div>
-            @endif
-        </div>
-
-        @if($totalUlasan > 0)
-        <div class="reviews-carousel-track-wrap" id="rcTrack" tabindex="0" aria-label="Daftar ulasan pengunjung">
-            <div class="reviews-carousel-track">
-                @foreach($ulasan as $u)
+    <section class="promo-banner-section" aria-label="Banner Promo Angkringan Sekota">
+        <div class="promo-banner-container">
+            <div class="promo-banner-wrapper" id="promoBannerWrap">
                 @php
-                    $bintang = str_repeat('★', $u->rating) . str_repeat('☆', 5 - $u->rating);
+                    $activeBanners = isset($banners) ? $banners : collect();
                 @endphp
-                <article class="rc-card">
-                    <div class="rc-card-top">
-                        <div class="rc-avatar" aria-hidden="true">{{ $u->inisial }}</div>
-                        <div class="rc-meta">
-                            <div class="rc-name">{{ $u->customer_name }}</div>
-                            <div class="rc-time">{{ $u->waktu_format }}</div>
-                        </div>
-                        <div class="rc-stars" aria-label="Bintang {{ $u->rating }} dari 5">{{ $bintang }}</div>
+
+                @if($activeBanners->count() > 0)
+                    <div class="promo-banner-track" id="promoBannerTrack">
+                        @foreach($activeBanners as $index => $banner)
+                            <div class="promo-banner-slide {{ $index === 0 ? 'active' : '' }}" data-index="{{ $index }}">
+                                @if($banner->link)
+                                    <a href="{{ $banner->link }}" class="promo-banner-card" {!! str_starts_with($banner->link, 'http') ? 'target="_blank" rel="noopener"' : '' !!}>
+                                @else
+                                    <div class="promo-banner-card">
+                                @endif
+
+                                    <img src="{{ $banner->gambar_url }}" alt="{{ $banner->judul ?? 'Banner Promo' }}" class="promo-banner-img" loading="{{ $index === 0 ? 'eager' : 'lazy' }}">
+
+                                    @if($banner->judul || $banner->deskripsi)
+                                        <div class="promo-banner-overlay">
+                                            <div class="promo-banner-content">
+                                                @if($banner->judul)
+                                                    <h3 class="promo-banner-title">{{ $banner->judul }}</h3>
+                                                @endif
+                                                @if($banner->deskripsi)
+                                                    <p class="promo-banner-desc">{{ $banner->deskripsi }}</p>
+                                                @endif
+                                                @if($banner->link)
+                                                    <span class="promo-banner-btn">
+                                                        <span>Lihat Detail</span>
+                                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                                                    </span>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    @endif
+
+                                @if($banner->link)
+                                    </a>
+                                @else
+                                    </div>
+                                @endif
+                            </div>
+                        @endforeach
                     </div>
-                    <p class="rc-text">&ldquo;{{ $u->review }}&rdquo;</p>
-                </article>
-                @endforeach
+
+                    @if($activeBanners->count() > 1)
+                        <button type="button" class="promo-banner-arrow prev" id="bannerPrevBtn" aria-label="Banner Sebelumnya">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M15 18l-6-6 6-6"/></svg>
+                        </button>
+                        <button type="button" class="promo-banner-arrow next" id="bannerNextBtn" aria-label="Banner Berikutnya">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M9 18l6-6-6-6"/></svg>
+                        </button>
+
+                        <div class="promo-banner-dots" id="bannerDotsWrap" role="tablist">
+                            @foreach($activeBanners as $index => $banner)
+                                <button type="button" class="banner-dot {{ $index === 0 ? 'active' : '' }}" onclick="goToBannerSlide({{ $index }})" aria-label="Slide {{ $index + 1 }}"></button>
+                            @endforeach
+                        </div>
+                    @endif
+                @else
+                    <div class="promo-banner-track">
+                        <div class="promo-banner-slide active">
+                            <div class="promo-banner-card">
+                                <img src="{{ asset('images/hero/slide1.jpg') }}" alt="Angkringan Sekota" class="promo-banner-img">
+                                <div class="promo-banner-overlay">
+                                    <div class="promo-banner-content">
+                                        <h3 class="promo-banner-title">Angkringan Sekota Tulungagung</h3>
+                                        <p class="promo-banner-desc">Buka tiap hari 17.00 - 23.00 WIB • Makanan &amp; Wedangan Khas Angkringan</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endif
             </div>
         </div>
-        <div class="reviews-carousel-dots" id="rcDots" aria-hidden="true"></div>
-        @else
-        <p class="rc-empty">Belum ada ulasan. <button type="button" onclick="goTo('kontak')" style="background:none;border:none;color:var(--red);font-weight:700;cursor:pointer;font-family:inherit;font-size:inherit;">Jadilah yang pertama memberi ulasan.</button></p>
-        @endif
     </section>
 
     <section class="bestsellers" aria-labelledby="home-menu-heading">
@@ -2863,27 +3117,52 @@
     </section>
     @endif
 
-    <section class="home-visit" aria-labelledby="home-visit-heading">
-        <div class="home-visit-inner">
-            <div>
-                <h2 id="home-visit-heading">Mampir ke {{ $namaUsaha }}</h2>
-                <p>Gerobak kami sudah siap sejak petang. Pesan di tempat, bawa pulang, atau tanya dulu lewat WA.</p>
-                <div class="home-visit-detail">
-                    <span class="vd-item">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
-                        {{ $jamBuka }}
-                    </span>
-                    <span class="vd-item">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-                        {{ $alamatUsaha }}
-                    </span>
-                </div>
+    {{-- ============================================================
+         CAROUSEL ULASAN PENGUNJUNG (DIPINDAH PAS DI ATAS FOOTER)
+         Data dari: $ulasan (Testimonial::aktif()->terbaru()->get())
+         ============================================================ --}}
+    <section class="reviews-carousel-section" aria-labelledby="rc-heading" id="home-reviews-carousel">
+        @php $totalUlasan = $ulasan->count(); @endphp
+
+        <div class="reviews-carousel-head">
+            <h2 id="rc-heading">Kata pengunjung <span>Angkringan Sekota</span></h2>
+            @if($totalUlasan > 0)
+            <div class="reviews-carousel-nav" role="group" aria-label="Navigasi ulasan">
+                <button type="button" class="btn-carousel-nav" id="rcPrev" aria-label="Ulasan sebelumnya">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg>
+                </button>
+                <button type="button" class="btn-carousel-nav" id="rcNext" aria-label="Ulasan berikutnya">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg>
+                </button>
             </div>
-            <div class="home-visit-actions">
-                <a class="btn-primary" href="https://maps.app.goo.gl/NyuN7yDHJ21HJt4L7" target="_blank" rel="noopener">Petunjuk Arah</a>
-                <button type="button" class="btn-outline" onclick="goTo('kontak')">Peta &amp; Kontak</button>
+            @endif
+        </div>
+
+        @if($totalUlasan > 0)
+        <div class="reviews-carousel-track-wrap" id="rcTrack" tabindex="0" aria-label="Daftar ulasan pengunjung">
+            <div class="reviews-carousel-track">
+                @foreach($ulasan as $u)
+                @php
+                    $bintang = str_repeat('★', $u->rating) . str_repeat('☆', 5 - $u->rating);
+                @endphp
+                <article class="rc-card">
+                    <div class="rc-card-top">
+                        <div class="rc-avatar" aria-hidden="true">{{ $u->inisial }}</div>
+                        <div class="rc-meta">
+                            <div class="rc-name">{{ $u->customer_name }}</div>
+                            <div class="rc-time">{{ $u->waktu_format }}</div>
+                        </div>
+                        <div class="rc-stars" aria-label="Bintang {{ $u->rating }} dari 5">{{ $bintang }}</div>
+                    </div>
+                    <p class="rc-text">&ldquo;{{ $u->review }}&rdquo;</p>
+                </article>
+                @endforeach
             </div>
         </div>
+        <div class="reviews-carousel-dots" id="rcDots" aria-hidden="true"></div>
+        @else
+        <p class="rc-empty">Belum ada ulasan. <button type="button" onclick="goTo('kontak')" style="background:none;border:none;color:var(--red);font-weight:700;cursor:pointer;font-family:inherit;font-size:inherit;">Jadilah yang pertama memberi ulasan.</button></p>
+        @endif
     </section>
 
     @include('partials._footer')
@@ -3552,6 +3831,115 @@ document.getElementById('orderNama')?.addEventListener('input', function() {
 </script>
 
 <script>
+// =============================================
+//  PROMO BANNER SLIDER (SEKOTA BANNER)
+// =============================================
+let currentBannerIdx = 0;
+let bannerTimer = null;
+
+function showBannerSlide(idx) {
+    const slides = document.querySelectorAll('.promo-banner-slide');
+    const dots   = document.querySelectorAll('.promo-banner-dots .banner-dot');
+    if (!slides.length) return;
+
+    slides.forEach(s => s.classList.remove('active'));
+    dots.forEach(d => d.classList.remove('active'));
+
+    currentBannerIdx = (idx + slides.length) % slides.length;
+    slides[currentBannerIdx].classList.add('active');
+    if (dots[currentBannerIdx]) {
+        dots[currentBannerIdx].classList.add('active');
+    }
+}
+
+function nextBannerSlide() {
+    showBannerSlide(currentBannerIdx + 1);
+}
+
+function prevBannerSlide() {
+    showBannerSlide(currentBannerIdx - 1);
+}
+
+window.goToBannerSlide = function(idx) {
+    showBannerSlide(idx);
+    resetBannerTimer();
+};
+
+function resetBannerTimer() {
+    clearInterval(bannerTimer);
+    const slides = document.querySelectorAll('.promo-banner-slide');
+    if (slides.length > 1) {
+        bannerTimer = setInterval(nextBannerSlide, 5000);
+    }
+}
+
+(function initPromoBanner() {
+    const wrap = document.getElementById('promoBannerWrap');
+    const prev = document.getElementById('bannerPrevBtn');
+    const next = document.getElementById('bannerNextBtn');
+    if (!wrap) return;
+
+    if (prev) {
+        prev.addEventListener('click', (e) => {
+            e.stopPropagation();
+            prevBannerSlide();
+            resetBannerTimer();
+        });
+    }
+    if (next) {
+        next.addEventListener('click', (e) => {
+            e.stopPropagation();
+            nextBannerSlide();
+            resetBannerTimer();
+        });
+    }
+
+    // Pause on hover
+    wrap.addEventListener('mouseenter', () => clearInterval(bannerTimer));
+    wrap.addEventListener('mouseleave', () => resetBannerTimer());
+
+    // Swipe touch support
+    let touchStartX = 0;
+    let touchEndX = 0;
+    wrap.addEventListener('touchstart', (e) => {
+        touchStartX = e.changedTouches[0].screenX;
+        clearInterval(bannerTimer);
+    }, { passive: true });
+    wrap.addEventListener('touchend', (e) => {
+        touchEndX = e.changedTouches[0].screenX;
+        if (touchEndX < touchStartX - 50) {
+            nextBannerSlide();
+        } else if (touchEndX > touchStartX + 50) {
+            prevBannerSlide();
+        }
+        resetBannerTimer();
+    }, { passive: true });
+
+    resetBannerTimer();
+})();
+
+// =============================================
+//  CAROUSEL ULASAN PENGUNJUNG
+// =============================================
+(function initReviewsCarousel() {
+    const track = document.getElementById('rcTrack');
+    const prev = document.getElementById('rcPrev');
+    const next = document.getElementById('rcNext');
+    if (!track) return;
+
+    const scrollAmount = 320;
+    if (prev) {
+        prev.addEventListener('click', () => {
+            track.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+        });
+    }
+    if (next) {
+        next.addEventListener('click', () => {
+            track.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+        });
+    }
+})();
+
 // =============================================
 //  PAGE NAVIGATION SYSTEM
 // =============================================

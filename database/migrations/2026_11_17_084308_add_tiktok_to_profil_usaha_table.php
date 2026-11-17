@@ -8,9 +8,11 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::table('profil_usaha', function (Blueprint $table) {
-            $table->string('tiktok')->nullable()->after('facebook');
-        });
+        if (!Schema::hasColumn('profil_usaha', 'tiktok')) {
+            Schema::table('profil_usaha', function (Blueprint $table) {
+                $table->string('tiktok')->nullable()->after('facebook');
+            });
+        }
     }
 
     public function down(): void

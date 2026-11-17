@@ -197,9 +197,14 @@
             <span class="nav-icon">🛒</span> Kasir
         </a>
 
-        {{-- 3. Beranda & Banner --}}
-        <a href="{{ route('admin.profil.index') }}" class="{{ request()->routeIs('admin.profil.index') && !request()->has('tab') ? 'active' : '' }}">
-            <span class="nav-icon">🏠</span> Beranda &amp; Banner
+        {{-- 3. Banner Promo --}}
+        <a href="{{ route('admin.banner.index') }}" class="{{ request()->routeIs('admin.banner.*') ? 'active' : '' }}">
+            <span class="nav-icon">🖼️</span> Banner Promo
+        </a>
+
+        {{-- 4. Profil Usaha --}}
+        <a href="{{ route('admin.profil.index') }}" class="{{ request()->routeIs('admin.profil.*') ? 'active' : '' }}">
+            <span class="nav-icon">🏠</span> Profil Usaha
         </a>
 
         {{-- 4. Tentang Kami --}}

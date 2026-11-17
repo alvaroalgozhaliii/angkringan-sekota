@@ -9,7 +9,9 @@ use App\Http\Controllers\Admin\ProdukController;
 use App\Http\Controllers\Admin\PesanController;
 use App\Http\Controllers\Admin\PenggunaController;
 use App\Http\Controllers\Admin\UlasanController;
+use App\Http\Controllers\Admin\BannerController;
 use App\Http\Controllers\UlasanPublikController;
+use App\Models\Banner;
 use App\Models\Produk;
 use App\Models\ProfilUsaha;
 use App\Models\Testimonial;
@@ -21,7 +23,8 @@ Route::get('/', function () {
     $profil = ProfilUsaha::getSingleton();
     $produk = Produk::tayang()->get();
     $ulasan = Testimonial::aktif()->terbaru()->get();
-    return view('welcome', compact('profil', 'produk', 'ulasan'));
+    $banners = Banner::aktif()->get();
+    return view('welcome', compact('profil', 'produk', 'ulasan', 'banners'));
 })->name('home');
 
 // Form kirim pesan dari web profil
@@ -51,6 +54,15 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/kasir/transaksi/{transaksi}', [KasirController::class, 'show'])->name('kasir.show');
         Route::get('/kasir/struk/{transaksi}',     [KasirController::class, 'struk'])->name('kasir.struk');
         Route::get('/kasir/riwayat',               [KasirController::class, 'riwayat'])->name('kasir.riwayat');
+
+        // Banner Promo
+        Route::get('/banner',                   [BannerController::class, 'index'])->name('banner.index');
+        Route::get('/banner/tambah',            [BannerController::class, 'create'])->name('banner.create');
+        Route::post('/banner',                  [BannerController::class, 'store'])->name('banner.store');
+        Route::get('/banner/{banner}/ubah',     [BannerController::class, 'edit'])->name('banner.edit');
+        Route::put('/banner/{banner}',          [BannerController::class, 'update'])->name('banner.update');
+        Route::delete('/banner/{banner}',       [BannerController::class, 'destroy'])->name('banner.destroy');
+        Route::patch('/banner/{banner}/toggle', [BannerController::class, 'toggleStatus'])->name('banner.toggle');
 
         // Profil & Kontak
         Route::get('/profil',         [ProfilController::class, 'index'])->name('profil.index');
