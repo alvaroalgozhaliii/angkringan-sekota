@@ -38,7 +38,30 @@ class PenggunaController extends Controller
             'role'     => $request->role,
         ]);
 
-        return back()->with('success', 'Pengguna admin berhasil ditambahkan!');
+        return back()->with('success', 'Pengguna berhasil ditambahkan.');
+    }
+
+    public function updateRole(Request $request, User $user)
+    {
+        if (Auth::user()->role !== 'owner') {
+            abort(403);
+        }
+
+        $data = $request->validate([
+            'role' => 'required|in:owner,pegawai',
+        ]);
+
+        if ($user->id === Auth::id() && $data['role'] !== 'owner') {
+            return back()->with('error', 'Akun yang sedang dipakai tidak bisa diturunkan dari admin.');
+        }
+
+        if ($user->role === 'owner' && $data['role'] !== 'owner' && User::where('role', 'owner')->count() <= 1) {
+            return back()->with('error', 'Harus ada minimal satu akun admin.');
+        }
+
+        $user->update(['role' => $data['role']]);
+
+        return back()->with('success', 'Hak akses ' . $user->name . ' diperbarui.');
     }
 
     public function destroy(User $user)
@@ -46,6 +69,9 @@ class PenggunaController extends Controller
         if (Auth::user()->role !== 'owner') abort(403);
         if ($user->id === Auth::id()) {
             return back()->with('error', 'Anda tidak dapat menghapus akun sendiri.');
+        }
+        if ($user->role === 'owner' && User::where('role', 'owner')->count() <= 1) {
+            return back()->with('error', 'Harus ada minimal satu akun admin.');
         }
         $user->delete();
         return back()->with('success', 'Pengguna berhasil dihapus!');

@@ -11,7 +11,7 @@ class AuthController extends Controller
     public function showLogin()
     {
         if (Auth::check() && in_array(Auth::user()->role, ['owner', 'pegawai'])) {
-            return redirect()->route('admin.dashboard');
+            return $this->redirectAfterLogin();
         }
         return view('admin.auth.login');
     }
@@ -35,7 +35,7 @@ class AuthController extends Controller
                 return back()->withErrors(['email' => 'Akun Anda tidak memiliki akses admin.']);
             }
             $request->session()->regenerate();
-            return redirect()->route('admin.dashboard');
+            return $this->redirectAfterLogin();
         }
 
         return back()->withErrors(['email' => 'Email atau password salah.'])->withInput($request->only('email'));
@@ -47,5 +47,12 @@ class AuthController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
         return redirect()->route('admin.login')->with('success', 'Berhasil logout.');
+    }
+
+    private function redirectAfterLogin()
+    {
+        return Auth::user()->role === 'owner'
+            ? redirect()->route('admin.pengguna.index')
+            : redirect()->route('admin.profil.index');
     }
 }

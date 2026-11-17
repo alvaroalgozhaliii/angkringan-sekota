@@ -39,6 +39,11 @@ class User extends Authenticatable
         return in_array($this->role, ['owner', 'pegawai']);
     }
 
+    public function roleLabel(): string
+    {
+        return $this->role === 'owner' ? 'Admin' : 'Pegawai';
+    }
+
     /**
      * The attributes that should be hidden for serialization.
      *
