@@ -2125,40 +2125,178 @@
            =================================================== */
         a.btn-outline, a.btn-primary { text-decoration: none; }
 
-        .home-intro {
-            position: relative;
-            overflow: hidden;
-            padding: 3.75rem 1.5rem;
+        /* ===================================================
+           SECTION: CAROUSEL ULASAN
+           =================================================== */
+        .reviews-carousel-section {
             background: var(--cream);
+            padding: 3rem 0 3.25rem;
             border-bottom: 1px solid rgba(200,16,46,0.1);
+            overflow: hidden;
         }
-        /* Hiasan titik-titik kecil — motif khas cetak angkringan, bukan dekorasi generik */
-        .home-intro::before {
-            content: '';
-            position: absolute;
-            top: 0; right: 0; bottom: 0; left: 0;
-            background-image: radial-gradient(circle, rgba(200,16,46,0.08) 1.5px, transparent 1.5px);
-            background-size: 22px 22px;
-            pointer-events: none;
-            z-index: 0;
+        .reviews-carousel-head {
+            max-width: 1100px;
+            margin: 0 auto 1.5rem;
+            padding: 0 1.5rem;
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 1rem;
+            flex-wrap: wrap;
         }
-        .home-intro-grid {
-            position: relative;
-            z-index: 1;
+        .reviews-carousel-head h2 {
+            font-size: clamp(1.2rem, 3vw, 1.6rem);
+            font-weight: 800;
+            color: var(--text-dark);
+            margin: 0;
+            letter-spacing: -0.01em;
+        }
+        .reviews-carousel-head h2 span {
+            color: var(--red);
+        }
+        .reviews-carousel-nav {
+            display: flex;
+            gap: 0.5rem;
+            flex-shrink: 0;
+        }
+        .btn-carousel-nav {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: 1.5px solid rgba(200,16,46,0.3);
+            background: var(--white);
+            color: var(--red);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s ease, border-color 0.2s ease;
+            flex-shrink: 0;
+        }
+        .btn-carousel-nav:hover {
+            background: var(--red);
+            border-color: var(--red);
+            color: var(--white);
+        }
+        .btn-carousel-nav:focus-visible {
+            outline: 2px solid var(--red);
+            outline-offset: 2px;
+        }
+        .btn-carousel-nav svg { width: 16px; height: 16px; }
+        /* Track bergulir */
+        .reviews-carousel-track-wrap {
+            overflow-x: auto;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+            padding: 0.5rem 1.5rem 1rem;
+            /* Snap per kartu */
+            scroll-snap-type: x mandatory;
+        }
+        .reviews-carousel-track-wrap::-webkit-scrollbar { display: none; }
+        .reviews-carousel-track {
+            display: flex;
+            gap: 1rem;
+            width: max-content;
+            align-items: stretch;
+        }
+        /* Kartu ulasan */
+        .rc-card {
+            background: var(--white);
+            border: 1px solid rgba(200,16,46,0.09);
+            border-radius: 16px;
+            padding: 1.4rem 1.5rem;
+            width: 300px;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 0.85rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            scroll-snap-align: start;
+            transition: box-shadow 0.2s ease;
+        }
+        .rc-card:hover {
+            box-shadow: 0 6px 22px rgba(158,12,35,0.1);
+        }
+        .rc-card-top {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        .rc-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--red) 0%, #E11D48 100%);
+            color: var(--white);
+            font-weight: 700;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .rc-meta {
+            min-width: 0;
+            flex: 1;
+        }
+        .rc-name {
+            font-size: 0.88rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .rc-time {
+            font-size: 0.72rem;
+            color: var(--text-gray);
+            margin-top: 1px;
+        }
+        .rc-stars {
+            color: #F59E0B;
+            font-size: 0.85rem;
+            letter-spacing: 1.5px;
+            flex-shrink: 0;
+        }
+        .rc-text {
+            font-size: 0.86rem;
+            color: #374151;
+            line-height: 1.65;
+            margin: 0;
+            font-style: italic;
+            flex: 1;
+            /* Batasi 4 baris */
+            display: -webkit-box;
+            -webkit-line-clamp: 4;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .rc-empty {
             max-width: 1100px;
             margin: 0 auto;
-            display: grid;
-            grid-template-columns: 1.35fr 1fr;
-            gap: 2.5rem 3rem;
-            align-items: start;
+            padding: 0 1.5rem;
+            font-size: 0.9rem;
+            color: var(--text-gray);
         }
-        .home-intro-copy {
-            padding: 1.75rem 1.8rem;
-            border-radius: 16px;
-            background: var(--white);
-            border: 1.5px solid rgba(200,16,46,0.12);
-            border-left: 4px solid var(--red);
-            box-shadow: 0 4px 18px rgba(158,12,35,0.07);
+        /* Dot indikator */
+        .reviews-carousel-dots {
+            display: flex;
+            justify-content: center;
+            gap: 0.4rem;
+            margin-top: 1rem;
+            padding: 0 1.5rem;
+        }
+        .rc-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 999px;
+            background: rgba(200,16,46,0.2);
+            transition: width 0.25s ease, background 0.25s ease;
+        }
+        .rc-dot.active {
+            width: 18px;
+            background: var(--red);
         }
         .home-kicker {
             display: inline-flex;
@@ -2589,9 +2727,9 @@
                     decoding="async">
             </div>
             <h1 class="hero-title">{{ $namaUsaha }}</h1>
-            <p class="hero-subtitle">
-                Makan malam di Tulungagung tanpa harus pesan dari jauh: nasi kucing, sate bakar, dan wedangan jahe tersedia setiap hari mulai petang.
-            </p>
+            <div class="hero-reviews" role="region" aria-label="Ulasan Pengunjung">
+                <div class="review-item">"Tempatnya cozy, cocok buat santai!" – Andi</div> <div class="review-item">"Makanan enak, harga terjangkau." – Budi</div> <div class="review-item">"Suasana hangat, cocok nongkrong." – Citra</div>
+            </div>
             <div class="hero-actions">
                 <button type="button" class="btn-primary" onclick="goTo('menu')">Lihat Menu</button>
                 <a class="btn-outline" href="https://maps.app.goo.gl/NyuN7yDHJ21HJt4L7" target="_blank" rel="noopener">Petunjuk Arah</a>
@@ -2623,45 +2761,53 @@
         </span>
     </div>
 
-    <section class="home-intro" aria-labelledby="home-intro-heading">
-        <div class="home-intro-grid">
-            <div class="home-intro-copy">
-                <span class="home-kicker">Malam di Tulungagung</span>
-                <h2 id="home-intro-heading" class="home-heading">Angkringan untuk makan santai, bukan buru-buru</h2>
-                <p class="home-lead">
-                    {{ $profil->teks_tentang_kami ?? 'Angkringan Sekota hadir dari kecintaan kami pada suasana sederhana, rasa yang jujur, dan obrolan yang tak ada habisnya.' }}
-                </p>
+    {{-- ============================================================
+         CAROUSEL ULASAN PENGUNJUNG
+         Menggantikan bagian home-intro
+         Data dari: $ulasan (Testimonial::aktif()->terbaru()->get())
+         ============================================================ --}}
+    <section class="reviews-carousel-section" aria-labelledby="rc-heading" id="home-reviews-carousel">
+        @php $totalUlasan = $ulasan->count(); @endphp
+
+        <div class="reviews-carousel-head">
+            <h2 id="rc-heading">Kata pengunjung <span>Angkringan Sekota</span></h2>
+            @if($totalUlasan > 0)
+            <div class="reviews-carousel-nav" role="group" aria-label="Navigasi ulasan">
+                <button type="button" class="btn-carousel-nav" id="rcPrev" aria-label="Ulasan sebelumnya">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg>
+                </button>
+                <button type="button" class="btn-carousel-nav" id="rcNext" aria-label="Ulasan berikutnya">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg>
+                </button>
             </div>
-            <ul class="home-facts">
-                <li>
-                    <span class="fact-icon" aria-hidden="true">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
-                    </span>
-                    <span class="fact-body">
-                        <span class="fact-label">Jam buka</span>
-                        <span class="fact-value">Setiap hari, {{ $jamBuka }}</span>
-                    </span>
-                </li>
-                <li>
-                    <span class="fact-icon" aria-hidden="true">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-                    </span>
-                    <span class="fact-body">
-                        <span class="fact-label">Lokasi</span>
-                        <span class="fact-value">{{ $alamatUsaha }}</span>
-                    </span>
-                </li>
-                <li>
-                    <span class="fact-icon" aria-hidden="true">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8h1a4 4 0 010 8h-1"/><path d="M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
-                    </span>
-                    <span class="fact-body">
-                        <span class="fact-label">Yang biasa dipesan</span>
-                        <span class="fact-value">Nasi kucing, sate, gorengan, dan wedangan hangat</span>
-                    </span>
-                </li>
-            </ul>
+            @endif
         </div>
+
+        @if($totalUlasan > 0)
+        <div class="reviews-carousel-track-wrap" id="rcTrack" tabindex="0" aria-label="Daftar ulasan pengunjung">
+            <div class="reviews-carousel-track">
+                @foreach($ulasan as $u)
+                @php
+                    $bintang = str_repeat('★', $u->rating) . str_repeat('☆', 5 - $u->rating);
+                @endphp
+                <article class="rc-card">
+                    <div class="rc-card-top">
+                        <div class="rc-avatar" aria-hidden="true">{{ $u->inisial }}</div>
+                        <div class="rc-meta">
+                            <div class="rc-name">{{ $u->customer_name }}</div>
+                            <div class="rc-time">{{ $u->waktu_format }}</div>
+                        </div>
+                        <div class="rc-stars" aria-label="Bintang {{ $u->rating }} dari 5">{{ $bintang }}</div>
+                    </div>
+                    <p class="rc-text">&ldquo;{{ $u->review }}&rdquo;</p>
+                </article>
+                @endforeach
+            </div>
+        </div>
+        <div class="reviews-carousel-dots" id="rcDots" aria-hidden="true"></div>
+        @else
+        <p class="rc-empty">Belum ada ulasan. <button type="button" onclick="goTo('kontak')" style="background:none;border:none;color:var(--red);font-weight:700;cursor:pointer;font-family:inherit;font-size:inherit;">Jadilah yang pertama memberi ulasan.</button></p>
+        @endif
     </section>
 
     <section class="bestsellers" aria-labelledby="home-menu-heading">
