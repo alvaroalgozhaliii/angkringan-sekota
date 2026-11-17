@@ -36,6 +36,29 @@
         .login-back a{color:#C8102E;font-weight:600;text-decoration:none}
         .login-back a:hover{text-decoration:underline}
         .alert-error{background:#FEE2E2;color:#991B1B;padding:.8rem 1rem;border-radius:8px;font-size:.82rem;margin-bottom:1.2rem;border:1px solid #FECACA}
+        @media(max-width:900px){
+            .split-left{width:320px;padding:2rem 1.5rem}
+            .split-right{padding:1.5rem}
+            .login-card{padding:2rem}
+        }
+        @media(max-width:640px){
+            body{display:block;min-height:100dvh}
+            .split-left{width:100%;min-height:0;padding:1.25rem 1rem}
+            .brand-logo{width:64px;height:64px;margin-bottom:.75rem}
+            .brand-name{font-size:1.25rem;margin-bottom:.25rem}
+            .brand-sub{font-size:.78rem}
+            .brand-desc{display:none}
+            .split-right{min-height:calc(100dvh - 160px);padding:1rem;align-items:flex-start}
+            .login-card{padding:1.5rem 1.25rem;border-radius:12px}
+            .login-title{font-size:1.25rem}
+            .login-sub{font-size:.8rem;margin-bottom:1.5rem}
+        }
+        @media(max-width:380px){
+            .split-left{padding:.9rem}
+            .brand-logo{width:54px;height:54px}
+            .split-right{padding:.75rem}
+            .login-card{padding:1.2rem 1rem}
+        }
     </style>
 </head>
 <body>

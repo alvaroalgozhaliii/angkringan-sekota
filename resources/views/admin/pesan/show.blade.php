@@ -12,7 +12,7 @@
 </div>
 
 <div class="panel" style="max-width:650px">
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem">
+    <div class="message-meta-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem">
         <div>
             <div class="form-label" style="color:var(--muted)">Nama Pengirim</div>
             <div style="font-weight:600">{{ $pesan->nama_pengirim }}</div>

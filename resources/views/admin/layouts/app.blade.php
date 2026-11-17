@@ -43,7 +43,7 @@
         .btn-logout:hover{background:rgba(255,255,255,.25)}
 
         /* ── MAIN ── */
-        .main-wrap{margin-left:var(--sidebar-w);flex:1;display:flex;flex-direction:column;min-height:100vh;min-width:0;max-width:calc(100vw - var(--sidebar-w));overflow-x:hidden}
+        .main-wrap{margin-left:var(--sidebar-w);flex:1;display:flex;flex-direction:column;min-height:100vh;min-width:0;width:calc(100% - var(--sidebar-w));max-width:calc(100vw - var(--sidebar-w));overflow-x:hidden}
         .topbar{background:var(--white);border-bottom:1px solid var(--border);padding:.75rem 1.5rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;position:sticky;top:0;z-index:40;flex-wrap:wrap}
         .topbar-left{display:flex;align-items:center;gap:.75rem}
         .topbar-title-wrap{display:flex;flex-direction:column}
@@ -57,7 +57,8 @@
         .clock-sep{color:var(--border)}
 
         /* User Pill */
-        .user-pill{display:inline-flex;align-items:center;gap:.4rem;background:#F9FAFB;border:1px solid var(--border);padding:.35rem .75rem;border-radius:20px;font-size:.78rem;font-weight:600;color:var(--text)}
+        .user-pill{display:inline-flex;align-items:center;gap:.4rem;background:#F9FAFB;border:1px solid var(--border);padding:.35rem .75rem;border-radius:20px;font-size:.78rem;font-weight:600;color:var(--text);min-width:0;max-width:100%}
+        .user-pill span:nth-child(2){min-width:0;overflow:hidden;text-overflow:ellipsis}
         .user-pill-role{color:var(--muted);font-size:.72rem;font-weight:400}
 
         /* DB Badge */
@@ -129,7 +130,7 @@
         .btn-lg{padding:.7rem 1.5rem;font-size:.9rem}
 
         /* ── TABLE ── */
-        .table-wrap{overflow-x:auto}
+        .table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%}
         table{width:100%;border-collapse:collapse;font-size:.85rem}
         thead th{text-align:left;padding:.7rem 1rem;font-weight:600;color:var(--muted);font-size:.78rem;text-transform:uppercase;letter-spacing:.05em;border-bottom:2px solid var(--border)}
         tbody td{padding:.8rem 1rem;border-bottom:1px solid var(--border);vertical-align:middle}
@@ -164,16 +165,49 @@
             .topbar-actions .clock-pill,
             .topbar-actions .badge-db{display:none}
         }
-        @media(max-width:768px){
+        @media(max-width:900px){
             .sidebar{transform:translateX(-100%)}
             .sidebar.open{transform:translateX(0)}
-            .main-wrap{margin-left:0;max-width:100vw}
+            body{display:block;width:100%;overflow-x:hidden}
+            .main-wrap{margin-left:0;width:100%;max-width:100%;min-width:0}
             .hamburger{display:block}
-            .stat-grid{grid-template-columns:repeat(2,1fr)}
+            .stat-grid{grid-template-columns:repeat(2,minmax(0,1fr)) !important;gap:.75rem}
             .two-col{grid-template-columns:1fr}
-            .content{padding:1rem}
-            .topbar{padding:.75rem 1rem}
-            .notif-dropdown{position:fixed;top:60px;left:10px;right:10px;width:auto}
+            .content{padding:1rem;min-width:0}
+            .topbar{padding:.75rem 1rem;align-items:flex-start;gap:.65rem}
+            .topbar-left{min-width:0;width:100%;align-items:flex-start}
+            .topbar-title-wrap{min-width:0;max-width:calc(100% - 2.5rem)}
+            .topbar-title{font-size:1.08rem;overflow-wrap:anywhere}
+            .topbar-actions{width:100%;margin:0;display:flex;flex-wrap:wrap;justify-content:flex-start;gap:.5rem}
+            .topbar-actions .btn-sm{min-height:38px}
+            .user-pill{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+            .notif-dropdown{position:fixed;top:calc(env(safe-area-inset-top) + 8px);left:10px;right:10px;width:auto;max-height:calc(100dvh - 20px)}
+            .notif-body{max-height:55dvh}
+            .page-header{align-items:flex-start;gap:.75rem;flex-wrap:wrap}
+            .page-header > :first-child{min-width:0;flex:1 1 100%}
+            .page-header .btn-sm{max-width:100%}
+            .panel{padding:1rem;max-width:100% !important}
+            .order-filters{grid-template-columns:repeat(2,minmax(0,1fr)) !important}
+            .order-filters > div:first-child{grid-column:1 / -1}
+            .order-filters > button{min-height:42px;justify-content:center}
+            .message-meta-grid{grid-template-columns:1fr !important}
+            input,select,textarea,button{max-width:100%}
+            .alert{align-items:flex-start;overflow-wrap:anywhere}
+        }
+        @media(max-width:480px){
+            .content{padding:.75rem}
+            .topbar{padding:.65rem .75rem}
+            .topbar-actions{gap:.4rem}
+            .topbar-actions .btn-sm{font-size:.72rem;padding:.4rem .6rem}
+            .user-pill{font-size:.72rem;padding:.35rem .55rem;flex:1 1 auto;width:100%}
+            .topbar-actions .notif-wrapper{margin-left:auto}
+            .stat-grid{grid-template-columns:1fr 1fr !important}
+            .stat-card{padding:.9rem}
+            .stat-value{font-size:1.35rem}
+            .panel{padding:.85rem;border-radius:10px}
+            .order-filters{grid-template-columns:1fr !important}
+            .order-filters > div:first-child{grid-column:auto}
+            .btn-row .btn-sm{flex:1 1 auto;justify-content:center}
         }
     </style>
     @stack('styles')

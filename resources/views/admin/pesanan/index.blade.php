@@ -12,7 +12,7 @@
 
 <div class="panel">
     <form method="GET" action="{{ route('admin.pesanan.index') }}">
-        <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr auto;gap:.75rem;align-items:flex-end">
+        <div class="order-filters" style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr auto;gap:.75rem;align-items:flex-end">
             <div>
                 <label class="form-label" for="q">Cari</label>
                 <input id="q" type="text" name="q" value="{{ request('q') }}" class="form-control" placeholder="Nomor, kasir, atau pelanggan">

@@ -19,7 +19,7 @@
 @endif
 
 {{-- Stat Cards --}}
-<div class="stat-grid" style="grid-template-columns:repeat(4,1fr)">
+<div class="stat-grid">
     <div class="stat-card">
         <div class="stat-label">Total Ulasan</div>
         <div class="stat-value">{{ $totalAll }}</div>
