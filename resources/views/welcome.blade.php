@@ -53,7 +53,7 @@
             --white:      #FFFFFF;
             --text-dark:  #1A1A1A;
             --text-gray:  #666666;
-            --nav-h:      64px;
+            --nav-h:      68px;
         }
 
         body {
@@ -88,12 +88,13 @@
         .navbar-brand {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
             text-decoration: none;
             cursor: pointer;
         }
         .navbar-logo-circle {
-            width: 44px; height: 44px;
+            width: 56px;
+            height: 56px;
             background: var(--white);
             border-radius: 50%;
             display: flex;
@@ -404,7 +405,7 @@
             padding: 3.5rem 1.5rem 4.25rem;
             display: flex;
             flex-direction: column;
-            align-items: flex-start;
+            align-items: center;
             gap: 1.35rem;
         }
         .hero-brand-mark {
@@ -415,7 +416,7 @@
             padding: 4px;
             overflow: hidden;
             box-shadow: 0 10px 28px rgba(0,0,0,0.28);
-            flex-shrink: 0;
+            flex-shrink: 0; margin-bottom: 1rem;
         }
         .hero-brand-mark img {
             width: 100%;
@@ -425,15 +426,18 @@
             display: block;
         }
         .hero-title {
-            font-size: clamp(2.35rem, 7vw, 4.1rem);
-            font-weight: 800;
-            color: var(--white);
-            line-height: 0.98;
-            letter-spacing: -0.02em;
-            text-transform: uppercase;
-            max-width: 12ch;
-            text-shadow: 0 2px 18px rgba(0,0,0,0.35);
-            margin: 0;
+    font-size: clamp(2.35rem, 7vw, 4.1rem);
+    font-weight: 800;
+    color: var(--white);
+    line-height: 0.98;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+    text-align: center;
+    max-width: none;
+    text-shadow: 0 2px 18px rgba(0,0,0,0.35);
+    margin: 1rem 0 0 0;
+}
+
         }
         .hero-subtitle {
             font-size: clamp(0.95rem, 2.2vw, 1.1rem);
@@ -2615,7 +2619,7 @@
             .footer-grid { grid-template-columns: 1fr; }
             .footer-bottom { flex-direction: column; text-align: center; }
             .page-banner-text h2 { font-size: 1.5rem; }
-            .page-banner-logo { width: 56px; height: 56px; }
+            .page-banner-logo { width: 70px; height: 70px; margin-top: -5px; }
             .bestsellers { padding: 2.5rem 1.15rem; }
             .home-intro { padding: 2.5rem 1.15rem; }
             .home-visit { padding: 2.25rem 1.15rem; }
@@ -2727,13 +2731,7 @@
                     decoding="async">
             </div>
             <h1 class="hero-title">{{ $namaUsaha }}</h1>
-            <div class="hero-reviews" role="region" aria-label="Ulasan Pengunjung">
-                <div class="review-item">"Tempatnya cozy, cocok buat santai!" – Andi</div> <div class="review-item">"Makanan enak, harga terjangkau." – Budi</div> <div class="review-item">"Suasana hangat, cocok nongkrong." – Citra</div>
-            </div>
-            <div class="hero-actions">
-                <button type="button" class="btn-primary" onclick="goTo('menu')">Lihat Menu</button>
-                <a class="btn-outline" href="https://maps.app.goo.gl/NyuN7yDHJ21HJt4L7" target="_blank" rel="noopener">Petunjuk Arah</a>
-            </div>
+
         </div>
 
         <div class="hero-dots" id="heroDots" role="group" aria-label="Pilih foto hero">

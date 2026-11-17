@@ -160,6 +160,60 @@ html, body {
   background: rgba(255, 255, 255, 0.25);
 }
 
+/* Hero reviews carousel */
+.hero-reviews {
+  display: flex;
+  overflow: hidden;
+  gap: 1rem;
+  padding: 0.75rem 0;
+  position: relative;
+  mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
+}
+
+.hero-reviews-inner {
+  display: flex;
+  gap: 1rem;
+  animation: reviewScroll 20s linear infinite;
+  will-change: transform;
+}
+
+.hero-reviews-inner:hover {
+  animation-play-state: paused;
+}
+
+@keyframes reviewScroll {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.review-item {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: #fff;
+  padding: 0.5rem 1rem;
+  border-radius: 2rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  font-size: 0.875rem;
+  white-space: nowrap;
+}
+
+.review-stars {
+  color: #facc15;
+  font-size: 0.75rem;
+  letter-spacing: 1px;
+}
+
+.review-text {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+
 /* Table styling */
 .data-table {
   width: 100%;
