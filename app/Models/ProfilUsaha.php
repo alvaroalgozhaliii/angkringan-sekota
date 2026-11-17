@@ -8,7 +8,7 @@ class ProfilUsaha extends Model
 {
     protected $table = 'profil_usaha';
     protected $fillable = [
-        'nama_usaha', 'whatsapp', 'instagram', 'facebook',
+        'nama_usaha', 'whatsapp', 'instagram', 'facebook', 'tiktok',
         'alamat', 'teks_tentang_kami', 'logo', 'jam_buka', 'email',
     ];
 
@@ -39,6 +39,7 @@ class ProfilUsaha extends Model
             'whatsapp'         => '0812-3456-7890',
             'instagram'        => '@angkringan.sekota',
             'facebook'         => 'Angkringan Sekota',
+            'tiktok'           => '@angkringan.sekota',
             'alamat'           => 'Tulungagung, Jawa Timur',
             'teks_tentang_kami'=> 'Angkringan Sekota hadir dari kecintaan kami pada suasana sederhana, rasa yang jujur, dan obrolan yang tak ada habisnya.',
             'jam_buka'         => '17.00 - 23.00 WIB',

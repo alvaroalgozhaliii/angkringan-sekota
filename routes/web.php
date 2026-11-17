@@ -8,8 +8,11 @@ use App\Http\Controllers\Admin\ProfilController;
 use App\Http\Controllers\Admin\ProdukController;
 use App\Http\Controllers\Admin\PesanController;
 use App\Http\Controllers\Admin\PenggunaController;
+use App\Http\Controllers\Admin\UlasanController;
+use App\Http\Controllers\UlasanPublikController;
 use App\Models\Produk;
 use App\Models\ProfilUsaha;
+use App\Models\Testimonial;
 
 // ============================================================
 //  PUBLIC — Website Profil UMKM (pengunjung)
@@ -17,11 +20,15 @@ use App\Models\ProfilUsaha;
 Route::get('/', function () {
     $profil = ProfilUsaha::getSingleton();
     $produk = Produk::tayang()->get();
-    return view('welcome', compact('profil', 'produk'));
+    $ulasan = Testimonial::aktif()->terbaru()->get();
+    return view('welcome', compact('profil', 'produk', 'ulasan'));
 })->name('home');
 
 // Form kirim pesan dari web profil
 Route::post('/kirim-pesan', [\App\Http\Controllers\PesanPublikController::class, 'store'])->name('pesan.store');
+
+// Form kirim ulasan dari web profil
+Route::post('/kirim-ulasan', [UlasanPublikController::class, 'store'])->name('ulasan.store');
 
 // ============================================================
 //  ADMIN — Panel Admin (/admin/...)
@@ -63,6 +70,11 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/pesan/{pesan}',            [PesanController::class, 'show'])->name('pesan.show');
         Route::delete('/pesan/{pesan}',         [PesanController::class, 'destroy'])->name('pesan.destroy');
         Route::post('/pesan/mark-all-read',     [PesanController::class, 'markAllRead'])->name('pesan.markAllRead');
+
+        // Ulasan Pengunjung
+        Route::get('/ulasan',                   [UlasanController::class, 'index'])->name('ulasan.index');
+        Route::patch('/ulasan/{ulasan}/toggle', [UlasanController::class, 'toggleAktif'])->name('ulasan.toggle');
+        Route::delete('/ulasan/{ulasan}',       [UlasanController::class, 'destroy'])->name('ulasan.destroy');
 
         // Pengguna Admin (owner only)
         Route::get('/pengguna',                 [PenggunaController::class, 'index'])->name('pengguna.index');

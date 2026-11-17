@@ -217,6 +217,15 @@
             <span class="nav-icon">📍</span> Lokasi &amp; Kontak
         </a>
 
+        {{-- 7. Ulasan Pengunjung --}}
+        <a href="{{ route('admin.ulasan.index') }}" class="{{ request()->routeIs('admin.ulasan.*') ? 'active' : '' }}">
+            <span class="nav-icon">⭐</span> Ulasan Pengunjung
+            @php $pendingUlasan = \App\Models\Testimonial::where('is_active', 0)->count(); @endphp
+            @if($pendingUlasan > 0)
+                <span class="badge-menu">{{ $pendingUlasan }}</span>
+            @endif
+        </a>
+
         {{-- Pengguna Admin (Khusus Owner) --}}
         @if(auth()->user() && auth()->user()->isOwner())
         <a href="{{ route('admin.pengguna.index') }}" class="{{ request()->routeIs('admin.pengguna.*') ? 'active' : '' }}">

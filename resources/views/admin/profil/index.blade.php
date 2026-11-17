@@ -32,6 +32,10 @@
             <label for="facebook" class="form-label">Facebook</label>
             <input type="text" class="form-control" id="facebook" name="facebook" value="{{ old('facebook', $profil->facebook) }}">
         </div>
+        <div class="col-md-6">
+            <label for="tiktok" class="form-label">TikTok</label>
+            <input type="text" class="form-control" id="tiktok" name="tiktok" value="{{ old('tiktok', $profil->tiktok) }}" placeholder="@angkringan.sekota">
+        </div>
         <div class="col-12">
             <label for="alamat" class="form-label">Alamat</label>
             <textarea class="form-control" id="alamat" name="alamat" rows="2">{{ old('alamat', $profil->alamat) }}</textarea>

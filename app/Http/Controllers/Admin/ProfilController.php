@@ -22,6 +22,7 @@ class ProfilController extends Controller
             'whatsapp'          => 'nullable|string|max:20',
             'instagram'         => 'nullable|string|max:100',
             'facebook'          => 'nullable|string|max:100',
+            'tiktok'            => 'nullable|string|max:100',
             'alamat'            => 'nullable|string',
             'teks_tentang_kami' => 'nullable|string',
             'jam_buka'          => 'nullable|string|max:100',
@@ -30,13 +31,13 @@ class ProfilController extends Controller
 
         // Log incoming request for debugging
         \Log::info('Profil update request', $request->only([
-            'nama_usaha','whatsapp','instagram','facebook',
+            'nama_usaha','whatsapp','instagram','facebook','tiktok',
             'alamat','teks_tentang_kami','jam_buka','email',
         ]));
 
         $profil = ProfilUsaha::getSingleton();
         $profil->update($request->only([
-            'nama_usaha','whatsapp','instagram','facebook',
+            'nama_usaha','whatsapp','instagram','facebook','tiktok',
             'alamat','teks_tentang_kami','jam_buka','email',
         ]));
 
