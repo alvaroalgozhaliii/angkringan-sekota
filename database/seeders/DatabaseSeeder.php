@@ -13,10 +13,10 @@ class DatabaseSeeder extends Seeder
         // Admin users
         DB::table('users')->insert([
             [
-                'name'       => 'Owner Sekota',
-                'email'      => 'owner@sekota.id',
+                'name'       => 'Admin Sekota',
+                'email'      => 'admin@angkringansekota.id',
                 'password'   => Hash::make('sekota123'),
-                'role'       => 'owner',
+                'role'       => 'super_admin',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],

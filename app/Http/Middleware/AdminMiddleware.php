@@ -15,8 +15,7 @@ class AdminMiddleware
             return redirect()->route('admin.login')->with('error', 'Silakan login terlebih dahulu.');
         }
 
-        // Only users with owner or pegawai role can access admin
-        if (!in_array(Auth::user()->role, ['owner', 'pegawai'])) {
+        if (!Auth::user()->isAdmin()) {
             Auth::logout();
             return redirect()->route('admin.login')->with('error', 'Akses ditolak.');
         }

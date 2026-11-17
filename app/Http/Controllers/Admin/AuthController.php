@@ -10,7 +10,7 @@ class AuthController extends Controller
 {
     public function showLogin()
     {
-        if (Auth::check() && in_array(Auth::user()->role, ['owner', 'pegawai'])) {
+        if (Auth::check() && Auth::user()->isAdmin()) {
             return $this->redirectAfterLogin();
         }
         return view('admin.auth.login');
@@ -30,7 +30,7 @@ class AuthController extends Controller
         $credentials = $request->only('email', 'password');
 
         if (Auth::attempt($credentials, $request->boolean('remember'))) {
-            if (!in_array(Auth::user()->role, ['owner', 'pegawai'])) {
+            if (!Auth::user()->isAdmin()) {
                 Auth::logout();
                 return back()->withErrors(['email' => 'Akun Anda tidak memiliki akses admin.']);
             }
@@ -51,8 +51,10 @@ class AuthController extends Controller
 
     private function redirectAfterLogin()
     {
-        return Auth::user()->role === 'owner'
+        return Auth::user()->isSuperAdmin()
             ? redirect()->route('admin.pengguna.index')
-            : redirect()->route('admin.profil.index');
+            : (Auth::user()->isOwner()
+                ? redirect()->route('admin.pengaturan.transaksi')
+                : redirect()->route('admin.profil.index'));
     }
 }

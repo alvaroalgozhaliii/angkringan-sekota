@@ -184,13 +184,29 @@
 <nav class="sidebar" id="sidebar">
     <div class="sidebar-brand">
         <div class="sidebar-logo-title">Angkringan<br>Sekota</div>
-        <div class="sidebar-logo-sub">{{ auth()->user()->isOwner() ? 'Admin sistem' : 'Panel operasional' }}</div>
+        <div class="sidebar-logo-sub">{{ auth()->user()->isSuperAdmin() ? 'Super Admin' : (auth()->user()->isOwner() ? 'Admin sistem' : 'Panel operasional') }}</div>
     </div>
     <div class="sidebar-nav">
-        @if(auth()->user()->isOwner())
+        @if(auth()->user()->isSuperAdmin())
         <a href="{{ route('admin.pengguna.index') }}" class="{{ request()->routeIs('admin.pengguna.*') ? 'active' : '' }}">
-            <span class="nav-icon">👥</span> Manajemen pengguna
+            <span class="nav-icon">👥</span> Manajemen akun &amp; role
         </a>
+        <a href="{{ route('admin.pengaturan.transaksi') }}" class="{{ request()->routeIs('admin.pengaturan.*') ? 'active' : '' }}">
+            <span class="nav-icon">💳</span> Pengaturan transaksi
+        </a>
+        <a href="{{ route('admin.pesanan.index') }}" class="{{ request()->routeIs('admin.pesanan.*') ? 'active' : '' }}">
+            <span class="nav-icon">🧾</span> Pantau pesanan
+        </a>
+        <a href="{{ route('admin.pelanggan.index') }}" class="{{ request()->routeIs('admin.pelanggan.*') ? 'active' : '' }}">
+            <span class="nav-icon">🧑</span> Data pelanggan
+        </a>
+        <a href="{{ route('admin.profil.index') }}" class="{{ request()->routeIs('admin.profil.*') ? 'active' : '' }}">
+            <span class="nav-icon">🏠</span> Profil Usaha
+        </a>
+        <a href="{{ route('admin.ulasan.index') }}" class="{{ request()->routeIs('admin.ulasan.*') ? 'active' : '' }}">
+            <span class="nav-icon">⭐</span> Ulasan Pengunjung
+        </a>
+        @elseif(auth()->user()->isOwner())
         <a href="{{ route('admin.pengaturan.transaksi') }}" class="{{ request()->routeIs('admin.pengaturan.*') ? 'active' : '' }}">
             <span class="nav-icon">💳</span> Pengaturan transaksi
         </a>
@@ -204,12 +220,6 @@
         <a href="{{ route('admin.profil.index') }}" class="{{ request()->routeIs('admin.profil.*') ? 'active' : '' }}">
             <span class="nav-icon">🏠</span> Profil Usaha
         </a>
-        <a href="{{ route('admin.profil.index') }}#tentang-kami">
-            <span class="nav-icon">ℹ️</span> Tentang Kami
-        </a>
-        <a href="{{ route('admin.profil.index') }}#kontak">
-            <span class="nav-icon">📍</span> Lokasi &amp; Kontak
-        </a>
         <a href="{{ route('admin.ulasan.index') }}" class="{{ request()->routeIs('admin.ulasan.*') ? 'active' : '' }}">
             <span class="nav-icon">⭐</span> Ulasan Pengunjung
             @php $pendingUlasan = \App\Models\Testimonial::where('is_active', 0)->count(); @endphp
@@ -219,9 +229,6 @@
         </a>
         @endif
 
-        <a href="{{ route('admin.profil-akun.edit') }}" class="{{ request()->routeIs('admin.profil-akun.*') ? 'active' : '' }}">
-            <span class="nav-icon">👤</span> Profil pengguna
-        </a>
     </div>
     <div class="sidebar-footer">
         <div class="sidebar-user">
@@ -272,13 +279,13 @@
             </a>
 
             <!-- User Badge / Pill -->
-            <div class="user-pill" title="Pengguna yang sedang aktif">
+            <a href="{{ route('admin.profil-akun.edit') }}" class="user-pill" title="Buka profil pengguna" style="text-decoration:none">
                 <span>👤</span>
                 <span>{{ auth()->user()->name }}</span>
                 <span class="user-pill-role">({{ auth()->user()->roleLabel() }})</span>
-            </div>
+            </a>
 
-            @unless(auth()->user()->isOwner())
+            @if(auth()->user()->isPegawai())
             <!-- Ikon Lonceng Notifikasi Pesan Masuk -->
             <div class="notif-wrapper" id="notifWrapper">
                 <button type="button" class="notif-btn" id="notifBtn" aria-label="Notifikasi Pesan Masuk" title="Pesan Masuk">
@@ -347,7 +354,7 @@
                     </div>
                 </div>
             </div>
-            @endunless
+            @endif
         </div>
     </div>
 

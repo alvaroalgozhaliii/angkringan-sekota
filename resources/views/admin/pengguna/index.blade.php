@@ -1,12 +1,12 @@
 @extends('admin.layouts.app')
-@section('page-title', 'Pengguna Admin')
-@section('title', 'Kelola Pengguna Admin')
+@section('page-title', 'Manajemen Akun & Role')
+@section('title', 'Manajemen Akun & Role')
 
 @section('content')
 <div class="page-header">
     <div>
-        <div class="page-title">Kelola Pengguna Admin</div>
-        <div class="page-sub">Manajemen akun pengelola web profil dan panel admin Angkringan Sekota.</div>
+        <div class="page-title">Manajemen Akun &amp; Role</div>
+        <div class="page-sub">Kelola akun admin dan hak akses pengguna Angkringan Sekota.</div>
     </div>
 </div>
 
@@ -29,6 +29,7 @@
                 <select name="role" class="form-control" required>
                     <option value="pegawai" {{ old('role') === 'pegawai' ? 'selected' : '' }}>Pegawai</option>
                     <option value="owner" {{ old('role') === 'owner' ? 'selected' : '' }}>Owner</option>
+                    <option value="super_admin" {{ old('role') === 'super_admin' ? 'selected' : '' }}>Super Admin</option>
                 </select>
             </div>
             <div class="form-group">
@@ -55,7 +56,7 @@
                         <th>Nama</th>
                         <th>Email</th>
                         <th>Role</th>
-                        <th>Aksi</th>
+                        <th>Kelola</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -69,11 +70,21 @@
                         </td>
                         <td>{{ $u->email }}</td>
                         <td>
-                            <span class="badge {{ $u->role === 'owner' ? 'badge-red' : 'badge-gray' }}">
-                                {{ ucfirst($u->role) }}
+                            <span class="badge {{ $u->isSuperAdmin() ? 'badge-red' : ($u->isOwner() ? 'badge-green' : 'badge-gray') }}">
+                                {{ $u->roleLabel() }}
                             </span>
                         </td>
                         <td>
+                            <form method="POST" action="{{ route('admin.pengguna.role', $u) }}" style="display:flex;gap:.4rem;align-items:center;margin-bottom:.45rem">
+                                @csrf
+                                @method('PATCH')
+                                <select name="role" class="form-control" aria-label="Role {{ $u->name }}" style="min-width:125px;padding:.35rem">
+                                    <option value="pegawai" {{ $u->role === 'pegawai' ? 'selected' : '' }}>Pegawai</option>
+                                    <option value="owner" {{ $u->role === 'owner' ? 'selected' : '' }}>Owner</option>
+                                    <option value="super_admin" {{ $u->role === 'super_admin' ? 'selected' : '' }}>Super Admin</option>
+                                </select>
+                                <button type="submit" class="action-link" style="background:none;border:none;cursor:pointer;padding:0">Simpan</button>
+                            </form>
                             @if($u->id !== auth()->id())
                             <form method="POST" action="{{ route('admin.pengguna.destroy', $u) }}" onsubmit="return confirm('Yakin ingin menghapus pengguna ini?')">
                                 @csrf

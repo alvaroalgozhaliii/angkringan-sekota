@@ -12,9 +12,8 @@ class PenggunaController extends Controller
 {
     public function index()
     {
-        // Only owner can manage users
-        if (Auth::user()->role !== 'owner') {
-            abort(403, 'Hanya owner yang dapat mengelola pengguna admin.');
+        if (!Auth::user()->isSuperAdmin()) {
+            abort(403, 'Hanya Super Admin yang dapat mengelola akun dan role.');
         }
         $pengguna = User::orderBy('created_at', 'desc')->get();
         return view('admin.pengguna.index', compact('pengguna'));
@@ -22,13 +21,13 @@ class PenggunaController extends Controller
 
     public function store(Request $request)
     {
-        if (Auth::user()->role !== 'owner') abort(403);
+        if (!Auth::user()->isSuperAdmin()) abort(403);
 
         $request->validate([
             'name'     => 'required|string|max:255',
             'email'    => 'required|email|unique:users,email',
             'password' => 'required|min:6|confirmed',
-            'role'     => 'required|in:owner,pegawai',
+            'role'     => 'required|in:super_admin,owner,pegawai',
         ]);
 
         User::create([
@@ -43,20 +42,20 @@ class PenggunaController extends Controller
 
     public function updateRole(Request $request, User $user)
     {
-        if (Auth::user()->role !== 'owner') {
+        if (!Auth::user()->isSuperAdmin()) {
             abort(403);
         }
 
         $data = $request->validate([
-            'role' => 'required|in:owner,pegawai',
+            'role' => 'required|in:super_admin,owner,pegawai',
         ]);
 
-        if ($user->id === Auth::id() && $data['role'] !== 'owner') {
-            return back()->with('error', 'Akun yang sedang dipakai tidak bisa diturunkan dari admin.');
+        if ($user->id === Auth::id() && $data['role'] !== 'super_admin') {
+            return back()->with('error', 'Role akun Super Admin yang sedang dipakai tidak dapat diturunkan.');
         }
 
-        if ($user->role === 'owner' && $data['role'] !== 'owner' && User::where('role', 'owner')->count() <= 1) {
-            return back()->with('error', 'Harus ada minimal satu akun admin.');
+        if ($user->role === 'super_admin' && $data['role'] !== 'super_admin' && User::where('role', 'super_admin')->count() <= 1) {
+            return back()->with('error', 'Harus ada minimal satu akun Super Admin.');
         }
 
         $user->update(['role' => $data['role']]);
@@ -66,12 +65,12 @@ class PenggunaController extends Controller
 
     public function destroy(User $user)
     {
-        if (Auth::user()->role !== 'owner') abort(403);
+        if (!Auth::user()->isSuperAdmin()) abort(403);
         if ($user->id === Auth::id()) {
             return back()->with('error', 'Anda tidak dapat menghapus akun sendiri.');
         }
-        if ($user->role === 'owner' && User::where('role', 'owner')->count() <= 1) {
-            return back()->with('error', 'Harus ada minimal satu akun admin.');
+        if ($user->role === 'super_admin' && User::where('role', 'super_admin')->count() <= 1) {
+            return back()->with('error', 'Harus ada minimal satu akun Super Admin.');
         }
         $user->delete();
         return back()->with('success', 'Pengguna berhasil dihapus!');
