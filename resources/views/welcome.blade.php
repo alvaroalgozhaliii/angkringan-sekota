@@ -46,8 +46,8 @@
         }
 
         :root {
-            --red:        #C8102E;
-            --red-dark:   #9E0C23;
+            --red:        {{ $profil->warnaTema() }};
+            --red-dark:   {{ $profil->warnaTema() }};
             --cream:      #FDF5F0;
             --cream-dark: #F5E8E0;
             --white:      #FFFFFF;
@@ -1029,6 +1029,64 @@
             cursor: not-allowed;
             transform: none !important;
             box-shadow: none !important;
+        }
+        .order-success-panel {
+            padding: 2rem 1.25rem 1.5rem;
+            text-align: center;
+        }
+        .order-success-icon {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto 0.85rem;
+            border-radius: 50%;
+            background: #D1FAE5;
+            color: #065F46;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+        }
+        .order-success-title {
+            margin: 0 0 0.35rem;
+            font-size: 1.05rem;
+            font-weight: 800;
+            color: #065F46;
+        }
+        .order-success-desc {
+            margin: 0 0 0.35rem;
+            font-size: 0.86rem;
+            color: var(--text-gray);
+        }
+        .order-success-note {
+            margin: 0 0 1.25rem;
+            font-size: 0.78rem;
+            color: #666;
+            line-height: 1.5;
+        }
+        .order-success-actions {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+        .order-success-actions .btn-order-system {
+            text-decoration: none;
+        }
+        .btn-order-secondary {
+            flex: 1;
+            background: #fff;
+            color: #444;
+            border: 1px solid #E5E7EB;
+            padding: 0.75rem 1rem;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 0.86rem;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.2s;
+        }
+        .btn-order-secondary:hover {
+            background: #F5F5F5;
+            border-color: #D1D5DB;
         }
 
         /* ── CUSTOM CONFIRMATION MODAL ── */
@@ -2803,6 +2861,9 @@
             .home-intro-grid { grid-template-columns: 1fr; gap: 1.75rem; }
             .home-visit-inner { grid-template-columns: 1fr; }
             .home-visit-actions { justify-content: flex-start; }
+            .reviews-grid { grid-template-columns: 1fr; gap: 1.5rem; }
+            .contact-grid { grid-template-columns: 1fr; gap: 1.25rem; }
+            .section-title { white-space: normal; }
         }
         @media (max-width: 600px) {
             .hero {
@@ -2849,6 +2910,41 @@
             .quote-grid { grid-template-columns: 1fr; }
             .menu-content, .about-content-wrap, .kontak-content-wrap { padding: 1.5rem 1rem 3rem; }
         }
+        @media (max-width: 480px) {
+            .hamburger { min-width: 44px; min-height: 44px; padding: 10px 8px; }
+            .hamburger span { margin: 4px 0; }
+            .mobile-menu ul a { min-height: 44px; display: flex; align-items: center; font-size: 1rem; }
+            .hero-info-strip { flex-direction: column; align-items: flex-start; gap: 0.4rem; text-align: left; }
+            .hero-info-strip .strip-item { white-space: normal; min-width: 0; }
+            .section-title { font-size: 1.3rem; }
+            .cards-grid { grid-template-columns: 1fr; gap: 1rem; }
+            .product-card-footer { flex-wrap: wrap; }
+            .product-card-price, .btn-pesan-item { min-height: 44px; display: inline-flex; align-items: center; }
+            .filter-row { gap: 0.5rem; margin-bottom: 1.5rem; }
+            .filter-btn { min-height: 44px; flex: 1 1 auto; justify-content: center; padding: 0.5rem 0.75rem; }
+            .menu-search-input { font-size: 16px; min-height: 46px; }
+            .btn-search-clear { width: 28px; height: 28px; right: 10px; }
+            .promo-banner-wrapper { aspect-ratio: auto; min-height: 190px; max-height: none; }
+            .promo-banner-overlay { padding: 1rem; }
+            .promo-banner-title { font-size: 1.1rem; }
+            .promo-banner-desc { font-size: 0.76rem; max-width: 100%; }
+            .promo-banner-btn { min-height: 40px; padding: 0.5rem 1rem; }
+            .modal-overlay { align-items: flex-end; padding: 0; }
+            .modal-box { max-width: 100%; max-height: min(94dvh, 760px); border-radius: 20px 20px 0 0; padding-bottom: env(safe-area-inset-bottom); }
+            .modal-header { padding: 0.85rem 1rem; position: sticky; top: 0; z-index: 2; }
+            .modal-body { padding: 1rem; }
+            .modal-footer { padding: 0.85rem 1rem calc(0.85rem + env(safe-area-inset-bottom)); }
+            .btn-close-modal { width: 44px; height: 44px; }
+            .btn-qty { width: 36px; height: 36px; }
+            .btn-del-item { min-width: 44px; min-height: 44px; }
+            .order-item-row { align-items: flex-start; flex-wrap: wrap; }
+            .order-item-info { flex: 1 1 100%; }
+            .order-qty-control { margin-left: auto; }
+            .order-item-subtotal { min-width: 0; }
+            .btn-order-system, .btn-order-secondary, .btn-order-clear { min-height: 46px; }
+            .order-success-actions .btn-order-system, .order-success-actions .btn-order-secondary { flex: 1 1 100%; }
+            .toast-notif { max-width: calc(100vw - 24px); border-radius: 14px; white-space: normal; text-align: center; padding: 0.75rem 1rem; }
+        }
     </style>
 </head>
 <body>
@@ -2884,7 +2980,7 @@
         <li><a onclick="goTo('tentang')">Tentang Kami</a></li>
         <li><a onclick="goTo('kontak')">Lokasi &amp; Kontak</a></li>
     </ul>
-    <button class="hamburger" id="hamburgerBtn" aria-label="Buka menu">
+    <button class="hamburger" id="hamburgerBtn" type="button" aria-label="Buka menu" aria-controls="mobileMenu" aria-expanded="false">
         <span></span><span></span><span></span>
     </button>
 </nav>
@@ -2949,7 +3045,10 @@
                     height="72"
                     decoding="async">
             </div>
-            <h1 class="hero-title">{{ $namaUsaha }}</h1>
+            <h1 class="hero-title">{{ $profil->judul_beranda ?: $namaUsaha }}</h1>
+            @if($profil->deskripsi_beranda)
+                <p class="hero-subtitle">{{ $profil->deskripsi_beranda }}</p>
+            @endif
 
         </div>
 
@@ -2989,7 +3088,7 @@
                     $activeBanners = isset($banners) ? $banners : collect();
                 @endphp
 
-                @if($activeBanners->count() > 0)
+                @if($profil->tampilkan_banner && $activeBanners->count() > 0)
                     <div class="promo-banner-track" id="promoBannerTrack">
                         @foreach($activeBanners as $index => $banner)
                             <div class="promo-banner-slide {{ $index === 0 ? 'active' : '' }}" data-index="{{ $index }}">
@@ -3082,11 +3181,12 @@
                              decoding="async">
                     </div>
                     <div class="product-card-body">
-                        <div class="product-card-name">{{ $item->nama }}</div>
+                        <div class="product-card-name">{{ $item->nama }} @if($item->is_best_seller)<span title="Best seller">⭐</span>@endif</div>
+                        @if($item->stok <= 0)<div class="hint" style="color:#B91C1C">Stok habis</div>@endif
                         <div class="product-card-footer">
                             <span class="product-card-price">Rp{{ number_format($item->harga, 0, ',', '.') }}</span>
-                            <button type="button" class="btn-pesan-item" onclick="tambahPesanan({{ $item->id }}, '{{ addslashes($item->nama) }}', {{ $item->harga }}, '{{ $item->kategori }}', this)">
-                                + Pesan
+                            <button type="button" class="btn-pesan-item" @if($item->stok <= 0) disabled style="opacity:.5;cursor:not-allowed" @else onclick="tambahPesanan({{ $item->id }}, '{{ addslashes($item->nama) }}', {{ $item->harga }}, '{{ $item->kategori }}', this)" @endif>
+                                {{ $item->stok <= 0 ? 'Habis' : '+ Pesan' }}
                             </button>
                         </div>
                     </div>
@@ -3261,11 +3361,12 @@
                              loading="lazy">
                     </div>
                     <div class="product-card-body">
-                        <div class="product-card-name">{{ $item->nama }}</div>
+                        <div class="product-card-name">{{ $item->nama }} @if($item->is_best_seller)<span title="Best seller">⭐</span>@endif</div>
+                        @if($item->stok <= 0)<div class="hint" style="color:#B91C1C">Stok habis</div>@endif
                         <div class="product-card-footer">
                             <span class="product-card-price">Rp{{ number_format($item->harga, 0, ',', '.') }}</span>
-                            <button type="button" class="btn-pesan-item" onclick="tambahPesanan({{ $item->id }}, '{{ addslashes($item->nama) }}', {{ $item->harga }}, '{{ $item->kategori }}', this)">
-                                + Pesan
+                            <button type="button" class="btn-pesan-item" @if($item->stok <= 0) disabled style="opacity:.5;cursor:not-allowed" @else onclick="tambahPesanan({{ $item->id }}, '{{ addslashes($item->nama) }}', {{ $item->harga }}, '{{ $item->kategori }}', this)" @endif>
+                                {{ $item->stok <= 0 ? 'Habis' : '+ Pesan' }}
                             </button>
                         </div>
                     </div>
@@ -3291,11 +3392,12 @@
                              loading="lazy">
                     </div>
                     <div class="product-card-body">
-                        <div class="product-card-name">{{ $item->nama }}</div>
+                        <div class="product-card-name">{{ $item->nama }} @if($item->is_best_seller)<span title="Best seller">⭐</span>@endif</div>
+                        @if($item->stok <= 0)<div class="hint" style="color:#B91C1C">Stok habis</div>@endif
                         <div class="product-card-footer">
                             <span class="product-card-price">Rp{{ number_format($item->harga, 0, ',', '.') }}</span>
-                            <button type="button" class="btn-pesan-item" onclick="tambahPesanan({{ $item->id }}, '{{ addslashes($item->nama) }}', {{ $item->harga }}, '{{ $item->kategori }}', this)">
-                                + Pesan
+                            <button type="button" class="btn-pesan-item" @if($item->stok <= 0) disabled style="opacity:.5;cursor:not-allowed" @else onclick="tambahPesanan({{ $item->id }}, '{{ addslashes($item->nama) }}', {{ $item->harga }}, '{{ $item->kategori }}', this)" @endif>
+                                {{ $item->stok <= 0 ? 'Habis' : '+ Pesan' }}
                             </button>
                         </div>
                     </div>
@@ -3321,11 +3423,12 @@
                              loading="lazy">
                     </div>
                     <div class="product-card-body">
-                        <div class="product-card-name">{{ $item->nama }}</div>
+                        <div class="product-card-name">{{ $item->nama }} @if($item->is_best_seller)<span title="Best seller">⭐</span>@endif</div>
+                        @if($item->stok <= 0)<div class="hint" style="color:#B91C1C">Stok habis</div>@endif
                         <div class="product-card-footer">
                             <span class="product-card-price">Rp{{ number_format($item->harga, 0, ',', '.') }}</span>
-                            <button type="button" class="btn-pesan-item" onclick="tambahPesanan({{ $item->id }}, '{{ addslashes($item->nama) }}', {{ $item->harga }}, '{{ $item->kategori }}', this)">
-                                + Pesan
+                            <button type="button" class="btn-pesan-item" @if($item->stok <= 0) disabled style="opacity:.5;cursor:not-allowed" @else onclick="tambahPesanan({{ $item->id }}, '{{ addslashes($item->nama) }}', {{ $item->harga }}, '{{ $item->kategori }}', this)" @endif>
+                                {{ $item->stok <= 0 ? 'Habis' : '+ Pesan' }}
                             </button>
                         </div>
                     </div>
@@ -3361,21 +3464,14 @@
             <div class="about-text" onclick="finishTypewriter()" title="Klik untuk menampilkan seluruh teks langsung">
                 <h3>Siapa Kami</h3>
                 <div class="about-typewriter-box" id="aboutTypewriterBox">
-                    <p>
-                        <strong>Angkringan Sekota</strong> adalah warung makan khas angkringan yang berlokasi di
-                        Tulungagung, Jawa Timur. Kami hadir untuk memberikan pengalaman makan yang nyaman,
-                        hangat, dan penuh keakraban bagi semua kalangan.
-                    </p>
-                    <p>
-                        Dengan menu yang beragam dan harga yang sangat terjangkau, kami selalu berusaha
-                        menjaga kualitas cita rasa khas angkringan yang autentik. Nikmati berbagai sajian
-                        lezat dari nasi kucing, gorengan, minuman hangat, hingga menu spesial kami yang
-                        menjadi favorit pelanggan setia.
-                    </p>
-                    <p>
-                        Buka setiap hari mulai pukul <strong>17.00 – 23.00 WIB</strong>. Kami selalu menyambut
-                        Anda dengan hangat dan ramah.
-                    </p>
+                    <p>{!! nl2br(e($profil->teks_tentang_kami ?: 'Angkringan Sekota adalah warung makan khas angkringan di Tulungagung, Jawa Timur.')) !!}</p>
+                    @if($profil->visi)
+                        <p><strong>Visi:</strong> {{ $profil->visi }}</p>
+                    @endif
+                    @if($profil->misi)
+                        <p><strong>Misi:</strong> {{ $profil->misi }}</p>
+                    @endif
+                    <p>Buka setiap hari mulai pukul <strong>{{ $profil->jam_buka ?? '17.00 - 23.00 WIB' }}</strong>. Kami selalu menyambut Anda dengan hangat dan ramah.</p>
                 </div>
                 <button class="btn-red" onclick="event.stopPropagation(); goTo('menu')">Lihat Menu Kami →</button>
             </div>
@@ -3426,10 +3522,10 @@
 <div id="orderModal" class="modal-overlay">
     <div class="modal-box">
         <div class="modal-header">
-            <div class="modal-title">
+            <div class="modal-title" id="orderModalTitle">
                 <span>🛒</span> Pesanan Makanan &amp; Minuman
             </div>
-            <button type="button" class="btn-close-modal" onclick="tutupModalPesanan()" aria-label="Tutup">✕</button>
+            <button type="button" class="btn-close-modal" id="btnCloseOrderModalHeader" onclick="tutupModalPesanan()" aria-label="Tutup">✕</button>
         </div>
 
         <div class="modal-body">
@@ -3485,9 +3581,67 @@
                     <input type="text" id="orderMeja" class="order-input" placeholder="Contoh: Meja 03 / Lesehan Depan">
                 </div>
 
+                @if($pengaturanTransaksi->pengiriman_aktif)
+                <div class="order-type-tabs" style="margin-top:.75rem">
+                    <div id="typeTabKirim" class="type-tab-card" onclick="pilihTipePemesanan('pengiriman')">
+                        <span class="tab-icon">🛵</span>
+                        <div>
+                            <div class="tab-title">Dikirim</div>
+                            <div class="tab-sub">Area: {{ $pengaturanTransaksi->area_pengiriman ?: 'Hubungi kami' }}</div>
+                        </div>
+                    </div>
+                </div>
+                @endif
+
+                <div class="order-form-group" id="orderAlamatGroup" style="display:none">
+                    <label>Alamat Pengiriman <span style="color:#DC2626">*</span></label>
+                    <textarea id="orderAlamat" class="order-input" rows="2" placeholder="Nama jalan, nomor rumah, patokan, dan kota..."></textarea>
+                </div>
+
                 <div class="order-form-group">
-                    <label>Nomor WhatsApp (Opsional)</label>
-                    <input type="tel" id="orderWa" class="order-input" placeholder="Contoh: 0812-3456-7890">
+                    <label>Metode Pembayaran <span style="color:#DC2626">*</span></label>
+                    <select id="orderMetodeBayar" class="order-input">
+                        @if($pengaturanTransaksi->tunai_aktif)<option value="tunai">Cash / Tunai (bayar di kasir)</option>@endif
+                        @if($pengaturanTransaksi->qris_aktif)<option value="qris">QRIS (unggah bukti bayar)</option>@endif
+                    </select>
+                    @if($pengaturanTransaksi->qris_aktif)
+                        <div id="qrisPanel" style="display:none;margin-top:12px;padding:12px;border:1px solid #F3D2D8;border-radius:12px;background:#FFF8F8">
+                            <div style="display:flex;gap:12px;align-items:flex-start;flex-wrap:wrap">
+                                @if($pengaturanTransaksi->qrisUrl())
+                                    <img id="gambarQrisMenu" src="{{ $pengaturanTransaksi->qrisUrl() }}" alt="Kode QRIS {{ $pengaturanTransaksi->qris_nama_merchant ?: 'ANGKRINGAN SEKOTA' }}" title="Klik untuk memperbesar QRIS" style="width:132px;height:132px;object-fit:contain;background:#fff;border:1px solid #eee;border-radius:8px;padding:6px;cursor:zoom-in">
+                                @else
+                                    <div style="font-size:.78rem;color:#991B1B">Kode QRIS belum tersedia. Silakan hubungi kasir.</div>
+                                @endif
+                                <div style="flex:1;min-width:190px">
+                                    <strong style="font-size:.86rem">QRIS {{ $pengaturanTransaksi->qris_nama_merchant ?: 'ANGKRINGAN SEKOTA' }}</strong>
+                                    <div class="hint" style="font-size:.75rem;color:#666;margin-top:3px">Nominal: <span id="qrisTotal">Rp 0</span></div>
+                                    <div class="hint" style="font-size:.75rem;color:#666;margin-top:3px">Transfer sesuai nominal, lalu unggah bukti bayar di sini. Setelah divalidasi, pesanan langsung diproses.</div>
+                                    <input type="file" id="buktiQris" accept="image/jpeg,image/png,image/webp" class="order-input" style="display:none;margin-top:8px">
+                                    <button type="button" id="btnPilihBuktiQris" style="margin-top:8px;border:1px solid #C8102E;background:#fff;color:#C8102E;border-radius:8px;padding:8px 12px;font-weight:700;font-size:.8rem;cursor:pointer">📷 Pilih Foto Bukti</button>
+                                    <div id="namaBuktiQris" class="hint" style="font-size:.72rem;color:#666;margin-top:5px">Belum ada foto dipilih.</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="qrisLightbox" style="display:none;position:fixed;inset:0;z-index:6000;background:rgba(0,0,0,.78);align-items:center;justify-content:center;padding:20px" role="dialog" aria-modal="true" aria-label="Kode QRIS">
+                            <div style="position:relative;max-width:min(92vw,520px);width:100%;background:#fff;border-radius:16px;padding:18px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.35)">
+                                <button type="button" id="tutupQrisLightbox" aria-label="Tutup" style="position:absolute;top:8px;right:8px;width:34px;height:34px;border:1px solid #E5E7EB;border-radius:50%;background:#fff;color:#111;font-size:1rem;font-weight:700;cursor:pointer">✕</button>
+                                <img id="gambarQrisLightbox" src="" alt="Kode QRIS diperbesar" style="width:100%;max-height:72vh;object-fit:contain">
+                                <div style="font-size:.78rem;color:#666;margin-top:8px">Klik di luar gambar atau tekan Esc untuk menutup.</div>
+                            </div>
+                        </div>
+                    @endif
+                    @if($pengaturanTransaksi->tunai_aktif)
+                        <div class="hint" style="font-size:.75rem;color:#666;margin-top:.4rem">Cash / tunai dibayarkan di kasir saat pengambilan atau pengiriman.</div>
+                    @endif
+                    @if($pengaturanTransaksi->tunai_aktif && $pengaturanTransaksi->tunai_syarat)
+                        <div class="hint" style="font-size:.75rem;color:#666;margin-top:.4rem">Tunai: {{ $pengaturanTransaksi->tunai_syarat }}</div>
+                    @endif
+                </div>
+
+                <div class="order-form-group">
+                    <label>Nomor WhatsApp <span style="color:#DC2626">*</span></label>
+                    <input type="tel" id="orderWa" class="order-input" placeholder="Contoh: 0812-3456-7890" required>
+                    <div class="hint" style="font-size:.75rem;color:#666;margin-top:.4rem">Dipakai untuk verifikasi pembayaran QRIS dan mengecek status pesanan.</div>
                 </div>
 
                 <div class="order-form-group">
@@ -3499,13 +3653,24 @@
             </div>
         </div>
 
-        <div class="modal-footer">
+        <div class="modal-footer" id="orderFormFooter">
             <button type="button" class="btn-order-system" id="btnOrderSystem" onclick="kirimPesananSistem()">
                 <span>📩</span> Simpan ke Kasir
             </button>
             <button type="button" class="btn-order-clear" onclick="kosongkanPesanan()" title="Kosongkan Keranjang">
                 🗑️
             </button>
+        </div>
+
+        <div id="orderSuccessPanel" class="order-success-panel" style="display:none">
+            <div class="order-success-icon">✅</div>
+            <h4 class="order-success-title">Pesanan berhasil dikirim</h4>
+            <p class="order-success-desc">Nomor pesanan Anda: <strong id="orderSuccessNomor">-</strong></p>
+            <p class="order-success-note" id="orderSuccessNote"></p>
+            <div class="order-success-actions">
+                <a id="btnCekStatusPesanan" class="btn-order-system" href="#" target="_blank" rel="noopener">🔎 Cek Status Pesanan</a>
+                <button type="button" class="btn-order-secondary" onclick="tutupModalPesanan()">Tutup</button>
+            </div>
         </div>
     </div>
 </div>
@@ -3620,10 +3785,12 @@ function renderKeranjang() {
     const container = document.getElementById('orderItemsContainer');
     const modalTotalItems = document.getElementById('modalTotalItems');
     const modalTotalPrice = document.getElementById('modalTotalPrice');
+    const qrisTotal = document.getElementById('qrisTotal');
     const btnOrderSystem = document.getElementById('btnOrderSystem');
 
     modalTotalItems.textContent = totalQty + ' porsi';
     modalTotalPrice.textContent = formatRupiah(totalPrice);
+    if (qrisTotal) qrisTotal.textContent = formatRupiah(totalPrice);
 
     if (totalQty === 0) {
         container.innerHTML = '<div class="order-empty-state">🍽️ Belum ada menu yang dipilih.<br><span style="font-size:0.8rem;color:#888;">Silakan klik "+ Pesan" pada menu makanan atau minuman.</span></div>';
@@ -3656,7 +3823,35 @@ function renderKeranjang() {
     container.innerHTML = html;
 }
 
+function resetModalPesanan() {
+    const body = document.querySelector('#orderModal .modal-body');
+    const footer = document.getElementById('orderFormFooter');
+    const panel = document.getElementById('orderSuccessPanel');
+    const headerClose = document.getElementById('btnCloseOrderModalHeader');
+    const title = document.getElementById('orderModalTitle');
+    const nomor = document.getElementById('orderSuccessNomor');
+    const note = document.getElementById('orderSuccessNote');
+    const cekStatus = document.getElementById('btnCekStatusPesanan');
+    const btnOrder = document.getElementById('btnOrderSystem');
+    const msg = document.getElementById('orderStatusMsg');
+
+    if (btnOrder) {
+        btnOrder.disabled = false;
+        btnOrder.innerHTML = '<span>📩</span> Simpan ke Kasir';
+    }
+    if (msg) msg.style.display = 'none';
+    if (body) body.style.display = '';
+    if (footer) footer.style.display = '';
+    if (panel) panel.style.display = 'none';
+    if (headerClose) headerClose.style.display = '';
+    if (title) title.innerHTML = '<span>🛒</span> Pesanan Makanan &amp; Minuman';
+    if (nomor) nomor.textContent = '-';
+    if (note) note.textContent = '';
+    if (cekStatus) cekStatus.href = '#';
+}
+
 function bukaModalPesanan() {
+    resetModalPesanan();
     renderKeranjang();
     const modal = document.getElementById('orderModal');
     modal.classList.add('open');
@@ -3670,23 +3865,22 @@ function bukaModalPesanan() {
 function tutupModalPesanan() {
     const modal = document.getElementById('orderModal');
     modal.classList.remove('open');
+    window.setTimeout(() => {
+        if (!modal.classList.contains('open')) resetModalPesanan();
+    }, 260);
 }
 
 function pilihTipePemesanan(type) {
     document.getElementById('orderTypeValue').value = type;
-    const tabDineIn = document.getElementById('typeTabDineIn');
-    const tabTakeaway = document.getElementById('typeTabTakeaway');
-    const tableGroup = document.getElementById('tableGroup');
+    const tabId = type === 'dine_in' ? 'typeTabDineIn' : type === 'takeaway' ? 'typeTabTakeaway' : 'typeTabKirim';
+    ['typeTabDineIn', 'typeTabTakeaway', 'typeTabKirim'].forEach(id => document.getElementById(id)?.classList.remove('active'));
+    document.getElementById(tabId)?.classList.add('active');
 
-    if (type === 'dine_in') {
-        tabDineIn.classList.add('active');
-        tabTakeaway.classList.remove('active');
-        if (tableGroup) tableGroup.style.display = 'block';
-    } else {
-        tabTakeaway.classList.add('active');
-        tabDineIn.classList.remove('active');
-        if (tableGroup) tableGroup.style.display = 'none';
-    }
+    const tableGroup = document.getElementById('tableGroup');
+    const alamatGroup = document.getElementById('orderAlamatGroup');
+    if (tableGroup) tableGroup.style.display = type === 'dine_in' ? 'block' : 'none';
+    if (alamatGroup) alamatGroup.style.display = type === 'pengiriman' ? 'block' : 'none';
+    document.getElementById('orderAlamat')?.toggleAttribute('required', type === 'pengiriman');
 }
 
 function buatTeksPesanan() {
@@ -3714,7 +3908,27 @@ function buatTeksPesanan() {
     const isDineIn = orderType === 'dine_in';
     const meja = document.getElementById('orderMeja').value.trim();
     const wa = document.getElementById('orderWa').value.trim();
+    const alamat = document.getElementById('orderAlamat')?.value.trim() || '';
+    const metodePembayaran = document.getElementById('orderMetodeBayar')?.value || 'tunai';
+    const buktiQris = document.getElementById('buktiQris')?.files?.[0] || null;
     const catatan = document.getElementById('orderCatatan').value.trim();
+
+    if (metodePembayaran === 'qris' && !buktiQris) {
+        showToast('⚠️ Foto bukti pembayaran QRIS wajib diunggah.');
+        document.getElementById('btnPilihBuktiQris')?.focus();
+        return null;
+    }
+
+    if (!wa) {
+        showToast('⚠️ Nomor WhatsApp wajib diisi untuk verifikasi pesanan.');
+        document.getElementById('orderWa')?.focus();
+        return null;
+    }
+    if (orderType === 'pengiriman' && !alamat) {
+        showToast('⚠️ Alamat pengiriman wajib diisi.');
+        document.getElementById('orderAlamat')?.focus();
+        return null;
+    }
 
     let text = "*PESANAN ANGKRINGAN SEKOTA*\n";
     text += "──────────────────────────\n";
@@ -3723,9 +3937,11 @@ function buatTeksPesanan() {
     if (isDineIn && meja) {
         text += "📍 *Meja:* " + meja + "\n";
     }
-    if (wa) {
-        text += "📱 *No. WA:* " + wa + "\n";
+    if (orderType === 'pengiriman') {
+        text += "🛵 *Alamat:* " + alamat + "\n";
     }
+    text += "📱 *No. WA:* " + wa + "\n";
+    text += "💳 *Bayar:* " + (metodePembayaran === 'qris' ? 'QRIS' : 'Tunai') + "\n";
     text += "──────────────────────────\n";
     text += "📋 *Daftar Menu:*\n";
 
@@ -3743,8 +3959,68 @@ function buatTeksPesanan() {
     text += "──────────────────────────\n";
     text += "Mohon segera diproses ya, terima kasih!";
 
-    return { nama, wa, text, totalPrice };
+    const items = Object.keys(keranjang).map(id => ({
+        id: Number(id),
+        qty: keranjang[id].qty
+    }));
+
+    return {
+        nama,
+        wa,
+        text,
+        totalPrice,
+        items,
+        metodePembayaran,
+        buktiQris,
+        metodePengambilan: orderType === 'pengiriman' ? 'pengiriman' : 'ambil_di_toko',
+        alamat
+    };
 }
+
+(function initQrisCheckout() {
+    const select = document.getElementById('orderMetodeBayar');
+    const panel = document.getElementById('qrisPanel');
+    const fileInput = document.getElementById('buktiQris');
+    const pickButton = document.getElementById('btnPilihBuktiQris');
+    const fileName = document.getElementById('namaBuktiQris');
+    const qrisImage = document.getElementById('gambarQrisMenu');
+    const lightbox = document.getElementById('qrisLightbox');
+    const lightboxImage = document.getElementById('gambarQrisLightbox');
+    const closeLightbox = document.getElementById('tutupQrisLightbox');
+    if (!select || !panel || !fileInput || !pickButton) return;
+
+    if (qrisImage && lightbox && lightboxImage && closeLightbox) {
+        const tutupPreview = () => {
+            lightbox.style.display = 'none';
+            lightboxImage.src = '';
+        };
+
+        qrisImage.addEventListener('click', () => {
+            lightboxImage.src = qrisImage.src;
+            lightbox.style.display = 'flex';
+        });
+        closeLightbox.addEventListener('click', tutupPreview);
+        lightbox.addEventListener('click', (event) => {
+            if (event.target === lightbox) tutupPreview();
+        });
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape') tutupPreview();
+        });
+    }
+
+    function togglePanel() {
+        const aktif = select.value === 'qris';
+        panel.style.display = aktif ? 'block' : 'none';
+        fileInput.required = aktif;
+    }
+
+    select.addEventListener('change', togglePanel);
+    pickButton.addEventListener('click', () => fileInput.click());
+    fileInput.addEventListener('change', () => {
+        fileName.textContent = fileInput.files?.length ? fileInput.files[0].name : 'Belum ada foto dipilih.';
+    });
+    togglePanel();
+})();
 
 function kirimPesananSistem() {
     const data = buatTeksPesanan();
@@ -3755,14 +4031,20 @@ function kirimPesananSistem() {
     const origText = btn.innerHTML;
     btn.disabled = true;
     btn.innerHTML = 'Mengirim...';
+    msgEl.style.display = 'none';
 
     const formData = new FormData();
     formData.append('_token', '{{ csrf_token() }}');
     formData.append('nama_pengirim', data.nama);
-    formData.append('nomor_wa', data.wa || '-');
-    formData.append('isi_pesan', data.text);
+    formData.append('nomor_wa', data.wa);
+    formData.append('catatan', data.text);
+    formData.append('items', JSON.stringify(data.items));
+    formData.append('metode_pembayaran', data.metodePembayaran);
+    if (data.buktiQris) formData.append('bukti_pembayaran', data.buktiQris);
+    formData.append('metode_pengambilan', data.metodePengambilan);
+    formData.append('alamat_pengiriman', data.alamat);
 
-    fetch('{{ route("pesan.store") }}', {
+    fetch('{{ route("pesanan.store") }}', {
         method: 'POST',
         headers: {
             'Accept': 'application/json',
@@ -3770,20 +4052,37 @@ function kirimPesananSistem() {
         },
         body: formData
     })
-    .then(res => res.json())
+    .then(async res => {
+        const body = await res.json().catch(() => ({}));
+        if (!res.ok || !body.success) {
+            const errors = body.errors ? Object.values(body.errors).flat().join(' ') : null;
+            throw new Error(errors || body.message || 'Terjadi kendala saat mengirim ke server.');
+        }
+        return body;
+    })
     .then(res => {
-        btn.disabled = false;
-        btn.innerHTML = origText;
-        msgEl.style.display = 'block';
-        msgEl.style.background = '#D1FAE5';
-        msgEl.style.color = '#065F46';
-        msgEl.innerHTML = '✅ Pesanan berhasil dicatat oleh sistem kasir/admin! Silakan tunggu pesanan Anda disiapkan.';
+        const isQris = res.metode_pembayaran === 'qris';
+        const info = isQris
+            ? 'Bukti pembayaran QRIS diterima. Pegawai sedang mengecek bukti transaksi Anda.'
+            : 'Pesanan tunai sudah masuk. Silakan bayar di kasir saat pengambilan atau pengiriman.';
+        const body = document.querySelector('#orderModal .modal-body');
+        const footer = document.getElementById('orderFormFooter');
+        const panel = document.getElementById('orderSuccessPanel');
+        const headerClose = document.getElementById('btnCloseOrderModalHeader');
+        const title = document.getElementById('orderModalTitle');
 
-        setTimeout(() => {
-            keranjang = {};
-            renderKeranjang();
-            tutupModalPesanan();
-        }, 2200);
+        if (body) body.style.display = 'none';
+        if (footer) footer.style.display = 'none';
+        if (headerClose) headerClose.style.display = 'none';
+        if (title) title.innerHTML = '<span>✅</span> Pesanan Berhasil';
+        document.getElementById('orderSuccessNomor').textContent = res.nomor_transaksi;
+        document.getElementById('orderSuccessNote').textContent = info;
+        document.getElementById('btnCekStatusPesanan').href = res.cek_url;
+        if (panel) panel.style.display = 'block';
+
+        keranjang = {};
+        renderKeranjang();
+        showToast('📦 Pesanan ' + res.nomor_transaksi + ' berhasil dibuat.');
     })
     .catch(err => {
         btn.disabled = false;
@@ -3791,7 +4090,7 @@ function kirimPesananSistem() {
         msgEl.style.display = 'block';
         msgEl.style.background = '#FEE2E2';
         msgEl.style.color = '#991B1B';
-        msgEl.innerHTML = 'Terjadi kendala saat mengirim ke server. Silakan coba lagi.';
+        msgEl.textContent = '⚠️ ' + (err.message || 'Terjadi kendala saat mengirim ke server. Silakan coba lagi.');
     });
 }
 
@@ -4059,9 +4358,23 @@ function updateNav(pageId) {
 const hamburgerBtn = document.getElementById('hamburgerBtn');
 const mobileMenu   = document.getElementById('mobileMenu');
 
-hamburgerBtn.addEventListener('click', () => mobileMenu.classList.toggle('open'));
+function closeMob() {
+    mobileMenu?.classList.remove('open');
+    hamburgerBtn?.setAttribute('aria-expanded', 'false');
+}
 
-function closeMob() { mobileMenu.classList.remove('open'); }
+hamburgerBtn?.addEventListener('click', () => {
+    const open = !mobileMenu.classList.contains('open');
+    mobileMenu.classList.toggle('open', open);
+    hamburgerBtn.setAttribute('aria-expanded', String(open));
+});
+
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && mobileMenu?.classList.contains('open')) {
+        closeMob();
+        hamburgerBtn?.focus();
+    }
+});
 
 // =============================================
 //  FILTER & SEARCH MENU

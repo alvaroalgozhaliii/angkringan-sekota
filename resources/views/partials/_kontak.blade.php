@@ -117,7 +117,7 @@
                                     <button type="button" 
                                             id="btnCopyAddress"
                                             onclick="salinAlamat('{{ addslashes($profil->alamat ?? 'Tulungagung, Jawa Timur') }}')" 
-                                            class="mt-2 inline-flex items-center gap-1.5 text-xs font-semibold text-[#C8102E] hover:text-[#9E0C23] bg-rose-50 hover:bg-rose-100 px-3 py-1.5 rounded-md transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-[#C8102E]"
+                                            class="mt-2 min-h-[44px] inline-flex items-center gap-1.5 text-xs font-semibold text-[#C8102E] hover:text-[#9E0C23] bg-rose-50 hover:bg-rose-100 px-3 py-2 rounded-md transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-[#C8102E]"
                                             aria-label="Salin teks alamat lengkap ke clipboard">
                                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" id="copyIconSvg">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2" />
@@ -143,7 +143,7 @@
                             </div>
 
                             {{-- Baris Sosial Media (jika ada) --}}
-                            @if(!empty($profil->instagram) || !empty($profil->facebook))
+                            @if(!empty($profil->instagram) || !empty($profil->facebook) || !empty($profil->tiktok))
                             <div class="pt-2 border-t border-stone-100 flex items-center gap-3">
                                 <span class="text-xs text-stone-500">Media Sosial:</span>
                                 <div class="flex items-center gap-2">
@@ -151,16 +151,25 @@
                                     <a href="https://instagram.com/{{ ltrim($profil->instagram, '@') }}" 
                                        target="_blank" 
                                        rel="noopener" 
-                                       class="text-xs font-medium text-stone-700 hover:text-[#C8102E] bg-stone-100 hover:bg-stone-200 px-2.5 py-1 rounded transition-colors"
+                                       class="min-h-[44px] inline-flex items-center text-xs font-medium text-stone-700 hover:text-[#C8102E] bg-stone-100 hover:bg-stone-200 px-3 py-2 rounded transition-colors"
                                        title="Buka Instagram Angkringan Sekota">
                                         Instagram: {{ $profil->instagram }}
                                     </a>
                                     @endif
                                     @if(!empty($profil->facebook))
                                     <a href="#" 
-                                       class="text-xs font-medium text-stone-700 hover:text-[#C8102E] bg-stone-100 hover:bg-stone-200 px-2.5 py-1 rounded transition-colors"
+                                       class="min-h-[44px] inline-flex items-center text-xs font-medium text-stone-700 hover:text-[#C8102E] bg-stone-100 hover:bg-stone-200 px-3 py-2 rounded transition-colors"
                                        title="Buka Facebook Angkringan Sekota">
                                         Facebook
+                                    </a>
+                                    @endif
+                                    @if(!empty($profil->tiktok))
+                                    <a href="https://www.tiktok.com/{{ ltrim($profil->tiktok, '@') }}"
+                                       target="_blank"
+                                       rel="noopener"
+                                       class="min-h-[44px] inline-flex items-center text-xs font-medium text-stone-700 hover:text-[#C8102E] bg-stone-100 hover:bg-stone-200 px-3 py-2 rounded transition-colors"
+                                       title="Buka TikTok Angkringan Sekota">
+                                        TikTok: {{ $profil->tiktok }}
                                     </a>
                                     @endif
                                 </div>
@@ -208,10 +217,10 @@
                                 Temukan rute tercepat menuju lokasi Angkringan Sekota di Google Maps.
                             </p>
                         </div>
-                        <a href="https://maps.app.goo.gl/NyuN7yDHJ21HJt4L7" 
-                           target="_blank" 
-                           rel="noopener" 
-                           class="hidden sm:inline-flex items-center gap-1.5 bg-[#C8102E] hover:bg-[#9E0C23] text-white text-xs font-bold px-3.5 py-2 rounded-lg shadow-sm transition-colors shrink-0"
+                        <a href="{{ $profil->maps_link ?: 'https://maps.app.goo.gl/NyuN7yDHJ21HJt4L7' }}"
+                           target="_blank"
+                           rel="noopener"
+                           class="hidden sm:inline-flex items-center gap-1.5 bg-[#C8102E] hover:bg-[#9E0C23] text-white text-xs font-bold px-3.5 py-2.5 min-h-[44px] rounded-lg shadow-sm transition-colors shrink-0"
                            title="Buka rute langsung di aplikasi Google Maps">
                             <span>Petunjuk Arah</span>
                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -241,10 +250,10 @@
                             <strong class="text-stone-800 font-semibold">Angkringan Sekota Tulungagung</strong>
                             <p class="text-stone-500">Akses jalan mulus, mudah dicapai kendaraan roda 2 dan roda 4.</p>
                         </div>
-                        <a href="https://maps.app.goo.gl/NyuN7yDHJ21HJt4L7" 
-                           target="_blank" 
-                           rel="noopener" 
-                           class="sm:hidden w-full inline-flex items-center justify-center gap-1.5 bg-[#C8102E] hover:bg-[#9E0C23] text-white font-bold py-2.5 px-4 rounded-lg shadow-sm transition-colors text-center"
+                        <a href="{{ $profil->maps_link ?: 'https://maps.app.goo.gl/NyuN7yDHJ21HJt4L7' }}"
+                           target="_blank"
+                           rel="noopener"
+                           class="sm:hidden w-full min-h-[44px] inline-flex items-center justify-center gap-1.5 bg-[#C8102E] hover:bg-[#9E0C23] text-white font-bold py-2.5 px-4 rounded-lg shadow-sm transition-colors text-center"
                            title="Buka rute langsung di aplikasi Google Maps">
                             <span>Buka di Google Maps</span>
                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -322,7 +331,7 @@
                             <input type="text" 
                                    id="reviewCustomerName" 
                                    name="customer_name" 
-                                   class="w-full bg-white border border-stone-300 rounded-lg px-3.5 py-2.5 text-sm text-stone-900 placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-[#C8102E] focus:border-[#C8102E] transition-all"
+                                   class="w-full bg-white border border-stone-300 rounded-lg px-3.5 py-2.5 text-base text-stone-900 placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-[#C8102E] focus:border-[#C8102E] transition-all"
                                    placeholder="Contoh: Mas Danang atau Mbak Rani" 
                                    required 
                                    maxlength="100" 
@@ -334,12 +343,12 @@
                                 Penilaian Bintang <span class="text-[#C8102E]">*</span>
                             </label>
                             <div class="bg-white border border-stone-300 rounded-lg p-3 flex flex-col gap-2">
-                                <div class="star-picker flex items-center gap-1.5" id="starPicker">
-                                    <button type="button" class="star-btn active text-2xl text-amber-400 hover:scale-110 transition-transform p-0.5 cursor-pointer leading-none" data-val="1" onclick="setRating(1)" onmouseenter="previewRating(1)" onmouseleave="resetStarPreview()" aria-label="1 Bintang" title="1 Bintang">★</button>
-                                    <button type="button" class="star-btn active text-2xl text-amber-400 hover:scale-110 transition-transform p-0.5 cursor-pointer leading-none" data-val="2" onclick="setRating(2)" onmouseenter="previewRating(2)" onmouseleave="resetStarPreview()" aria-label="2 Bintang" title="2 Bintang">★</button>
-                                    <button type="button" class="star-btn active text-2xl text-amber-400 hover:scale-110 transition-transform p-0.5 cursor-pointer leading-none" data-val="3" onclick="setRating(3)" onmouseenter="previewRating(3)" onmouseleave="resetStarPreview()" aria-label="3 Bintang" title="3 Bintang">★</button>
-                                    <button type="button" class="star-btn active text-2xl text-amber-400 hover:scale-110 transition-transform p-0.5 cursor-pointer leading-none" data-val="4" onclick="setRating(4)" onmouseenter="previewRating(4)" onmouseleave="resetStarPreview()" aria-label="4 Bintang" title="4 Bintang">★</button>
-                                    <button type="button" class="star-btn active text-2xl text-amber-400 hover:scale-110 transition-transform p-0.5 cursor-pointer leading-none" data-val="5" onclick="setRating(5)" onmouseenter="previewRating(5)" onmouseleave="resetStarPreview()" aria-label="5 Bintang" title="5 Bintang">★</button>
+                                <div class="star-picker flex flex-wrap items-center gap-1" id="starPicker">
+                                    <button type="button" class="star-btn active min-w-[44px] min-h-[44px] flex items-center justify-center text-2xl text-amber-400 hover:scale-110 transition-transform cursor-pointer leading-none" data-val="1" onclick="setRating(1)" onmouseenter="previewRating(1)" onmouseleave="resetStarPreview()" aria-label="1 Bintang" title="1 Bintang">★</button>
+                                    <button type="button" class="star-btn active min-w-[44px] min-h-[44px] flex items-center justify-center text-2xl text-amber-400 hover:scale-110 transition-transform cursor-pointer leading-none" data-val="2" onclick="setRating(2)" onmouseenter="previewRating(2)" onmouseleave="resetStarPreview()" aria-label="2 Bintang" title="2 Bintang">★</button>
+                                    <button type="button" class="star-btn active min-w-[44px] min-h-[44px] flex items-center justify-center text-2xl text-amber-400 hover:scale-110 transition-transform cursor-pointer leading-none" data-val="3" onclick="setRating(3)" onmouseenter="previewRating(3)" onmouseleave="resetStarPreview()" aria-label="3 Bintang" title="3 Bintang">★</button>
+                                    <button type="button" class="star-btn active min-w-[44px] min-h-[44px] flex items-center justify-center text-2xl text-amber-400 hover:scale-110 transition-transform cursor-pointer leading-none" data-val="4" onclick="setRating(4)" onmouseenter="previewRating(4)" onmouseleave="resetStarPreview()" aria-label="4 Bintang" title="4 Bintang">★</button>
+                                    <button type="button" class="star-btn active min-w-[44px] min-h-[44px] flex items-center justify-center text-2xl text-amber-400 hover:scale-110 transition-transform cursor-pointer leading-none" data-val="5" onclick="setRating(5)" onmouseenter="previewRating(5)" onmouseleave="resetStarPreview()" aria-label="5 Bintang" title="5 Bintang">★</button>
                                 </div>
                                 <span class="text-xs font-semibold text-amber-800" id="starRatingLabel">
                                     5 Bintang: Sangat Puas!
@@ -355,7 +364,7 @@
                             <textarea id="reviewText" 
                                       name="review" 
                                       rows="3" 
-                                      class="w-full bg-white border border-stone-300 rounded-lg px-3.5 py-2.5 text-sm text-stone-900 placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-[#C8102E] focus:border-[#C8102E] transition-all resize-y"
+                                      class="w-full bg-white border border-stone-300 rounded-lg px-3.5 py-2.5 text-base text-stone-900 placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-[#C8102E] focus:border-[#C8102E] transition-all resize-y"
                                       placeholder="Tulis ulasan Anda di sini..." 
                                       required 
                                       maxlength="1000"></textarea>

@@ -13,32 +13,41 @@ class AuthController extends Controller
         if (Auth::check() && Auth::user()->isAdmin()) {
             return $this->redirectAfterLogin();
         }
+
         return view('admin.auth.login');
     }
 
     public function login(Request $request)
     {
         $request->validate([
-            'email'    => 'required|email',
-            'password' => 'required',
+            'username' => 'required|string|max:255',
+            'password' => 'required|string',
         ], [
-            'email.required'    => 'Email wajib diisi.',
-            'email.email'       => 'Format email tidak valid.',
+            'username.required' => 'Username atau email wajib diisi.',
+            'username.max' => 'Username atau email terlalu panjang.',
             'password.required' => 'Password wajib diisi.',
         ]);
 
-        $credentials = $request->only('email', 'password');
+        $identifier = trim($request->string('username')->toString());
+        $credentials = [
+            (filter_var($identifier, FILTER_VALIDATE_EMAIL) ? 'email' : 'name') => $identifier,
+            'password' => $request->string('password')->toString(),
+        ];
 
         if (Auth::attempt($credentials, $request->boolean('remember'))) {
-            if (!Auth::user()->isAdmin()) {
+            if (! Auth::user()->isAdmin()) {
                 Auth::logout();
-                return back()->withErrors(['email' => 'Akun Anda tidak memiliki akses admin.']);
+                $request->session()->invalidate();
+                $request->session()->regenerateToken();
+
+                return back()->withErrors(['username' => 'Akun Anda tidak memiliki akses ke dashboard.']);
             }
             $request->session()->regenerate();
+
             return $this->redirectAfterLogin();
         }
 
-        return back()->withErrors(['email' => 'Email atau password salah.'])->withInput($request->only('email'));
+        return back()->withErrors(['username' => 'Username/email atau password salah.'])->withInput($request->only('username'));
     }
 
     public function logout(Request $request)
@@ -46,6 +55,7 @@ class AuthController extends Controller
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
+
         return redirect()->route('admin.login')->with('success', 'Berhasil logout.');
     }
 
@@ -55,6 +65,6 @@ class AuthController extends Controller
             ? redirect()->route('admin.pengguna.index')
             : (Auth::user()->isOwner()
                 ? redirect()->route('admin.pengaturan.transaksi')
-                : redirect()->route('admin.profil.index'));
+                : redirect()->route('pegawai.dashboard'));
     }
 }

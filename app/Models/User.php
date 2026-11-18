@@ -3,13 +3,14 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
+    /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
 
     /**
@@ -20,6 +21,8 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
+        'kontak',
+        'foto',
         'password',
         'role',
     ];
@@ -42,6 +45,28 @@ class User extends Authenticatable
     public function isAdmin(): bool
     {
         return in_array($this->role, ['super_admin', 'owner', 'pegawai'], true);
+    }
+
+    public function isPegawaiPanel(): bool
+    {
+        return in_array($this->role, ['pegawai', 'super_admin'], true);
+    }
+
+    public function fotoUrl(): string
+    {
+        if (! $this->foto) {
+            return asset('images/logo.png');
+        }
+        if (str_starts_with($this->foto, 'http') || str_starts_with($this->foto, 'images/')) {
+            return str_starts_with($this->foto, 'http') ? $this->foto : asset($this->foto);
+        }
+
+        return asset('storage/'.$this->foto);
+    }
+
+    public function activityLogs()
+    {
+        return $this->hasMany(ActivityLog::class);
     }
 
     public function roleLabel(): string

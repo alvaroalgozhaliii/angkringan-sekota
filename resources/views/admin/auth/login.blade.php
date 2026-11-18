@@ -8,7 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-        body{font-family:'Poppins',sans-serif;min-height:100vh;display:flex;background:#f4f5f7}
+        body{font-family:'Poppins',sans-serif;min-height:100dvh;display:flex;background:#f4f5f7}
         .split-left{width:420px;background:#C8102E;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:3rem 2.5rem;min-height:100vh;position:relative;overflow:hidden;flex-shrink:0}
         .split-left::before{content:'';position:absolute;top:-30%;left:-30%;width:80%;height:80%;background:radial-gradient(ellipse,rgba(255,255,255,.08) 0%,transparent 70%);border-radius:50%}
         .split-left::after{content:'';position:absolute;bottom:-20%;right:-20%;width:60%;height:60%;background:radial-gradient(ellipse,rgba(0,0,0,.12) 0%,transparent 70%);border-radius:50%}
@@ -23,17 +23,17 @@
         .login-sub{font-size:.85rem;color:#6B7280;margin-bottom:2rem}
         .form-group{margin-bottom:1.1rem}
         .form-label{display:block;font-size:.8rem;font-weight:600;color:#374151;margin-bottom:.4rem}
-        .form-control{width:100%;padding:.7rem 1rem;border:1.5px solid #E5E7EB;border-radius:8px;font-size:.9rem;font-family:'Poppins',sans-serif;color:#1F2937;transition:border .2s}
+        .form-control{width:100%;min-height:46px;padding:.7rem 1rem;border:1.5px solid #E5E7EB;border-radius:8px;font-size:16px;font-family:'Poppins',sans-serif;color:#1F2937;transition:border .2s}
         .form-control:focus{outline:none;border-color:#C8102E;box-shadow:0 0 0 3px rgba(200,16,46,.08)}
         .form-control.error{border-color:#DC2626}
         .error-msg{color:#DC2626;font-size:.78rem;margin-top:.35rem}
-        .remember-row{display:flex;align-items:center;gap:.5rem;margin-bottom:1.4rem}
-        .remember-row input{width:16px;height:16px;accent-color:#C8102E}
-        .remember-row label{font-size:.82rem;color:#6B7280}
-        .btn-login{width:100%;padding:.8rem;background:#C8102E;color:#fff;border:none;border-radius:8px;font-size:.95rem;font-weight:700;font-family:'Poppins',sans-serif;cursor:pointer;transition:background .2s}
+        .remember-row{display:flex;align-items:center;gap:.5rem;margin-bottom:1.4rem;min-height:44px}
+        .remember-row input{width:22px;height:22px;accent-color:#C8102E}
+        .remember-row label{font-size:.82rem;color:#6B7280;min-height:44px;display:inline-flex;align-items:center;cursor:pointer}
+        .btn-login{width:100%;min-height:46px;padding:.8rem;background:#C8102E;color:#fff;border:none;border-radius:8px;font-size:.95rem;font-weight:700;font-family:'Poppins',sans-serif;cursor:pointer;transition:background .2s}
         .btn-login:hover{background:#9E0C23}
         .login-back{text-align:center;margin-top:1.25rem;font-size:.8rem;color:#6B7280}
-        .login-back a{color:#C8102E;font-weight:600;text-decoration:none}
+        .login-back a{color:#C8102E;font-weight:600;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 .25rem}
         .login-back a:hover{text-decoration:underline}
         .alert-error{background:#FEE2E2;color:#991B1B;padding:.8rem 1rem;border-radius:8px;font-size:.82rem;margin-bottom:1.2rem;border:1px solid #FECACA}
         @media(max-width:900px){
@@ -41,7 +41,7 @@
             .split-right{padding:1.5rem}
             .login-card{padding:2rem}
         }
-        @media(max-width:640px){
+        @media(max-width:768px){
             body{display:block;min-height:100dvh}
             .split-left{width:100%;min-height:0;padding:1.25rem 1rem}
             .brand-logo{width:64px;height:64px;margin-bottom:.75rem}
@@ -82,16 +82,16 @@
         @if(session('error'))
             <div class="alert-error">{{ session('error') }}</div>
         @endif
-        @if($errors->has('email'))
-            <div class="alert-error">{{ $errors->first('email') }}</div>
+        @if($errors->has('username'))
+            <div class="alert-error">{{ $errors->first('username') }}</div>
         @endif
 
         <form method="POST" action="{{ route('admin.login.post') }}">
             @csrf
             <div class="form-group">
-                <label class="form-label" for="email">Email</label>
-                <input type="email" id="email" name="email" class="form-control {{ $errors->has('email') ? 'error' : '' }}"
-                       placeholder="owner@sekota.id" value="{{ old('email') }}" required autofocus>
+                <label class="form-label" for="username">Username atau Email</label>
+                <input type="text" id="username" name="username" class="form-control {{ $errors->has('username') ? 'error' : '' }}"
+                       placeholder="pegawai@sekota.id" value="{{ old('username') }}" required autofocus autocomplete="username">
             </div>
             <div class="form-group">
                 <label class="form-label" for="password">Password</label>

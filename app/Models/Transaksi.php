@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use App\Support\OrderStatus;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Model;
 
 class Transaksi extends Model
 {
@@ -13,6 +14,7 @@ class Transaksi extends Model
         'nomor_transaksi',
         'user_id',
         'nama_kasir',
+        'sumber',
         'nama_pelanggan',
         'catatan',
         'total_harga',
@@ -20,6 +22,20 @@ class Transaksi extends Model
         'uang_diterima',
         'kembalian',
         'status',
+        'no_telepon_pelanggan',
+        'email_pelanggan',
+        'alamat_pengiriman',
+        'metode_pengambilan',
+        'bukti_pembayaran',
+        'alasan_penolakan',
+        'batas_bayar_at',
+        'waktu_dibayar_at',
+        'stok_dikurangi',
+        'verified_by',
+        'verified_at',
+        'disetujui_oleh',
+        'disetujui_at',
+        'status_updated_at',
     ];
 
     protected $casts = [
@@ -28,6 +44,12 @@ class Transaksi extends Model
         'kembalian' => 'decimal:0',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
+        'batas_bayar_at' => 'datetime',
+        'waktu_dibayar_at' => 'datetime',
+        'verified_at' => 'datetime',
+        'disetujui_at' => 'datetime',
+        'status_updated_at' => 'datetime',
+        'stok_dikurangi' => 'boolean',
     ];
 
     public function details()
@@ -40,24 +62,78 @@ class Transaksi extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
+    public function detailsPembayaran()
+    {
+        return $this->hasMany(NotifikasiPesanan::class, 'transaksi_id');
+    }
+
+    public function notifikasi()
+    {
+        return $this->hasMany(NotifikasiPesanan::class, 'transaksi_id');
+    }
+
+    public function diverifikasiOleh()
+    {
+        return $this->belongsTo(User::class, 'verified_by');
+    }
+
+    public function disetujuiOleh()
+    {
+        return $this->belongsTo(User::class, 'disetujui_oleh');
+    }
+
+    public function getSumberLabelAttribute(): string
+    {
+        return $this->sumber === 'website' ? 'Online' : 'Kasir';
+    }
+
     public function scopeHariIni($query)
     {
         return $query->whereDate('created_at', Carbon::today());
     }
 
+    public function getStatusLabelAttribute(): string
+    {
+        return OrderStatus::label($this->status);
+    }
+
+    public function getBuktiUrlAttribute(): ?string
+    {
+        return $this->bukti_pembayaran
+            ? (str_starts_with($this->bukti_pembayaran, 'http')
+                ? $this->bukti_pembayaran
+                : asset('storage/'.$this->bukti_pembayaran))
+            : null;
+    }
+
+    public function linkWhatsapp(): ?string
+    {
+        $nomor = preg_replace('/[^0-9]/', '', (string) $this->no_telepon_pelanggan);
+        if (! $nomor || strlen($nomor) < 8) {
+            return null;
+        }
+        if (str_starts_with($nomor, '0')) {
+            $nomor = '62'.substr($nomor, 1);
+        }
+
+        $pesan = 'Halo, ini terkait pesanan '.$this->nomor_transaksi.'.';
+
+        return 'https://wa.me/'.$nomor.'?text='.rawurlencode($pesan);
+    }
+
     public function getFormattedTotalAttribute(): string
     {
-        return 'Rp ' . number_format($this->total_harga, 0, ',', '.');
+        return 'Rp '.number_format($this->total_harga, 0, ',', '.');
     }
 
     public function getFormattedUangDiterimaAttribute(): string
     {
-        return 'Rp ' . number_format($this->uang_diterima, 0, ',', '.');
+        return 'Rp '.number_format($this->uang_diterima, 0, ',', '.');
     }
 
     public function getFormattedKembalianAttribute(): string
     {
-        return 'Rp ' . number_format($this->kembalian, 0, ',', '.');
+        return 'Rp '.number_format($this->kembalian, 0, ',', '.');
     }
 
     public function getFormattedWaktuAttribute(): string
@@ -75,8 +151,8 @@ class Transaksi extends Model
      */
     public static function generateNomorTransaksi(): string
     {
-        $prefix = 'TRX-' . date('Ymd') . '-';
-        $latest = self::where('nomor_transaksi', 'like', $prefix . '%')
+        $prefix = 'TRX-'.date('Ymd').'-';
+        $latest = self::where('nomor_transaksi', 'like', $prefix.'%')
             ->orderBy('id', 'desc')
             ->first();
 
@@ -87,6 +163,6 @@ class Transaksi extends Model
             $nextNum = 1;
         }
 
-        return $prefix . str_pad($nextNum, 3, '0', STR_PAD_LEFT);
+        return $prefix.str_pad($nextNum, 3, '0', STR_PAD_LEFT);
     }
 }

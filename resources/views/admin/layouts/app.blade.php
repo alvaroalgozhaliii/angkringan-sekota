@@ -26,7 +26,9 @@
         body{font-family:'Poppins',sans-serif;background:var(--bg);color:var(--text);display:flex;min-height:100vh}
 
         /* ── SIDEBAR ── */
-        .sidebar{width:var(--sidebar-w);background:var(--red);min-height:100vh;position:fixed;top:0;left:0;bottom:0;display:flex;flex-direction:column;z-index:50;transition:transform .3s}
+        .sidebar{width:var(--sidebar-w);background:var(--red);min-height:100dvh;position:fixed;top:0;left:0;bottom:0;display:flex;flex-direction:column;z-index:50;transition:transform .3s;box-shadow:4px 0 24px rgba(0,0,0,.12)}
+        .sidebar-backdrop{position:fixed;inset:0;background:rgba(17,17,20,.55);backdrop-filter:blur(2px);z-index:45;opacity:0;visibility:hidden;transition:opacity .3s,visibility .3s}
+        .sidebar-backdrop.show{opacity:1;visibility:visible}
         .sidebar-brand{padding:1.5rem 1.25rem 1rem;border-bottom:1px solid rgba(255,255,255,.15)}
         .sidebar-logo-title{font-size:1.1rem;font-weight:800;color:#fff;text-transform:uppercase;line-height:1.1;letter-spacing:.03em}
         .sidebar-logo-sub{font-size:.7rem;font-weight:400;color:rgba(255,255,255,.7);margin-top:.15rem}
@@ -145,6 +147,21 @@
         .action-link{color:var(--red);font-weight:600;font-size:.82rem;text-decoration:none;transition:opacity .2s}
         .action-link:hover{opacity:.7;text-decoration:underline}
         .action-link.del{color:#DC2626}
+        .badge-blue{background:#DBEAFE;color:#1E40AF}
+        .badge-purple{background:#EDE9FE;color:#5B21B6}
+        .badge-warning{background:#FEF3C7;color:#92400E}
+        .badge-info{background:#DBEAFE;color:#1E40AF}
+        .badge-primary{background:#EDE9FE;color:#5B21B6}
+        .badge-danger{background:#FEE2E2;color:#991B1B}
+        .badge-teal{background:#CCFBF1;color:#115E59}
+        .filter-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.75rem;align-items:end}
+        .filter-grid .form-group{margin-bottom:0}
+        .thumb{width:56px;height:56px;object-fit:cover;border-radius:8px;border:1px solid var(--border);background:#F3F4F6}
+        .thumb-lg{width:100%;max-width:420px;border-radius:10px;border:1px solid var(--border)}
+        .hint{font-size:.75rem;color:var(--muted);margin-top:.3rem;line-height:1.5}
+        .field-error{font-size:.75rem;color:#991B1B;margin-top:.3rem}
+        .divider{height:1px;background:var(--border);margin:1.25rem 0}
+        .link-wa{color:#059669;font-weight:600;text-decoration:none}
 
         /* ── ALERTS ── */
         .alert{padding:.85rem 1.1rem;border-radius:8px;font-size:.85rem;margin-bottom:1rem;display:flex;align-items:center;gap:.6rem}
@@ -157,7 +174,8 @@
         .page-sub{font-size:.8rem;color:var(--muted);margin-top:.1rem}
 
         /* ── MOBILE ── */
-        .hamburger{display:none;background:none;border:none;font-size:1.3rem;cursor:pointer;padding:4px}
+        .hamburger{display:none;background:none;border:none;font-size:1.3rem;cursor:pointer;padding:4px;min-width:44px;min-height:44px;place-items:center;color:var(--text);border-radius:8px}
+        .hamburger:focus-visible{outline:2px solid var(--red);outline-offset:2px}
         @media(max-width:1280px){
             .topbar-actions .badge-db{display:none}
         }
@@ -166,11 +184,14 @@
             .topbar-actions .badge-db{display:none}
         }
         @media(max-width:900px){
-            .sidebar{transform:translateX(-100%)}
+            .filter-grid{grid-template-columns:1fr 1fr}
+            .sidebar{transform:translateX(-100%);height:100dvh}
             .sidebar.open{transform:translateX(0)}
+            .sidebar-backdrop.show{visibility:visible;opacity:1}
             body{display:block;width:100%;overflow-x:hidden}
+            body.sidebar-open{overflow:hidden}
             .main-wrap{margin-left:0;width:100%;max-width:100%;min-width:0}
-            .hamburger{display:block}
+            .hamburger{display:grid}
             .stat-grid{grid-template-columns:repeat(2,minmax(0,1fr)) !important;gap:.75rem}
             .two-col{grid-template-columns:1fr}
             .content{padding:1rem;min-width:0}
@@ -195,6 +216,7 @@
             .alert{align-items:flex-start;overflow-wrap:anywhere}
         }
         @media(max-width:480px){
+            .filter-grid{grid-template-columns:1fr}
             .content{padding:.75rem}
             .topbar{padding:.65rem .75rem}
             .topbar-actions{gap:.4rem}
@@ -208,11 +230,19 @@
             .order-filters{grid-template-columns:1fr !important}
             .order-filters > div:first-child{grid-column:auto}
             .btn-row .btn-sm{flex:1 1 auto;justify-content:center}
+            .form-control,input,select,textarea{font-size:16px;max-width:100%}
+            .form-group label{overflow-wrap:anywhere}
+        }
+        @media(max-width:360px){
+            .stat-grid{grid-template-columns:1fr !important}
+            .topbar-title{font-size:1rem}
         }
     </style>
     @stack('styles')
 </head>
 <body>
+
+<div class="sidebar-backdrop" id="sidebarBackdrop"></div>
 
 <!-- SIDEBAR -->
 <nav class="sidebar" id="sidebar">
@@ -251,8 +281,44 @@
             <span class="nav-icon">🧑</span> Data pelanggan
         </a>
         @else
-        <a href="{{ route('admin.profil.index') }}" class="{{ request()->routeIs('admin.profil.*') ? 'active' : '' }}">
-            <span class="nav-icon">🏠</span> Profil Usaha
+        <a href="{{ route('pegawai.dashboard') }}" class="{{ request()->routeIs('pegawai.dashboard') ? 'active' : '' }}">
+            <span class="nav-icon">📊</span> Dashboard Pegawai
+        </a>
+        <a href="{{ route('pegawai.kasir.index') }}" class="{{ request()->routeIs('pegawai.kasir.*') ? 'active' : '' }}">
+            <span class="nav-icon">🧮</span> Kasir
+        </a>
+        <a href="{{ route('pegawai.pesanan.index') }}" class="{{ request()->routeIs('pegawai.pesanan.*') ? 'active' : '' }}">
+            <span class="nav-icon">🧾</span> Pesanan &amp; Pembayaran
+            @php
+                $totalPending = \App\Models\Transaksi::whereIn('status', [
+                    \App\Support\OrderStatus::MENUNGGU_PERSETUJUAN,
+                    \App\Support\OrderStatus::MENUNGGU_VERIFIKASI,
+                    \App\Support\OrderStatus::MENUNGGU_PEMBAYARAN,
+                    \App\Support\OrderStatus::DIBAYAR,
+                    \App\Support\OrderStatus::DITERIMA,
+                    \App\Support\OrderStatus::DIPROSES,
+                    \App\Support\OrderStatus::DIKIRIM,
+                    \App\Support\OrderStatus::SIAP_DIAMBIL,
+                ])->count();
+            @endphp
+            @if($totalPending > 0)
+                <span class="badge-menu">{{ $totalPending }}</span>
+            @endif
+        </a>
+        <a href="{{ route('pegawai.produk.index') }}" class="{{ request()->routeIs('pegawai.produk.*') ? 'active' : '' }}">
+            <span class="nav-icon">🍜</span> Produk &amp; Stok
+        </a>
+        <a href="{{ route('pegawai.konten.index') }}" class="{{ request()->routeIs('pegawai.konten.*', 'pegawai.banner.*') ? 'active' : '' }}">
+            <span class="nav-icon">🎨</span> Tampilan Website
+        </a>
+        <a href="{{ route('pegawai.transaksi.edit') }}" class="{{ request()->routeIs('pegawai.transaksi.*') ? 'active' : '' }}">
+            <span class="nav-icon">💳</span> Metode Transaksi
+        </a>
+        <a href="{{ route('pegawai.log.index') }}" class="{{ request()->routeIs('pegawai.log.*') ? 'active' : '' }}">
+            <span class="nav-icon">📜</span> Log Aktivitas
+        </a>
+        <a href="{{ route('admin.pesan.index') }}" class="{{ request()->routeIs('admin.pesan.*') ? 'active' : '' }}">
+            <span class="nav-icon">✉️</span> Pesan Masuk
         </a>
         <a href="{{ route('admin.ulasan.index') }}" class="{{ request()->routeIs('admin.ulasan.*') ? 'active' : '' }}">
             <span class="nav-icon">⭐</span> Ulasan Pengunjung
@@ -260,6 +326,9 @@
             @if($pendingUlasan > 0)
                 <span class="badge-menu">{{ $pendingUlasan }}</span>
             @endif
+        </a>
+        <a href="{{ route('pegawai.profil.edit') }}" class="{{ request()->routeIs('pegawai.profil.*', 'pegawai.password.*') ? 'active' : '' }}">
+            <span class="nav-icon">👤</span> Profil Saya
         </a>
         @endif
 
@@ -280,7 +349,7 @@
 <div class="main-wrap">
     <div class="topbar">
         <div class="topbar-left">
-            <button class="hamburger" id="hamburger" title="Buka Menu">☰</button>
+            <button class="hamburger" id="hamburger" type="button" title="Buka Menu" aria-label="Buka menu navigasi" aria-controls="sidebar" aria-expanded="false">☰</button>
             <div class="topbar-title-wrap">
                 <div class="topbar-title">
                     @yield('page-icon')
@@ -401,7 +470,12 @@
         @endif
         @if(isset($errors) && $errors->any())
             <div class="alert alert-error">
-                ❌ {{ $errors->first() }}
+                <div>❌ Periksa kembali input Anda:</div>
+                <ul style="margin:.35rem 0 0 1.1rem;padding:0">
+                    @foreach($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
             </div>
         @endif
 
@@ -410,13 +484,35 @@
 </div>
 
 <script>
-    // Sidebar Hamburger toggle
     const hamburger = document.getElementById('hamburger');
     const sidebar   = document.getElementById('sidebar');
-    hamburger?.addEventListener('click', () => sidebar.classList.toggle('open'));
+    const backdrop  = document.getElementById('sidebarBackdrop');
+
+    const setSidebar = (open) => {
+        if (!sidebar) return;
+        sidebar.classList.toggle('open', open);
+        backdrop?.classList.toggle('show', open);
+        document.body.classList.toggle('sidebar-open', open);
+        hamburger?.setAttribute('aria-expanded', String(open));
+        if (open && window.matchMedia('(max-width: 900px)').matches) {
+            sidebar.querySelector('a')?.focus();
+        }
+    };
+
+    hamburger?.addEventListener('click', (e) => {
+        e.stopPropagation();
+        setSidebar(!sidebar.classList.contains('open'));
+    });
+    backdrop?.addEventListener('click', () => setSidebar(false));
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && sidebar?.classList.contains('open')) {
+            setSidebar(false);
+            hamburger?.focus();
+        }
+    });
     document.addEventListener('click', (e) => {
-        if (!sidebar.contains(e.target) && !hamburger.contains(e.target)) {
-            sidebar.classList.remove('open');
+        if (sidebar?.classList.contains('open') && !sidebar.contains(e.target) && !hamburger?.contains(e.target)) {
+            setSidebar(false);
         }
     });
 
