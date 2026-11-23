@@ -50,6 +50,9 @@
             --red-dark:   {{ $profil->warnaTema() }};
             --cream:      #FDF5F0;
             --cream-dark: #F5E8E0;
+            --paper:      #FFFDF2;
+            --paper-deep: #F7EFD8;
+            --paper-ink:  rgba(120, 88, 43, 0.10);
             --white:      #FFFFFF;
             --text-dark:  #1A1A1A;
             --text-gray:  #666666;
@@ -59,7 +62,39 @@
         body {
             font-family: 'Poppins', sans-serif;
             color: var(--text-dark);
+            background: var(--paper);
             overflow: hidden; /* pages scroll individually */
+        }
+        body::before,
+        body::after {
+            content: '';
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+        }
+        body::before {
+            z-index: 48;
+            opacity: 0.75;
+            background-image:
+                linear-gradient(90deg, rgba(120, 88, 43, 0.055) 0%, transparent 100%),
+                linear-gradient(270deg, rgba(120, 88, 43, 0.055) 0%, transparent 100%),
+                linear-gradient(90deg, var(--paper-ink) 0 1px, transparent 1px 16px, rgba(120, 88, 43, 0.05) 16px 17px, transparent 17px 100%),
+                linear-gradient(270deg, var(--paper-ink) 0 1px, transparent 1px 16px, rgba(120, 88, 43, 0.05) 16px 17px, transparent 17px 100%),
+                repeating-linear-gradient(180deg, rgba(120, 88, 43, 0.08) 0 2px, transparent 2px 18px),
+                repeating-linear-gradient(180deg, rgba(120, 88, 43, 0.08) 0 2px, transparent 2px 18px);
+            background-size: 180px 100%, 180px 100%, 100% 100%, 100% 100%, 2px 100%, 2px 100%;
+            background-position: left top, right top, left top, right top, 8px top, calc(100% - 8px) top;
+            background-repeat: no-repeat;
+            -webkit-mask-image: linear-gradient(90deg, #000 0%, #000 8%, transparent 20%, transparent 80%, #000 92%, #000 100%);
+            mask-image: linear-gradient(90deg, #000 0%, #000 8%, transparent 20%, transparent 80%, #000 92%, #000 100%);
+        }
+        body::after {
+            z-index: 49;
+            opacity: 0.06;
+            mix-blend-mode: multiply;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+            background-repeat: repeat;
+            background-size: 200px 200px;
         }
         button, .filter-btn, .btn-primary, .btn-outline { -webkit-user-select: none; user-select: none; }
 
@@ -314,7 +349,70 @@
            Dial: ENERGY 2 / RHYTHM 2 / MOTION 2
            Motif: lingkaran logo putih + aksen merah brand
            =================================================== */
-        #page-beranda { background: var(--cream); }
+         #page-beranda {
+             background: var(--paper);
+         }
+
+
+        /* ── CAP STEMPEL ─────────────────────────────────────────────────────
+           Stempel melingkar SVG di hero — semi-transparan di atas foto.
+           Animasi masuk 1x saja memberi kesan "baru dicap" (R-19).
+        ─────────────────────────────────────────────────────────────────── */
+        .hero-stamp {
+            position: absolute;
+            top: clamp(1.5rem, 6vw, 3.5rem);
+            right: clamp(1.5rem, 7vw, 5rem);
+            width: clamp(140px, 20vw, 220px);
+            height: clamp(140px, 20vw, 220px);
+            z-index: 3;
+            opacity: 0;
+            transform: scale(0.82) rotate(-8deg);
+            animation: stampIn 0.55s cubic-bezier(0.22, 0.61, 0.36, 1) 0.4s forwards;
+            pointer-events: none;
+        }
+        @keyframes stampIn {
+            to { opacity: 1; transform: scale(1) rotate(-5deg); }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .hero-stamp { animation: none; opacity: 1; transform: scale(1) rotate(-5deg); }
+        }
+
+        /* ── CORETAN GARIS MERAH ─────────────────────────────────────────────
+           Goresan garis diagonal di pojok bawah kanan hero. Motif gestural
+           merah yang diulang dari stempel, dengan intensitas lebih rendah (R-31).
+        ─────────────────────────────────────────────────────────────────── */
+        .hero-scratch {
+            position: absolute;
+            bottom: clamp(3rem, 6vw, 5rem);
+            right: clamp(1rem, 3vw, 2.5rem);
+            width: 90px;
+            height: 65px;
+            z-index: 3;
+            pointer-events: none;
+            opacity: 0.72;
+        }
+
+        /* ── WATERMARK LOGO ──────────────────────────────────────────────────
+           Logo samar di belakang section bestsellers. Motif identitas yang
+           sama dengan stempel hero, tapi opacity jauh lebih rendah (R-20).
+        ─────────────────────────────────────────────────────────────────── */
+        .bestsellers {
+            position: relative;
+            overflow: hidden;
+        }
+        .section-watermark {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: clamp(200px, 30vw, 320px);
+            height: clamp(200px, 30vw, 320px);
+            object-fit: contain;
+            opacity: 0.055;
+            mix-blend-mode: multiply;
+            pointer-events: none;
+            user-select: none;
+        }
         .hero {
             min-height: calc(100dvh - var(--nav-h));
             min-height: calc(100vh - var(--nav-h));
@@ -400,13 +498,11 @@
             position: relative;
             z-index: 2;
             width: 100%;
-            max-width: 1100px;
-            margin: 0 auto;
-            padding: 3.5rem 1.5rem 4.25rem;
+            padding: 3.5rem 2rem 4.25rem 2rem;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            gap: 1.35rem;
+            align-items: flex-start;
+            gap: 0.9rem;
         }
         .hero-brand-mark {
             width: 72px;
@@ -426,19 +522,18 @@
             display: block;
         }
         .hero-title {
-    font-size: clamp(2.35rem, 7vw, 4.1rem);
-    font-weight: 800;
-    color: var(--white);
-    line-height: 0.98;
-    letter-spacing: -0.02em;
-    text-transform: uppercase;
-    text-align: center;
-    max-width: none;
-    text-shadow: 0 2px 18px rgba(0,0,0,0.35);
-    margin: 1rem 0 0 0;
-}
-
+            font-size: clamp(2.35rem, 7vw, 4.1rem);
+            font-weight: 800;
+            color: var(--white);
+            line-height: 0.98;
+            letter-spacing: -0.02em;
+            text-transform: uppercase;
+            text-align: left;
+            max-width: 18ch;
+            text-shadow: 0 2px 18px rgba(0,0,0,0.35);
+            margin: 0;
         }
+
         .hero-subtitle {
             font-size: clamp(0.95rem, 2.2vw, 1.1rem);
             color: rgba(255,255,255,0.92);
@@ -446,6 +541,7 @@
             max-width: 34rem;
             margin: 0;
             font-weight: 400;
+            text-align: left;
         }
         .hero-actions {
             display: flex;
@@ -532,7 +628,7 @@
 
         /* Produk favorit di beranda */
         .bestsellers {
-            background: var(--white);
+            background: #F5EDD8;
             padding: 4rem 1.5rem;
         }
         .bestsellers-container { max-width: 1100px; margin: 0 auto; }
@@ -1233,7 +1329,7 @@
         /* ===================================================
            PAGE: MENU
            =================================================== */
-        #page-menu { background: var(--cream); }
+        #page-menu { background: var(--paper); }
         .menu-content {
             max-width: 920px;
             margin: 0 auto;
@@ -1409,7 +1505,7 @@
         /* ===================================================
            PAGE: TENTANG KAMI
            =================================================== */
-        #page-tentang { background: var(--cream); }
+        #page-tentang { background: var(--paper); }
         .about-content-wrap {
             max-width: 1100px;
             margin: 0 auto;
@@ -1499,7 +1595,7 @@
         /* ===================================================
            PAGE: LOKASI & KONTAK & ULASAN
            =================================================== */
-        #page-kontak { background: var(--cream); }
+        #page-kontak { background: var(--paper); }
         .kontak-content-wrap {
             max-width: 1100px;
             margin: 0 auto;
@@ -2191,7 +2287,7 @@
            SECTION: PROMO BANNER CAROUSEL (STYLE SEPERTI TAKAPEDIA)
            =================================================== */
         .promo-banner-section {
-            background: var(--cream);
+            background: var(--paper);
             padding: 2.25rem 0 1.5rem;
             position: relative;
         }
@@ -2410,7 +2506,7 @@
            SECTION: CAROUSEL ULASAN
            =================================================== */
         .reviews-carousel-section {
-            background: var(--cream);
+            background: var(--paper-deep);
             padding: 3.25rem 0 3.5rem;
             border-top: 1px solid rgba(200,16,46,0.1);
             overflow: hidden;
@@ -2663,8 +2759,7 @@
         }
 
         .bestsellers {
-            background:
-                linear-gradient(180deg, rgba(253,245,240,0.95) 0%, #fff 38%, #FFF7F4 100%);
+            background: linear-gradient(180deg, var(--paper) 0%, var(--paper-deep) 100%);
         }
         .home-menu-head {
             text-align: left;
@@ -2866,6 +2961,13 @@
             .section-title { white-space: normal; }
         }
         @media (max-width: 600px) {
+            body::before {
+                opacity: 0.55;
+                background-size: 90px 100%, 90px 100%, 100% 100%, 100% 100%, 2px 100%, 2px 100%;
+                background-position: left top, right top, left top, right top, 5px top, calc(100% - 5px) top;
+                -webkit-mask-image: linear-gradient(90deg, #000 0%, #000 5%, transparent 16%, transparent 84%, #000 95%, #000 100%);
+                mask-image: linear-gradient(90deg, #000 0%, #000 5%, transparent 16%, transparent 84%, #000 95%, #000 100%);
+            }
             .hero {
                 min-height: calc(100dvh - var(--nav-h));
                 align-items: flex-end;
@@ -2875,7 +2977,7 @@
                 gap: 1rem;
             }
             .hero-brand-mark { width: 58px; height: 58px; }
-            .hero-title { max-width: none; font-size: clamp(2rem, 9vw, 2.6rem); }
+            .hero-title { max-width: none; font-size: clamp(2rem, 9vw, 2.6rem); text-align: left; }
             .hero-subtitle { font-size: 0.92rem; line-height: 1.55; }
             .hero-actions { width: 100%; }
             .hero-actions .btn-primary,
@@ -2911,6 +3013,13 @@
             .menu-content, .about-content-wrap, .kontak-content-wrap { padding: 1.5rem 1rem 3rem; }
         }
         @media (max-width: 480px) {
+            body::before {
+                opacity: 0.42;
+                background-size: 70px 100%, 70px 100%, 100% 100%, 100% 100%, 2px 100%, 2px 100%;
+                background-position: left top, right top, left top, right top, 4px top, calc(100% - 4px) top;
+                -webkit-mask-image: linear-gradient(90deg, #000 0%, #000 4%, transparent 14%, transparent 86%, #000 96%, #000 100%);
+                mask-image: linear-gradient(90deg, #000 0%, #000 4%, transparent 14%, transparent 86%, #000 96%, #000 100%);
+            }
             .hamburger { min-width: 44px; min-height: 44px; padding: 10px 8px; }
             .hamburger span { margin: 4px 0; }
             .mobile-menu ul a { min-height: 44px; display: flex; align-items: center; font-size: 1rem; }
@@ -3036,19 +3145,70 @@
         </div>
         <div class="hero-overlay" aria-hidden="true"></div>
 
+        {{-- Cap stempel melingkar di hero: identitas warung dicap di atas foto (R-19: animasi 1x) --}}
+        <svg class="hero-stamp" viewBox="0 0 220 220" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img">
+            <!-- Filter tinta tidak merata untuk efek cap nyata -->
+            <defs>
+                <filter id="inkRough" x="-5%" y="-5%" width="110%" height="110%">
+                    <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="4" seed="2" result="noise"/>
+                    <feDisplacementMap in="SourceGraphic" in2="noise" scale="3.5" xChannelSelector="R" yChannelSelector="G"/>
+                </filter>
+            </defs>
+            <g filter="url(#inkRough)">
+                <!-- Lingkaran luar tebal -->
+                <circle cx="110" cy="110" r="100" stroke="#C8102E" stroke-width="5.5" fill="none" opacity="0.88"/>
+                <!-- Lingkaran dalam tipis -->
+                <circle cx="110" cy="110" r="86" stroke="#C8102E" stroke-width="1.8" fill="none" opacity="0.6"/>
+                <!-- Siluet gerobak angkringan di tengah -->
+                <g transform="translate(110,110)" fill="#C8102E" opacity="0.9">
+                    <!-- Atap/tenda gerobak -->
+                    <path d="M-38,-12 L-28,-28 Q0,-36 28,-28 L38,-12 Z"/>
+                    <!-- Badan gerobak -->
+                    <rect x="-32" y="-12" width="64" height="22" rx="2"/>
+                    <!-- Kaki penyangga kiri -->
+                    <rect x="-26" y="10" width="4" height="14" rx="1"/>
+                    <!-- Kaki penyangga kanan -->
+                    <rect x="22" y="10" width="4" height="14" rx="1"/>
+                    <!-- Roda kiri -->
+                    <circle cx="-20" cy="28" r="9" stroke="#C8102E" stroke-width="2.5" fill="none"/>
+                    <circle cx="-20" cy="28" r="3" fill="#C8102E"/>
+                    <!-- Roda kanan -->
+                    <circle cx="20" cy="28" r="9" stroke="#C8102E" stroke-width="2.5" fill="none"/>
+                    <circle cx="20" cy="28" r="3" fill="#C8102E"/>
+                    <!-- Tiang penyambung antar roda -->
+                    <rect x="-29" y="26" width="58" height="3" rx="1"/>
+                    <!-- Asap/wap hangat di atas -->
+                    <path d="M-10,-38 Q-7,-44 -10,-50" stroke="#C8102E" stroke-width="2" fill="none" stroke-linecap="round" opacity="0.7"/>
+                    <path d="M0,-36 Q3,-43 0,-50" stroke="#C8102E" stroke-width="2" fill="none" stroke-linecap="round" opacity="0.5"/>
+                    <path d="M10,-38 Q13,-44 10,-50" stroke="#C8102E" stroke-width="2" fill="none" stroke-linecap="round" opacity="0.7"/>
+                </g>
+                <!-- Teks melingkar atas: ANGKRINGAN SEKOTA -->
+                <text font-family="Georgia, serif" font-size="13.5" font-weight="700" fill="#C8102E" opacity="0.92" letter-spacing="3.2">
+                    <textPath href="#stampCircleTop" startOffset="50%" text-anchor="middle">ANGKRINGAN SEKOTA</textPath>
+                </text>
+                <!-- Teks melingkar bawah: titik-titik pemisah -->
+                <text font-family="Georgia, serif" font-size="11" fill="#C8102E" opacity="0.65" letter-spacing="5">
+                    <textPath href="#stampCircleBot" startOffset="50%" text-anchor="middle">· · · · · · · · · · · ·</textPath>
+                </text>
+                <!-- Path lingkaran untuk textPath -->
+                <defs>
+                    <path id="stampCircleTop" d="M 110,110 m -88,0 a 88,88 0 1,1 176,0 a 88,88 0 1,1 -176,0"/>
+                    <path id="stampCircleBot" d="M 110,110 m -74,0 a 74,74 0 0,0 148,0"/>
+                </defs>
+            </g>
+        </svg>
+
+        {{-- Coretan garis merah: motif gestural merah di sudut bawah kanan (R-31: identitas berulang) --}}
+        <svg class="hero-scratch" viewBox="0 0 90 65" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <line x1="8" y1="58" x2="82" y2="6" stroke="#8B0000" stroke-width="3.5" stroke-linecap="round" opacity="0.80"/>
+            <line x1="14" y1="62" x2="78" y2="12" stroke="#9E0C23" stroke-width="2.2" stroke-linecap="round" opacity="0.60"/>
+            <line x1="22" y1="60" x2="88" y2="18" stroke="#C8102E" stroke-width="1.4" stroke-linecap="round" opacity="0.45"/>
+            <line x1="4" y1="48" x2="55" y2="4" stroke="#8B0000" stroke-width="1.8" stroke-linecap="round" opacity="0.35"/>
+        </svg>
+
         <div class="hero-container">
-            <div class="hero-brand-mark">
-                <img
-                    src="{{ $profil->logo_url ?? asset('images/logo.png') }}"
-                    alt=""
-                    width="72"
-                    height="72"
-                    decoding="async">
-            </div>
             <h1 class="hero-title">{{ $profil->judul_beranda ?: $namaUsaha }}</h1>
-            @if($profil->deskripsi_beranda)
-                <p class="hero-subtitle">{{ $profil->deskripsi_beranda }}</p>
-            @endif
+            <p class="hero-subtitle">{{ $profil->deskripsi_beranda ?: 'Angkringan khas Solo dengan cita rasa autentik — wedang jahe, nasi kucing, dan gorengan hangat setiap malam.' }}</p>
 
         </div>
 
@@ -3162,6 +3322,16 @@
     </section>
 
     <section class="bestsellers" aria-labelledby="home-menu-heading">
+        {{-- Watermark logo samar: motif identitas yang sama dengan cap hero, opacity 5.5% (R-20) --}}
+        <img
+            class="section-watermark"
+            src="{{ $profil->logo_url ?? asset('images/logo.png') }}"
+            alt=""
+            aria-hidden="true"
+            width="320"
+            height="320"
+            loading="lazy"
+            decoding="async">
         <div class="bestsellers-container">
             <div class="home-menu-head">
                 <span class="home-kicker">Dari dapur</span>
