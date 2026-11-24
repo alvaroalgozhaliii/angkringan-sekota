@@ -68,35 +68,6 @@
         .badge-db-dot{width:7px;height:7px;background:#10B981;border-radius:50%;animation:pulse 2s infinite}
         @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
 
-        /* Notification Bell & Dropdown */
-        .notif-wrapper{position:relative}
-        .notif-btn{position:relative;background:#F4F5F7;border:1px solid var(--border);border-radius:10px;width:38px;height:38px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--text);transition:all .2s}
-        .notif-btn:hover{background:#FEE2E2;color:var(--red);border-color:#FECACA}
-        .notif-badge{position:absolute;top:-4px;right:-4px;background:var(--red);color:#fff;font-size:.65rem;font-weight:700;min-width:18px;height:18px;border-radius:10px;display:flex;align-items:center;justify-content:center;padding:0 4px;border:2px solid #fff;box-shadow:0 2px 4px rgba(200,16,46,.3)}
-        
-        .notif-dropdown{position:absolute;top:calc(100% + 10px);right:0;width:360px;background:#fff;border:1px solid var(--border);border-radius:14px;box-shadow:0 12px 30px rgba(0,0,0,.12);display:none;z-index:100;overflow:hidden;animation:notifFadeIn .2s ease-out}
-        .notif-dropdown.show{display:block}
-        @keyframes notifFadeIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
-        
-        .notif-header{padding:.9rem 1.1rem;background:#FAFAFA;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
-        .notif-header-title{font-size:.85rem;font-weight:700;color:var(--text);display:flex;align-items:center;gap:.4rem}
-        .notif-count-pill{background:var(--red);color:#fff;font-size:.68rem;font-weight:700;padding:2px 7px;border-radius:12px}
-        .notif-body{max-height:360px;overflow-y:auto}
-        .notif-item{display:flex;align-items:flex-start;gap:.75rem;padding:.85rem 1.1rem;border-bottom:1px solid #F3F4F6;text-decoration:none;color:var(--text);transition:background .15s}
-        .notif-item:hover{background:#F9FAFB}
-        .notif-item.unread{background:#FEF2F2}
-        .notif-item.unread:hover{background:#FEE2E2}
-        .notif-avatar{width:34px;height:34px;border-radius:50%;background:#FEE2E2;color:var(--red);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.8rem;flex-shrink:0}
-        .notif-content{flex:1;min-width:0}
-        .notif-name{font-size:.82rem;font-weight:700;color:var(--text);display:flex;align-items:center;gap:.4rem}
-        .notif-dot{width:7px;height:7px;border-radius:50%;background:var(--red);display:inline-block}
-        .notif-text{font-size:.76rem;color:var(--muted);margin-top:.2rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.3}
-        .notif-time{font-size:.7rem;color:#9CA3AF;margin-top:.3rem}
-        .notif-empty{padding:2.5rem 1rem;text-align:center;color:var(--muted);font-size:.82rem}
-        .notif-footer{padding:.75rem 1.1rem;background:#FAFAFA;border-top:1px solid var(--border);text-align:center}
-        .notif-footer a{color:var(--red);font-size:.8rem;font-weight:600;text-decoration:none;transition:opacity .2s}
-        .notif-footer a:hover{text-decoration:underline;opacity:.85}
-
         .btn-sm{padding:.4rem .9rem;border-radius:6px;font-size:.8rem;font-weight:600;cursor:pointer;border:none;text-decoration:none;display:inline-flex;align-items:center;gap:.35rem;transition:all .2s}
         .btn-outline-red{background:transparent;border:1.5px solid var(--red);color:var(--red)}
         .btn-outline-red:hover{background:var(--red);color:#fff}
@@ -159,6 +130,34 @@
         .thumb{width:56px;height:56px;object-fit:cover;border-radius:8px;border:1px solid var(--border);background:#F3F4F6}
         .thumb-lg{width:100%;max-width:420px;border-radius:10px;border:1px solid var(--border)}
         .hint{font-size:.75rem;color:var(--muted);margin-top:.3rem;line-height:1.5}
+        .log-filter-panel{margin-bottom:1rem;padding:1rem 1.1rem}
+        .log-filters{display:grid;grid-template-columns:minmax(220px,2fr) repeat(4,minmax(120px,1fr)) auto;gap:.75rem;align-items:end}
+        .log-filter-actions{display:flex;align-items:center;gap:.5rem}
+        .log-filter-actions .btn-sm{min-height:38px}
+        .log-actor{font-weight:600;color:var(--text)}
+        .log-role{font-size:.75rem;color:var(--muted);white-space:nowrap}
+        .log-summary{max-width:420px;font-size:.78rem;line-height:1.5;color:var(--text);overflow-wrap:anywhere}
+        .log-detail{margin-top:.35rem;max-width:420px}
+        .log-detail summary{cursor:pointer;color:var(--red);font-size:.75rem;font-weight:600;list-style:none;min-height:24px;display:inline-flex;align-items:center}
+        .log-detail summary::-webkit-details-marker{display:none}
+        .log-detail summary::before{content:'+';font-weight:700;margin-right:.35rem}
+        .log-detail[open] summary::before{content:'-'}
+        .log-detail summary:focus-visible{outline:2px solid var(--red);outline-offset:2px;border-radius:4px}
+        .log-box{background:var(--gray-100);border:1px solid var(--border);border-left:3px solid var(--red);border-radius:8px;padding:.55rem .7rem;margin-top:.35rem;max-width:100%}
+        .log-box-label{display:block;font-size:.68rem;font-weight:700;color:var(--red);text-transform:uppercase;letter-spacing:.04em;margin-bottom:.3rem}
+        .log-box-row + .log-box-row{margin-top:.25rem}
+        .log-box-value{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.72rem;color:var(--text);line-height:1.55;white-space:pre-wrap;word-break:break-word}
+        .log-box-value strong{font-weight:700;color:var(--muted)}
+        .pagination-bar{display:flex;align-items:center;justify-content:space-between;gap:.75rem;flex-wrap:wrap;margin-top:1rem;padding-top:1rem;border-top:1px solid var(--border)}
+        .pagination-info{font-size:.78rem;color:var(--muted)}
+        .pagination-info strong{color:var(--text);font-weight:700}
+        .pagination-pages{display:flex;align-items:center;gap:.35rem;flex-wrap:wrap}
+        .pagination-btn{min-width:36px;height:36px;padding:0 .6rem;border:1px solid var(--border);border-radius:8px;background:var(--white);color:var(--text);display:inline-flex;align-items:center;justify-content:center;font-size:.78rem;font-weight:600;text-decoration:none;transition:all .2s}
+        .pagination-btn:hover:not(.active):not(.disabled){border-color:var(--red);color:var(--red);background:#FEF2F2}
+        .pagination-btn.active{background:var(--red);border-color:var(--red);color:var(--white)}
+        .pagination-btn.disabled{color:#9CA3AF;background:var(--gray-100);cursor:not-allowed}
+        .pagination-btn:focus-visible{outline:2px solid var(--red);outline-offset:2px}
+        .pagination-ellipsis{padding:0 .3rem;color:var(--muted);font-size:.78rem}
         .field-error{font-size:.75rem;color:#991B1B;margin-top:.3rem}
         .divider{height:1px;background:var(--border);margin:1.25rem 0}
         .link-wa{color:#059669;font-weight:600;text-decoration:none}
@@ -202,8 +201,8 @@
             .topbar-actions{width:100%;margin:0;display:flex;flex-wrap:wrap;justify-content:flex-start;gap:.5rem}
             .topbar-actions .btn-sm{min-height:38px}
             .user-pill{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-            .notif-dropdown{position:fixed;top:calc(env(safe-area-inset-top) + 8px);left:10px;right:10px;width:auto;max-height:calc(100dvh - 20px)}
-            .notif-body{max-height:55dvh}
+            .pagination-bar{justify-content:center}
+            .pagination-info{width:100%;text-align:center}
             .page-header{align-items:flex-start;gap:.75rem;flex-wrap:wrap}
             .page-header > :first-child{min-width:0;flex:1 1 100%}
             .page-header .btn-sm{max-width:100%}
@@ -211,6 +210,10 @@
             .order-filters{grid-template-columns:repeat(2,minmax(0,1fr)) !important}
             .order-filters > div:first-child{grid-column:1 / -1}
             .order-filters > button{min-height:42px;justify-content:center}
+            .log-filters{grid-template-columns:repeat(2,minmax(0,1fr))}
+            .log-filter-search,.log-filter-actions{grid-column:1 / -1}
+            .log-filter-actions .btn-sm{flex:1 1 auto;justify-content:center;min-height:44px}
+            .log-detail summary{min-height:44px}
             .message-meta-grid{grid-template-columns:1fr !important}
             input,select,textarea,button{max-width:100%}
             .alert{align-items:flex-start;overflow-wrap:anywhere}
@@ -222,13 +225,15 @@
             .topbar-actions{gap:.4rem}
             .topbar-actions .btn-sm{font-size:.72rem;padding:.4rem .6rem}
             .user-pill{font-size:.72rem;padding:.35rem .55rem;flex:1 1 auto;width:100%}
-            .topbar-actions .notif-wrapper{margin-left:auto}
+            .pagination-btn{min-width:38px}
             .stat-grid{grid-template-columns:1fr 1fr !important}
             .stat-card{padding:.9rem}
             .stat-value{font-size:1.35rem}
             .panel{padding:.85rem;border-radius:10px}
             .order-filters{grid-template-columns:1fr !important}
             .order-filters > div:first-child{grid-column:auto}
+            .log-filters{grid-template-columns:1fr}
+            .log-filter-search,.log-filter-actions{grid-column:auto}
             .btn-row .btn-sm{flex:1 1 auto;justify-content:center}
             .form-control,input,select,textarea{font-size:16px;max-width:100%}
             .form-group label{overflow-wrap:anywhere}
@@ -271,6 +276,9 @@
             <span class="nav-icon">⭐</span> Ulasan Pengunjung
         </a>
         @elseif(auth()->user()->isOwner())
+        <a href="{{ route('owner.dashboard') }}" class="{{ request()->routeIs('owner.dashboard') ? 'active' : '' }}">
+            <span class="nav-icon">▦</span> Dashboard
+        </a>
         <a href="{{ route('admin.pengaturan.transaksi') }}" class="{{ request()->routeIs('admin.pengaturan.*') ? 'active' : '' }}">
             <span class="nav-icon">💳</span> Pengaturan transaksi
         </a>
@@ -281,9 +289,6 @@
             <span class="nav-icon">🧑</span> Data pelanggan
         </a>
         @else
-        <a href="{{ route('pegawai.dashboard') }}" class="{{ request()->routeIs('pegawai.dashboard') ? 'active' : '' }}">
-            <span class="nav-icon">📊</span> Dashboard Pegawai
-        </a>
         <a href="{{ route('pegawai.kasir.index') }}" class="{{ request()->routeIs('pegawai.kasir.*') ? 'active' : '' }}">
             <span class="nav-icon">🧮</span> Kasir
         </a>
@@ -317,18 +322,12 @@
         <a href="{{ route('pegawai.log.index') }}" class="{{ request()->routeIs('pegawai.log.*') ? 'active' : '' }}">
             <span class="nav-icon">📜</span> Log Aktivitas
         </a>
-        <a href="{{ route('admin.pesan.index') }}" class="{{ request()->routeIs('admin.pesan.*') ? 'active' : '' }}">
-            <span class="nav-icon">✉️</span> Pesan Masuk
-        </a>
         <a href="{{ route('admin.ulasan.index') }}" class="{{ request()->routeIs('admin.ulasan.*') ? 'active' : '' }}">
             <span class="nav-icon">⭐</span> Ulasan Pengunjung
             @php $pendingUlasan = \App\Models\Testimonial::where('is_active', 0)->count(); @endphp
             @if($pendingUlasan > 0)
                 <span class="badge-menu">{{ $pendingUlasan }}</span>
             @endif
-        </a>
-        <a href="{{ route('pegawai.profil.edit') }}" class="{{ request()->routeIs('pegawai.profil.*', 'pegawai.password.*') ? 'active' : '' }}">
-            <span class="nav-icon">👤</span> Profil Saya
         </a>
         @endif
 
@@ -388,76 +387,6 @@
                 <span class="user-pill-role">({{ auth()->user()->roleLabel() }})</span>
             </a>
 
-            @if(auth()->user()->isPegawai())
-            <!-- Ikon Lonceng Notifikasi Pesan Masuk -->
-            <div class="notif-wrapper" id="notifWrapper">
-                <button type="button" class="notif-btn" id="notifBtn" aria-label="Notifikasi Pesan Masuk" title="Pesan Masuk">
-                    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
-                        <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
-                    </svg>
-                    @if(isset($notifUnreadCount) && $notifUnreadCount > 0)
-                        <span class="notif-badge" id="notifBadge">{{ $notifUnreadCount }}</span>
-                    @endif
-                </button>
-
-                <!-- Dropdown Notifikasi -->
-                <div class="notif-dropdown" id="notifDropdown">
-                    <div class="notif-header">
-                        <div class="notif-header-title">
-                            <span>💬 Pesan Masuk</span>
-                            @if(isset($notifUnreadCount) && $notifUnreadCount > 0)
-                                <span class="notif-count-pill">{{ $notifUnreadCount }} belum dibaca</span>
-                            @endif
-                        </div>
-                        @if(isset($notifUnreadCount) && $notifUnreadCount > 0)
-                            <form method="POST" action="{{ route('admin.pesan.markAllRead') }}" style="display:inline">
-                                @csrf
-                                <button type="submit" style="background:none;border:none;color:var(--red);font-size:.72rem;font-weight:600;cursor:pointer">
-                                    Tandai semua dibaca
-                                </button>
-                            </form>
-                        @endif
-                    </div>
-
-                    <div class="notif-body">
-                        @if(isset($notifRecentPesan) && $notifRecentPesan->count() > 0)
-                            @foreach($notifRecentPesan as $p)
-                                <a href="{{ route('admin.pesan.show', $p->id) }}" class="notif-item {{ $p->status === 'belum_dibaca' ? 'unread' : '' }}">
-                                    <div class="notif-avatar">
-                                        {{ strtoupper(substr($p->nama_pengirim ?: 'T', 0, 1)) }}
-                                    </div>
-                                    <div class="notif-content">
-                                        <div class="notif-name">
-                                            <span>{{ $p->nama_pengirim }}</span>
-                                            @if($p->status === 'belum_dibaca')
-                                                <span class="notif-dot" title="Belum dibaca"></span>
-                                            @endif
-                                        </div>
-                                        <div class="notif-text">
-                                            {{ \Illuminate\Support\Str::limit($p->isi_pesan, 55) }}
-                                        </div>
-                                        <div class="notif-time">
-                                            🕒 {{ $p->created_at ? $p->created_at->diffForHumans() : '-' }}
-                                        </div>
-                                    </div>
-                                </a>
-                            @endforeach
-                        @else
-                            <div class="notif-empty">
-                                <div style="font-size:1.8rem;margin-bottom:.4rem">📭</div>
-                                <strong>Belum ada pesan masuk</strong>
-                                <p style="font-size:.75rem;margin-top:.2rem">Pesan dari pelanggan lewat website profil akan muncul di sini.</p>
-                            </div>
-                        @endif
-                    </div>
-
-                    <div class="notif-footer">
-                        <a href="{{ route('admin.pesan.index') }}">Lihat Semua Pesan &rarr;</a>
-                    </div>
-                </div>
-            </div>
-            @endif
         </div>
     </div>
 
@@ -513,22 +442,6 @@
     document.addEventListener('click', (e) => {
         if (sidebar?.classList.contains('open') && !sidebar.contains(e.target) && !hamburger?.contains(e.target)) {
             setSidebar(false);
-        }
-    });
-
-    // Dropdown Notifikasi Lonceng
-    const notifBtn      = document.getElementById('notifBtn');
-    const notifDropdown = document.getElementById('notifDropdown');
-    const notifWrapper  = document.getElementById('notifWrapper');
-
-    notifBtn?.addEventListener('click', (e) => {
-        e.stopPropagation();
-        notifDropdown.classList.toggle('show');
-    });
-
-    document.addEventListener('click', (e) => {
-        if (notifWrapper && !notifWrapper.contains(e.target)) {
-            notifDropdown?.classList.remove('show');
         }
     });
 

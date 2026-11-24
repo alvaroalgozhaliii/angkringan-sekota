@@ -64,7 +64,7 @@ class AuthController extends Controller
         return Auth::user()->isSuperAdmin()
             ? redirect()->route('admin.pengguna.index')
             : (Auth::user()->isOwner()
-                ? redirect()->route('admin.pengaturan.transaksi')
-                : redirect()->route('pegawai.dashboard'));
+                ? redirect()->route('owner.dashboard')
+                : redirect()->route('pegawai.kasir.index'));
     }
 }
