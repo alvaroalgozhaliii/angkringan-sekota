@@ -1503,94 +1503,460 @@
         .menu-empty { text-align: center; padding: 3rem 1rem; color: var(--text-gray); font-size: 0.9rem; }
 
         /* ===================================================
-           PAGE: TENTANG KAMI
+           PAGE: TENTANG KAMI — STORYTELLING TIMELINE
            =================================================== */
-        #page-tentang { background: var(--paper); }
-        .about-content-wrap {
-            max-width: 1100px;
-            margin: 0 auto;
-            padding: 2.5rem 1.5rem 4rem;
+        #page-tentang {
+            background: var(--paper);
         }
-        .about-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 3rem;
-            align-items: center;
-        }
-        .about-img-wrap {
-            border-radius: 16px;
-            overflow: hidden;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.12);
-            aspect-ratio: 4/3;
-        }
-        .about-img-wrap img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; }
-        .about-img-wrap:hover img { transform: scale(1.05); }
-        .about-text h3 {
-            font-size: 1.4rem;
-            font-weight: 700;
-            color: var(--red);
-            margin-bottom: 0.75rem;
-            padding-bottom: 0.75rem;
-            border-bottom: 2px solid var(--red);
-            display: inline-block;
-        }
-        .about-text p { font-size: 0.9rem; color: var(--text-gray); line-height: 1.8; margin-bottom: 1rem; }
-        .about-text strong { color: var(--red); font-weight: 600; }
-        .about-typewriter-box {
-            min-height: 230px;
-        }
-        .type-cursor {
-            display: inline-block;
-            width: 2.5px;
-            height: 1.15em;
-            background-color: var(--red);
-            margin-left: 2px;
-            vertical-align: -2px;
-            animation: blinkCursor 0.75s infinite;
-            border-radius: 1px;
-        }
-        @keyframes blinkCursor {
-            0%, 49% { opacity: 1; }
-            50%, 100% { opacity: 0; }
-        }
-        .type-cursor.done {
-            animation: blinkCursor 0.75s 3 forwards;
-        }
-        .btn-red {
-            background: var(--red);
-            color: var(--white);
-            padding: 0.7rem 1.6rem;
-            border-radius: 8px;
-            font-weight: 600;
-            font-size: 0.88rem;
+
+        .story-kicker-pill {
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
-            border: 2px solid var(--red);
-            transition: all 0.25s;
-            margin-top: 0.5rem;
-            cursor: pointer;
-            font-family: 'Poppins', sans-serif;
+            background: rgba(255, 255, 255, 0.18);
+            border: 1px solid rgba(255, 255, 255, 0.28);
+            border-radius: 50px;
+            padding: 0.3rem 0.85rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #FFF;
+            margin-bottom: 0.65rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
         }
-        .btn-red:hover { background: var(--red-dark); border-color: var(--red-dark); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(200,16,46,0.3); }
+        .story-kicker-pill .kicker-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #FFE2E2;
+            box-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
+        }
 
-        /* Stats strip */
-        .about-stats {
+        .story-wrap {
+            max-width: 1120px;
+            margin: 0 auto;
+            padding: 3.5rem 1.75rem 5rem;
+        }
+
+        .story-timeline-container {
+            position: relative;
+            padding: 1.5rem 0 2rem;
+        }
+
+        /* Central Timeline Spine */
+        .story-spine {
+            position: absolute;
+            top: 2rem;
+            bottom: 2rem;
+            left: 50%;
+            width: 2px;
+            transform: translateX(-50%);
+            background: linear-gradient(180deg, rgba(200, 16, 46, 0.08) 0%, rgba(200, 16, 46, 0.35) 12%, rgba(200, 16, 46, 0.35) 88%, rgba(200, 16, 46, 0.08) 100%);
+            z-index: 1;
+            border-radius: 2px;
+        }
+        .story-spine-progress {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(180deg, var(--red) 0%, #E8203A 100%);
+            border-radius: 2px;
+            opacity: 0.75;
+        }
+
+        /* Individual Story Step */
+        .story-step {
+            position: relative;
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1rem;
-            margin-top: 2.5rem;
+            grid-template-columns: 1fr 1fr;
+            gap: 4.5rem;
+            align-items: center;
+            margin-bottom: 5.5rem;
+            z-index: 2;
+            opacity: 0;
+            transform: translateY(28px);
+            transition: opacity 0.7s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.7s cubic-bezier(0.2, 0.8, 0.2, 1);
         }
-        .stat-card {
-            background: var(--white);
-            border-radius: 14px;
-            padding: 1.5rem 1rem;
+        .story-step.revealed {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .story-step:last-of-type {
+            margin-bottom: 3.5rem;
+        }
+
+        /* Alternating desktop layout */
+        .story-step--left .story-visual {
+            order: 1;
+        }
+        .story-step--left .story-body {
+            order: 2;
+            padding-left: 0.5rem;
+        }
+        .story-step--right .story-body {
+            order: 1;
+            padding-right: 0.5rem;
+        }
+        .story-step--right .story-visual {
+            order: 2;
+        }
+
+        /* Center Milestone Marker */
+        .story-milestone-marker {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: var(--paper);
+            border: 2px solid var(--red);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 4;
+            box-shadow: 0 0 0 5px rgba(200, 16, 46, 0.1);
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+        }
+        .story-step.revealed .story-milestone-marker {
+            box-shadow: 0 0 0 7px rgba(200, 16, 46, 0.15);
+        }
+        .marker-core {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--red);
+        }
+
+        /* Photo Frame with subtle warm border and realistic shadow */
+        .story-visual {
+            position: relative;
+        }
+        .story-card-media {
+            position: relative;
+            border-radius: 18px;
+            overflow: hidden;
+            aspect-ratio: 4/3;
+            background: #EFE8DA;
+            box-shadow: 0 16px 36px -6px rgba(45, 20, 15, 0.1), 0 0 0 1px rgba(120, 88, 43, 0.12);
+            transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.5s ease;
+        }
+        .story-card-media:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 22px 45px -8px rgba(45, 20, 15, 0.16), 0 0 0 1px rgba(200, 16, 46, 0.2);
+        }
+        .story-card-media img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+        .story-card-media:hover img {
+            transform: scale(1.04);
+        }
+        .story-media-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(0,0,0,0) 60%, rgba(15, 10, 8, 0.6) 100%);
+            pointer-events: none;
+        }
+        .story-media-tag {
+            position: absolute;
+            bottom: 14px;
+            left: 14px;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            background: rgba(22, 18, 16, 0.82);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            color: #FFF;
+            padding: 0.35rem 0.85rem;
+            border-radius: 20px;
+            font-size: 0.76rem;
+            font-weight: 500;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            z-index: 2;
+        }
+
+        /* Narrative Story Body */
+        .story-meta-row {
+            display: flex;
+            align-items: baseline;
+            gap: 1.15rem;
+            margin-bottom: 0.75rem;
+        }
+        .story-number {
+            font-size: 3.25rem;
+            font-weight: 800;
+            color: var(--red);
+            line-height: 1;
+            font-family: 'Poppins', sans-serif;
+            letter-spacing: -0.04em;
+            opacity: 0.9;
+            display: inline-block;
+        }
+        .story-badge-wrap {
+            display: flex;
+            flex-direction: column;
+            gap: 0.15rem;
+        }
+        .story-phase-badge {
+            display: inline-block;
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: var(--red);
+            background: rgba(200, 16, 46, 0.08);
+            padding: 0.25rem 0.65rem;
+            border-radius: 5px;
+            border-left: 2px solid var(--red);
+            width: fit-content;
+        }
+        .story-phase-sub {
+            font-size: 0.72rem;
+            color: #8C7B6C;
+            font-weight: 500;
+            letter-spacing: 0.03em;
+        }
+        .story-heading {
+            font-size: 1.7rem;
+            font-weight: 700;
+            color: #1F2937;
+            line-height: 1.25;
+            margin-bottom: 0.95rem;
+            letter-spacing: -0.01em;
+        }
+        .story-narrative {
+            font-size: 0.95rem;
+            line-height: 1.82;
+            color: #4B5563;
+            margin-bottom: 1.35rem;
+        }
+        .story-detail-note {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            background: #FAF5EA;
+            border-left: 3px solid var(--red);
+            border-radius: 0 10px 10px 0;
+            padding: 0.75rem 1rem;
+            border-top: 1px solid rgba(120, 88, 43, 0.08);
+            border-right: 1px solid rgba(120, 88, 43, 0.08);
+            border-bottom: 1px solid rgba(120, 88, 43, 0.08);
+        }
+        .story-detail-note .note-icon {
+            font-size: 1.15rem;
+            line-height: 1.2;
+            flex-shrink: 0;
+            margin-top: 0.1rem;
+        }
+        .story-detail-note .note-text {
+            font-size: 0.82rem;
+            line-height: 1.55;
+            color: #5C4B3E;
+        }
+        .story-detail-note strong {
+            color: #1F2937;
+            font-weight: 600;
+        }
+
+        /* Closing Box */
+        .story-closing-box {
+            position: relative;
+            max-width: 760px;
+            margin: 2.5rem auto 0;
+            background: #FFFFFF;
+            border-radius: 20px;
+            padding: 3rem 2.25rem;
             text-align: center;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.07);
-            border: 1px solid rgba(0,0,0,0.04);
+            border: 1px solid rgba(120, 88, 43, 0.14);
+            border-top: 3.5px solid var(--red);
+            box-shadow: 0 16px 40px -10px rgba(45, 20, 15, 0.08);
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(24px);
+            transition: opacity 0.7s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.7s cubic-bezier(0.2, 0.8, 0.2, 1);
         }
-        .stat-card .num { font-size: 1.8rem; font-weight: 800; color: var(--red); line-height: 1; margin-bottom: 0.4rem; }
-        .stat-card .lbl { font-size: 0.8rem; color: var(--text-gray); font-weight: 500; }
+        .story-closing-box.revealed {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .closing-subbadge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: var(--red);
+            background: rgba(200, 16, 46, 0.08);
+            padding: 0.35rem 0.9rem;
+            border-radius: 50px;
+            margin-bottom: 1rem;
+        }
+        .closing-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--red);
+        }
+        .closing-headline {
+            font-size: clamp(1.45rem, 3.5vw, 1.95rem);
+            font-weight: 800;
+            color: #1F2937;
+            line-height: 1.25;
+            margin-bottom: 0.85rem;
+            letter-spacing: -0.015em;
+        }
+        .closing-paragraph {
+            font-size: 0.95rem;
+            line-height: 1.75;
+            color: #4B5563;
+            max-width: 580px;
+            margin: 0 auto 1.85rem;
+        }
+        .closing-cta-wrap {
+            display: flex;
+            justify-content: center;
+        }
+        .btn-story-explore {
+            background: var(--red);
+            color: #FFF;
+            border: 2px solid var(--red);
+            border-radius: 10px;
+            padding: 0.85rem 2rem;
+            font-size: 0.95rem;
+            font-weight: 600;
+            font-family: 'Poppins', sans-serif;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.65rem;
+            cursor: pointer;
+            min-height: 48px;
+            box-shadow: 0 4px 16px rgba(200, 16, 46, 0.25);
+            transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+            touch-action: manipulation;
+            text-decoration: none;
+        }
+        .btn-story-explore:hover {
+            background: var(--red-dark);
+            border-color: var(--red-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(200, 16, 46, 0.35);
+        }
+        .btn-story-explore:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 8px rgba(200, 16, 46, 0.3);
+        }
+        .btn-story-explore:focus-visible {
+            outline: 2px solid var(--red);
+            outline-offset: 2px;
+        }
+
+        /* Mobile & Tablet Responsive */
+        @media (max-width: 860px) {
+            .story-wrap {
+                padding: 2.25rem 1.25rem 4rem;
+            }
+            .story-spine {
+                left: 24px;
+                transform: none;
+            }
+            .story-milestone-marker {
+                left: 24px;
+                transform: translate(-50%, 0);
+                top: 0;
+                width: 24px;
+                height: 24px;
+            }
+            .story-milestone-marker .marker-core {
+                width: 8px;
+                height: 8px;
+            }
+            .story-step {
+                display: flex;
+                flex-direction: column;
+                gap: 1.4rem;
+                padding-left: 3.25rem;
+                margin-bottom: 3.75rem;
+            }
+            .story-step--left .story-visual,
+            .story-step--right .story-visual {
+                order: 1 !important;
+                width: 100%;
+            }
+            .story-step--left .story-body,
+            .story-step--right .story-body {
+                order: 2 !important;
+                padding: 0 !important;
+            }
+            .story-card-media {
+                aspect-ratio: 16/10;
+            }
+            .story-heading {
+                font-size: 1.45rem;
+            }
+            .story-number {
+                font-size: 2.6rem;
+            }
+        }
+        @media (max-width: 480px) {
+            .story-wrap {
+                padding: 1.75rem 1rem 3.5rem;
+            }
+            .story-spine {
+                left: 16px;
+            }
+            .story-milestone-marker {
+                left: 16px;
+                width: 20px;
+                height: 20px;
+            }
+            .story-step {
+                padding-left: 2.35rem;
+                gap: 1.15rem;
+                margin-bottom: 3rem;
+            }
+            .story-number {
+                font-size: 2.2rem;
+            }
+            .story-heading {
+                font-size: 1.3rem;
+            }
+            .story-narrative {
+                font-size: 0.88rem;
+                line-height: 1.7;
+            }
+            .story-closing-box {
+                padding: 2.25rem 1.25rem;
+                border-radius: 16px;
+            }
+            .btn-story-explore {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        /* Accessibility / prefers-reduced-motion */
+        @media (prefers-reduced-motion: reduce) {
+            .story-step,
+            .story-closing-box,
+            .story-card-media,
+            .story-card-media img,
+            .btn-story-explore {
+                opacity: 1 !important;
+                transform: none !important;
+                transition: none !important;
+            }
+            .story-spine-progress {
+                transition: none !important;
+            }
+        }
 
         /* ===================================================
            PAGE: LOKASI & KONTAK & ULASAN
@@ -3613,52 +3979,179 @@
 </div>
 
 {{-- ==============================================================
-     PAGE: TENTANG KAMI
+     PAGE: TENTANG KAMI — STORYTELLING TIMELINE
      ============================================================== --}}
 <div id="page-tentang" class="page">
 
-    <div class="page-banner">
+    <!-- Header Banner Tentang Kami -->
+    <div class="page-banner page-banner-tentang">
         <div class="page-banner-text">
-            <h2>Tentang Kami</h2>
-            <p>Warung angkringan khas Jawa Timur sejak bertahun-tahun.</p>
+            <div class="story-kicker-pill">
+                <span class="kicker-dot"></span>
+                <span>Kisah Perjalanan SEKOTA</span>
+            </div>
+            <h2>Setiap Perjalanan Punya Cerita</h2>
+            <p>Berawal dari langkah sederhana di pinggir jalan, hingga tumbuh menjadi tempat untuk menikmati kopi dan kebersamaan.</p>
+        </div>
+        <div class="page-banner-logo" aria-hidden="true">
+            <img src="{{ asset('images/logo.png') }}" alt="Logo Sekota" style="width:100%;height:100%;object-fit:contain;padding:4px">
         </div>
     </div>
 
-    <div class="about-content-wrap">
-        <div class="about-grid">
-            <div class="about-img-wrap">
-                <img src="{{ asset('images/about.jpg') }}"
-                     alt="Angkringan Sekota"
-                     onerror="this.src='https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=600&q=80'">
+    <!-- Timeline Perjalanan Storytelling -->
+    <div class="story-wrap">
+        <div class="story-timeline-container">
+            
+            <!-- Timeline Spine Indicator -->
+            <div class="story-spine" aria-hidden="true">
+                <div class="story-spine-progress" id="storySpineProgress"></div>
             </div>
-            <div class="about-text" onclick="finishTypewriter()" title="Klik untuk menampilkan seluruh teks langsung">
-                <h3>Siapa Kami</h3>
-                <div class="about-typewriter-box" id="aboutTypewriterBox">
-                    <p>{!! nl2br(e($profil->teks_tentang_kami ?: 'Angkringan Sekota adalah warung makan khas angkringan di Tulungagung, Jawa Timur.')) !!}</p>
-                    @if($profil->visi)
-                        <p><strong>Visi:</strong> {{ $profil->visi }}</p>
-                    @endif
-                    @if($profil->misi)
-                        <p><strong>Misi:</strong> {{ $profil->misi }}</p>
-                    @endif
-                    <p>Buka setiap hari mulai pukul <strong>{{ $profil->jam_buka ?? '17.00 - 23.00 WIB' }}</strong>. Kami selalu menyambut Anda dengan hangat dan ramah.</p>
+
+            <!-- STORY 01 — AWAL PERJALANAN -->
+            <article class="story-step story-step--left" data-story="1">
+                <div class="story-milestone-marker" aria-hidden="true">
+                    <span class="marker-core"></span>
                 </div>
-                <button class="btn-red" onclick="event.stopPropagation(); goTo('menu')">Lihat Menu Kami →</button>
-            </div>
+
+                <div class="story-visual">
+                    <div class="story-card-media">
+                        <img src="{{ asset('images/about.jpg') }}"
+                             alt="Suasana angkringan sederhana di pinggir jalan kawasan Alun-Alun Tulungagung"
+                             loading="lazy"
+                             onerror="this.src='https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=800&q=80'">
+                        <div class="story-media-overlay" aria-hidden="true"></div>
+                        <div class="story-media-tag">
+                            <span class="tag-icon">📍</span>
+                            <span>Kawasan Alun-Alun Tulungagung</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="story-body">
+                    <div class="story-meta-row">
+                        <span class="story-number" aria-label="Tahap 01">01</span>
+                        <div class="story-badge-wrap">
+                            <span class="story-phase-badge">AWAL PERJALANAN</span>
+                            <span class="story-phase-sub">Langkah Sederhana</span>
+                        </div>
+                    </div>
+                    <h3 class="story-heading">Berawal dari Pinggir Jalan</h3>
+                    <p class="story-narrative">
+                        Perjalanan SEKOTA dimulai dari sebuah angkringan sederhana di pinggir jalan kawasan Alun-Alun. Dengan langkah kecil, semangat, dan keinginan untuk terus berkembang, semuanya dimulai dari sini.
+                    </p>
+                    <div class="story-detail-note">
+                        <div class="note-icon">🏮</div>
+                        <div class="note-text">
+                            <strong>Suasana Malam yang Guyub:</strong> Gerobak angkringan, teko wedangan yang mengepul, dan kehangatan obrolan santai di bawah temaram lampu kota.
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- STORY 02 — PROSES BERTUMBUH -->
+            <article class="story-step story-step--right" data-story="2">
+                <div class="story-milestone-marker" aria-hidden="true">
+                    <span class="marker-core"></span>
+                </div>
+
+                <div class="story-visual">
+                    <div class="story-card-media">
+                        <img src="{{ asset('images/hero/slide2.jpg') }}"
+                             alt="Hidangan angkringan dan kebersamaan pelanggan Angkringan Sekota"
+                             loading="lazy"
+                             onerror="this.src='https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=800&q=80'">
+                        <div class="story-media-overlay" aria-hidden="true"></div>
+                        <div class="story-media-tag">
+                            <span class="tag-icon">🍢</span>
+                            <span>Cita Rasa &amp; Kepercayaan</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="story-body">
+                    <div class="story-meta-row">
+                        <span class="story-number" aria-label="Tahap 02">02</span>
+                        <div class="story-badge-wrap">
+                            <span class="story-phase-badge">PROSES BERTUMBUH</span>
+                            <span class="story-phase-sub">Kepercayaan Pelanggan</span>
+                        </div>
+                    </div>
+                    <h3 class="story-heading">Pelan-Pelan, Kami Bertumbuh</h3>
+                    <p class="story-narrative">
+                        Perjalanan tidak selalu mudah. Dari hari ke hari, pengalaman, kepercayaan pelanggan, dan semangat untuk terus melangkah menjadi bagian penting dari perkembangan SEKOTA.
+                    </p>
+                    <div class="story-detail-note">
+                        <div class="note-icon">🔥</div>
+                        <div class="note-text">
+                            <strong>Menjaga Keaslian Resep:</strong> Dari nasi kucing gurih hingga ragam sate bakar hangat, disajikan tulus untuk setiap pelanggan setia.
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- STORY 03 — PENCAPAIAN -->
+            <article class="story-step story-step--left" data-story="3">
+                <div class="story-milestone-marker" aria-hidden="true">
+                    <span class="marker-core"></span>
+                </div>
+
+                <div class="story-visual">
+                    <div class="story-card-media">
+                        <img src="{{ asset('images/hero/slide3.jpg') }}"
+                             alt="Warung Kopi Angkringan Sekota di Kepatihan Tulungagung"
+                             loading="lazy"
+                             onerror="this.src='https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=800&q=80'">
+                        <div class="story-media-overlay" aria-hidden="true"></div>
+                        <div class="story-media-tag">
+                            <span class="tag-icon">☕</span>
+                            <span>Warung Kopi di Kepatihan</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="story-body">
+                    <div class="story-meta-row">
+                        <span class="story-number" aria-label="Tahap 03">03</span>
+                        <div class="story-badge-wrap">
+                            <span class="story-phase-badge">PENCAPAIAN</span>
+                            <span class="story-phase-sub">Awal Babak Baru</span>
+                        </div>
+                    </div>
+                    <h3 class="story-heading">Memiliki Warung Kopi Sendiri</h3>
+                    <p class="story-narrative">
+                        Perjalanan dari pinggir jalan membawa SEKOTA melangkah lebih jauh hingga memiliki warung kopi sendiri di Kepatihan. Sebuah pencapaian yang menjadi awal cerita baru, tempat untuk menikmati hidangan, kopi, dan kebersamaan.
+                    </p>
+                    <div class="story-detail-note">
+                        <div class="note-icon">✨</div>
+                        <div class="note-text">
+                            <strong>Tempat Bersua yang Nyaman:</strong> Menyatukan kenyamanan warung kopi modern dengan jiwa sederhana nan ramah khas angkringan lokal.
+                        </div>
+                    </div>
+                </div>
+            </article>
+
         </div>
 
-        <div class="about-stats">
-            <div class="stat-card">
-                <div class="num">{{ $produk->count() }}+</div>
-                <div class="lbl">Pilihan Menu</div>
-            </div>
-            <div class="stat-card">
-                <div class="num">7</div>
-                <div class="lbl">Hari Buka</div>
-            </div>
-            <div class="stat-card">
-                <div class="num">⭐</div>
-                <div class="lbl">Favorit Warga Tulungagung</div>
+        <!-- Closing Statement Section -->
+        <div class="story-closing-box">
+            <div class="closing-content">
+                <div class="closing-subbadge">
+                    <span class="closing-dot"></span>
+                    <span>Melangkah Ke Depan</span>
+                </div>
+                <h3 class="closing-headline">Perjalanan kami belum berhenti di sini.</h3>
+                <p class="closing-paragraph">
+                    Dari langkah sederhana hingga tempat yang kami bangun hari ini, SEKOTA akan terus tumbuh bersama setiap cerita dan kebersamaan.
+                </p>
+                <div class="closing-cta-wrap">
+                    <button type="button" class="btn-story-explore" onclick="goTo('menu')">
+                        <span>Jelajahi Menu Kami</span>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M5 12h14"></path>
+                            <path d="M12 5l7 7-7 7"></path>
+                        </svg>
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -4494,9 +4987,9 @@ function goTo(pageId) {
     currentPage = pageId;
     updateNav(pageId);
 
-    // Jalankan efek ketikan jika membuka halaman Tentang Kami
+    // Inisialisasi animasi timeline jika membuka halaman Tentang Kami
     if (pageId === 'tentang') {
-        setTimeout(startAboutTypewriter, 350);
+        setTimeout(initTentangTimeline, 250);
     }
 
     // 3. Bersihkan state setelah animasi selesai
@@ -4646,117 +5139,56 @@ function applyMenuFilters() {
 }
 
 // =============================================
-//  EFEK KETIKAN (TYPEWRITER) - TENTANG KAMI
+//  STORYTELLING TIMELINE - TENTANG KAMI
 // =============================================
-let typewriterTimer = null;
-let isTyping = false;
+let timelineObserver = null;
 
-const aboutParagraphs = [
-    [
-        { tag: 'strong', text: 'Angkringan Sekota' },
-        { tag: null, text: ' adalah warung makan khas angkringan yang berlokasi di Tulungagung, Jawa Timur. Kami hadir untuk memberikan pengalaman makan yang nyaman, hangat, dan penuh keakraban bagi semua kalangan.' }
-    ],
-    [
-        { tag: null, text: 'Dengan menu yang beragam dan harga yang sangat terjangkau, kami selalu berusaha menjaga kualitas cita rasa khas angkringan yang autentik. Nikmati berbagai sajian lezat dari nasi kucing, gorengan, minuman hangat, hingga menu spesial kami yang menjadi favorit pelanggan setia.' }
-    ],
-    [
-        { tag: null, text: 'Buka setiap hari mulai pukul ' },
-        { tag: 'strong', text: '17.00 – 23.00 WIB' },
-        { tag: null, text: '. Kami selalu menyambut Anda dengan hangat dan ramah.' }
-    ]
-];
+function initTentangTimeline() {
+    const pageTentang = document.getElementById('page-tentang');
+    if (!pageTentang) return;
 
-function startAboutTypewriter() {
-    if (typewriterTimer) {
-        clearTimeout(typewriterTimer);
-        typewriterTimer = null;
+    const items = pageTentang.querySelectorAll('.story-step, .story-closing-box');
+    if (!items.length) return;
+
+    // Bersihkan observer lama jika ada
+    if (timelineObserver) {
+        timelineObserver.disconnect();
+        timelineObserver = null;
     }
 
-    const box = document.getElementById('aboutTypewriterBox');
-    if (!box) return;
+    if ('IntersectionObserver' in window) {
+        timelineObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('revealed');
+                }
+            });
+        }, {
+            root: pageTentang,
+            threshold: 0.12,
+            rootMargin: '0px 0px -30px 0px'
+        });
 
-    box.innerHTML = '';
-    isTyping = true;
-
-    const cursor = document.createElement('span');
-    cursor.className = 'type-cursor';
-    cursor.id = 'typeCursor';
-
-    let pIdx = 0;
-    let segIdx = 0;
-    let charIdx = 0;
-    let currentP = null;
-    let currentEl = null;
-
-    function typeNextChar() {
-        if (!isTyping) return;
-
-        if (pIdx >= aboutParagraphs.length) {
-            cursor.classList.add('done');
-            setTimeout(() => { if (cursor.parentNode) cursor.remove(); }, 2500);
-            isTyping = false;
-            return;
-        }
-
-        if (!currentP) {
-            currentP = document.createElement('p');
-            box.appendChild(currentP);
-            currentP.appendChild(cursor);
-            segIdx = 0;
-            charIdx = 0;
-            currentEl = null;
-        }
-
-        const segments = aboutParagraphs[pIdx];
-        if (segIdx >= segments.length) {
-            pIdx++;
-            currentP = null;
-            currentEl = null;
-            typewriterTimer = setTimeout(typeNextChar, 180);
-            return;
-        }
-
-        const seg = segments[segIdx];
-        if (!currentEl) {
-            if (seg.tag) {
-                currentEl = document.createElement(seg.tag);
-                currentP.insertBefore(currentEl, cursor);
-            } else {
-                currentEl = document.createElement('span');
-                currentP.insertBefore(currentEl, cursor);
-            }
-        }
-
-        if (charIdx < seg.text.length) {
-            currentEl.textContent += seg.text[charIdx];
-            charIdx++;
-            const char = seg.text[charIdx - 1];
-            const speed = (char === '.' || char === ',') ? 65 : (12 + Math.random() * 8);
-            typewriterTimer = setTimeout(typeNextChar, speed);
-        } else {
-            segIdx++;
-            charIdx = 0;
-            currentEl = null;
-            typewriterTimer = setTimeout(typeNextChar, 20);
-        }
+        items.forEach(el => timelineObserver.observe(el));
+    } else {
+        items.forEach(el => el.classList.add('revealed'));
     }
 
-    typeNextChar();
+    // Segera tampilkan item pertama agar langsung terlihat
+    requestAnimationFrame(() => {
+        const first = pageTentang.querySelector('.story-step');
+        if (first) first.classList.add('revealed');
+    });
 }
 
+// Fallback jika ada panggilan legacy
+function startAboutTypewriter() {
+    initTentangTimeline();
+}
 function finishTypewriter() {
-    if (!isTyping) return;
-    if (typewriterTimer) clearTimeout(typewriterTimer);
-    isTyping = false;
-
-    const box = document.getElementById('aboutTypewriterBox');
-    if (!box) return;
-
-    box.innerHTML = `
-        <p><strong>Angkringan Sekota</strong> adalah warung makan khas angkringan yang berlokasi di Tulungagung, Jawa Timur. Kami hadir untuk memberikan pengalaman makan yang nyaman, hangat, dan penuh keakraban bagi semua kalangan.</p>
-        <p>Dengan menu yang beragam dan harga yang sangat terjangkau, kami selalu berusaha menjaga kualitas cita rasa khas angkringan yang autentik. Nikmati berbagai sajian lezat dari nasi kucing, gorengan, minuman hangat, hingga menu spesial kami yang menjadi favorit pelanggan setia.</p>
-        <p>Buka setiap hari mulai pukul <strong>17.00 – 23.00 WIB</strong>. Kami selalu menyambut Anda dengan hangat dan ramah.</p>
-    `;
+    const pageTentang = document.getElementById('page-tentang');
+    if (!pageTentang) return;
+    pageTentang.querySelectorAll('.story-step, .story-closing-box').forEach(el => el.classList.add('revealed'));
 }
 
 // =============================================
