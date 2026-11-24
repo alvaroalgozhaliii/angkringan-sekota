@@ -1,22 +1,20 @@
 <?php
 
 use App\Http\Controllers\Admin\AuthController;
+use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\PelangganController;
 use App\Http\Controllers\Admin\PengaturanTransaksiController;
 use App\Http\Controllers\Admin\PenggunaController;
 use App\Http\Controllers\Admin\PesananController;
-use App\Http\Controllers\Admin\PesanController;
 use App\Http\Controllers\Admin\ProfilAkunController;
 use App\Http\Controllers\Admin\ProfilController;
 use App\Http\Controllers\Admin\UlasanController;
 use App\Http\Controllers\Pegawai\BannerController;
-use App\Http\Controllers\Pegawai\DashboardController;
 use App\Http\Controllers\Pegawai\KasirController;
 use App\Http\Controllers\Pegawai\KontenController;
 use App\Http\Controllers\Pegawai\LogController;
 use App\Http\Controllers\Pegawai\PesananController as PegawaiPesananController;
 use App\Http\Controllers\Pegawai\ProdukController as PegawaiProdukController;
-use App\Http\Controllers\Pegawai\ProfilController as PegawaiProfilController;
 use App\Http\Controllers\Pegawai\TransaksiController;
 use App\Http\Controllers\PesananPublikController;
 use App\Http\Controllers\PesanPublikController;
@@ -93,17 +91,18 @@ Route::prefix('admin')->name('admin.')->group(function () {
         });
 
         Route::middleware('role:pegawai,super_admin')->group(function () {
-            Route::get('/pesan', [PesanController::class, 'index'])->name('pesan.index');
-            Route::get('/pesan/{pesan}', [PesanController::class, 'show'])->name('pesan.show');
-            Route::delete('/pesan/{pesan}', [PesanController::class, 'destroy'])->name('pesan.destroy');
-            Route::post('/pesan/mark-all-read', [PesanController::class, 'markAllRead'])->name('pesan.markAllRead');
-
             Route::get('/ulasan', [UlasanController::class, 'index'])->name('ulasan.index');
             Route::patch('/ulasan/{ulasan}/toggle', [UlasanController::class, 'toggleAktif'])->name('ulasan.toggle');
             Route::delete('/ulasan/{ulasan}', [UlasanController::class, 'destroy'])->name('ulasan.destroy');
         });
     });
 });
+
+Route::prefix('owner')->name('owner.')
+    ->middleware([AdminMiddleware::class, 'role:owner,super_admin'])
+    ->group(function () {
+        Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    });
 
 // ============================================================
 //  PEGAWAI — Dashboard operasional (/pegawai/...)
@@ -112,13 +111,6 @@ Route::prefix('admin')->name('admin.')->group(function () {
 Route::prefix('pegawai')->name('pegawai.')
     ->middleware([AdminMiddleware::class, 'role:pegawai,super_admin'])
     ->group(function () {
-        Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
-
-        Route::get('/profil', [PegawaiProfilController::class, 'edit'])->name('profil.edit');
-        Route::put('/profil', [PegawaiProfilController::class, 'update'])->name('profil.update');
-        Route::get('/password', [PegawaiProfilController::class, 'editPassword'])->name('password.edit');
-        Route::put('/password', [PegawaiProfilController::class, 'updatePassword'])->name('password.update');
-
         Route::get('/konten', [KontenController::class, 'index'])->name('konten.index');
         Route::put('/konten/halaman', [KontenController::class, 'updateHalaman'])->name('konten.halaman');
         Route::put('/konten/info', [KontenController::class, 'updateInfo'])->name('konten.info');

@@ -25,6 +25,7 @@ final class ActivityLogger
         return ActivityLog::create([
             'user_id' => $user?->id,
             'user_nama' => $actorNama ?? $user?->name ?? 'Sistem',
+            'role' => $user?->role ?? 'sistem',
             'modul' => $modul,
             'aksi' => $aksi,
             'entitas' => $entitas,
