@@ -108,12 +108,11 @@
     <strong style="font-size:.9rem">Daftar Banner</strong>
     <div class="table-wrap" style="margin-top:.75rem">
         <table>
-            <thead><tr><th>Gambar</th><th>Judul</th><th>Urutan</th><th>Status</th><th>Aksi</th></tr></thead>
+            <thead><tr><th>Gambar</th><th>Urutan</th><th>Status</th><th>Aksi</th></tr></thead>
             <tbody>
                 @forelse($profilBanners as $banner)
                     <tr>
-                        <td><img src="{{ $banner->gambar_url }}" alt="Banner" class="thumb"></td>
-                        <td>{{ $banner->judul ?: '-' }}</td>
+                        <td><img src="{{ $banner->gambar_url }}" alt="" class="thumb"></td>
                         <td>{{ $banner->urutan }}</td>
                         <td><span class="badge {{ $banner->is_aktif ? 'badge-green' : 'badge-gray' }}">{{ $banner->is_aktif ? 'Aktif' : 'Nonaktif' }}</span></td>
                         <td>
@@ -121,10 +120,20 @@
                                 <summary class="action-link">Ubah</summary>
                                 <form method="POST" action="{{ route('pegawai.banner.update', $banner) }}" enctype="multipart/form-data" style="margin-top:.6rem;max-width:360px">
                                     @csrf @method('PUT')
-                                    <div class="form-group"><label class="form-label">Judul</label><input name="judul" class="form-control" value="{{ $banner->judul }}"></div>
-                                    <div class="form-group"><label class="form-label">Ganti gambar (opsional)</label><input name="gambar" type="file" accept="image/*" class="form-control"></div>
-                                    <div class="form-group"><label class="form-label">Urutan</label><input name="urutan" type="number" min="0" class="form-control" value="{{ $banner->urutan }}"></div>
-                                    <label style="font-size:.82rem"><input type="checkbox" name="is_aktif" value="1" {{ $banner->is_aktif ? 'checked' : '' }}> Aktif</label>
+                                    <div class="form-group">
+                                        <label class="form-label" for="gambar-{{ $banner->id }}">Ganti gambar (opsional)</label>
+                                        <input id="gambar-{{ $banner->id }}" name="gambar" type="file" accept="image/jpeg,image/png,image/webp" class="form-control">
+                                        <div class="hint">JPG/PNG/WebP, maksimal 2 MB.</div>
+                                        @error('gambar') <div class="field-error">{{ $message }}</div> @enderror
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label" for="urutan-{{ $banner->id }}">Urutan</label>
+                                        <input id="urutan-{{ $banner->id }}" name="urutan" type="number" min="0" max="999" class="form-control" value="{{ old('urutan', $banner->urutan) }}">
+                                    </div>
+                                    <label class="form-label" for="is-aktif-{{ $banner->id }}" style="display:flex;align-items:center;gap:.5rem;cursor:pointer">
+                                        <input id="is-aktif-{{ $banner->id }}" type="checkbox" name="is_aktif" value="1" {{ old('is_aktif', $banner->is_aktif) ? 'checked' : '' }}>
+                                        Aktif
+                                    </label>
                                     <div style="margin-top:.6rem"><button class="btn-sm btn-red">Simpan</button></div>
                                 </form>
                             </details>
@@ -135,7 +144,7 @@
                         </td>
                     </tr>
                 @empty
-                    <tr><td colspan="5" class="hint">Belum ada banner.</td></tr>
+                    <tr><td colspan="4" class="hint">Belum ada banner.</td></tr>
                 @endforelse
             </tbody>
         </table>
@@ -145,12 +154,20 @@
     <strong style="font-size:.9rem">Tambah Banner</strong>
     <form method="POST" action="{{ route('pegawai.banner.store') }}" enctype="multipart/form-data" style="margin-top:.75rem;max-width:560px">
         @csrf
-        <div class="form-group"><label class="form-label">Judul</label><input name="judul" class="form-control" maxlength="255"></div>
-        <div class="form-group"><label class="form-label">Deskripsi</label><input name="deskripsi" class="form-control" maxlength="255"></div>
-        <div class="form-group"><label class="form-label">Tautan (opsional)</label><input name="link" type="url" class="form-control"></div>
-        <div class="form-group"><label class="form-label">Gambar banner</label><input name="gambar" type="file" accept="image/jpeg,image/png,image/webp" class="form-control" required><div class="hint">JPG/PNG/WebP, maksimal 2 MB.</div></div>
-        <div class="form-group"><label class="form-label">Urutan</label><input name="urutan" type="number" min="0" value="0" class="form-control"></div>
-        <label style="font-size:.82rem"><input type="checkbox" name="is_aktif" value="1" checked> Aktif</label>
+        <div class="form-group">
+            <label class="form-label" for="banner-gambar">Gambar banner</label>
+            <input id="banner-gambar" name="gambar" type="file" accept="image/jpeg,image/png,image/webp" class="form-control" required>
+            <div class="hint">JPG/PNG/WebP, maksimal 2 MB. Isi gambar dengan promo atau diskon yang ingin ditampilkan.</div>
+            @error('gambar') <div class="field-error">{{ $message }}</div> @enderror
+        </div>
+        <div class="form-group">
+            <label class="form-label" for="banner-urutan">Urutan</label>
+            <input id="banner-urutan" name="urutan" type="number" min="0" max="999" value="{{ old('urutan', 0) }}" class="form-control">
+        </div>
+        <label class="form-label" for="banner-aktif" style="display:flex;align-items:center;gap:.5rem;cursor:pointer">
+            <input id="banner-aktif" type="checkbox" name="is_aktif" value="1" {{ old('is_aktif', true) ? 'checked' : '' }}>
+            Aktif
+        </label>
         <div style="margin-top:.75rem"><button class="btn-sm btn-lg btn-red">Tambah banner</button></div>
     </form>
 </div>

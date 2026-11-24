@@ -13,9 +13,6 @@ class BannerController extends PegawaiController
     public function store(Request $request)
     {
         $data = $request->validate([
-            'judul' => 'nullable|string|max:255',
-            'deskripsi' => 'nullable|string|max:255',
-            'link' => 'nullable|url|max:1000',
             'urutan' => 'nullable|integer|min:0|max:999',
             'is_aktif' => 'nullable|boolean',
             'gambar' => 'required|image|mimes:jpg,jpeg,png,webp|max:'.UploadGambar::UKURAN_MAKSIMAL,
@@ -34,8 +31,8 @@ class BannerController extends PegawaiController
         $banner = DB::transaction(function () use ($data) {
             $banner = Banner::create($data);
             ActivityLogger::log('Tampilan Web', 'Tambah banner', null, [
-                'judul' => $banner->judul ?: '-',
                 'gambar' => $banner->gambar,
+                'urutan' => $banner->urutan,
                 'is_aktif' => $banner->is_aktif ? 'ya' : 'tidak',
             ], 'banner', $banner->id);
 
@@ -48,9 +45,6 @@ class BannerController extends PegawaiController
     public function update(Request $request, Banner $banner)
     {
         $data = $request->validate([
-            'judul' => 'nullable|string|max:255',
-            'deskripsi' => 'nullable|string|max:255',
-            'link' => 'nullable|url|max:1000',
             'urutan' => 'nullable|integer|min:0|max:999',
             'is_aktif' => 'nullable|boolean',
             'gambar' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:'.UploadGambar::UKURAN_MAKSIMAL,
@@ -59,7 +53,6 @@ class BannerController extends PegawaiController
         $data['is_aktif'] = $request->boolean('is_aktif');
 
         $sebelum = [
-            'judul' => $banner->judul ?: '-',
             'gambar' => $banner->gambar,
             'urutan' => $banner->urutan,
             'is_aktif' => $banner->is_aktif ? 'ya' : 'tidak',
@@ -73,7 +66,6 @@ class BannerController extends PegawaiController
         DB::transaction(function () use ($banner, $data, $sebelum) {
             $banner->update($data);
             ActivityLogger::log('Tampilan Web', 'Ubah banner', $sebelum, [
-                'judul' => $banner->judul ?: '-',
                 'gambar' => $banner->gambar,
                 'urutan' => $banner->urutan,
                 'is_aktif' => $banner->is_aktif ? 'ya' : 'tidak',
@@ -92,8 +84,8 @@ class BannerController extends PegawaiController
         $gambar = $banner->gambar;
         DB::transaction(function () use ($banner) {
             ActivityLogger::log('Tampilan Web', 'Hapus banner', [
-                'judul' => $banner->judul ?: '-',
                 'gambar' => $banner->gambar,
+                'urutan' => $banner->urutan,
             ], null, 'banner', $banner->id);
             $banner->delete();
         });

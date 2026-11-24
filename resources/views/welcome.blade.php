@@ -2714,69 +2714,6 @@
             object-fit: cover;
             object-position: center;
             display: block;
-            transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
-        }
-        .promo-banner-card:hover .promo-banner-img {
-            transform: scale(1.03);
-        }
-        .promo-banner-overlay {
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(180deg, rgba(15,15,18,0.02) 0%, rgba(15,15,18,0.3) 40%, rgba(15,15,18,0.85) 100%);
-            display: flex;
-            align-items: flex-end;
-            padding: 2rem 2.25rem;
-            z-index: 3;
-            pointer-events: none;
-        }
-        .promo-banner-content {
-            max-width: 720px;
-            pointer-events: auto;
-        }
-        .promo-banner-title {
-            color: #FFFFFF;
-            font-size: clamp(1.15rem, 2.6vw, 1.85rem);
-            font-weight: 800;
-            line-height: 1.25;
-            letter-spacing: -0.01em;
-            text-transform: uppercase;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.85);
-            margin: 0;
-        }
-        .promo-banner-desc {
-            color: rgba(255,255,255,0.92);
-            font-size: clamp(0.8rem, 1.4vw, 0.95rem);
-            line-height: 1.5;
-            margin: 0.45rem 0 0;
-            text-shadow: 0 1px 6px rgba(0,0,0,0.85);
-        }
-        .promo-banner-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.45rem;
-            margin-top: 0.85rem;
-            background: var(--red);
-            color: #FFFFFF;
-            padding: 0.45rem 1.15rem;
-            border-radius: 99px;
-            font-size: 0.8rem;
-            font-weight: 700;
-            letter-spacing: 0.02em;
-            box-shadow: 0 4px 14px rgba(200,16,46,0.45);
-            transition: all 0.2s ease;
-        }
-        .promo-banner-btn svg {
-            width: 15px;
-            height: 15px;
-            transition: transform 0.2s ease;
-        }
-        .promo-banner-card:hover .promo-banner-btn {
-            background: #E8203A;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 18px rgba(200,16,46,0.6);
-        }
-        .promo-banner-card:hover .promo-banner-btn svg {
-            transform: translateX(3px);
         }
 
         /* Navigasi Panah Kiri Kanan */
@@ -2787,23 +2724,22 @@
             width: 44px;
             height: 44px;
             border-radius: 50%;
-            background: rgba(18, 18, 22, 0.65);
-            backdrop-filter: blur(8px);
-            border: 1.5px solid rgba(255,255,255,0.25);
+            background: rgba(18, 18, 22, 0.82);
+            border: 1.5px solid rgba(255,255,255,0.45);
             color: #FFFFFF;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
             z-index: 10;
-            transition: all 0.25s ease;
-            box-shadow: 0 4px 14px rgba(0,0,0,0.3);
+            transition: background-color 0.2s ease, border-color 0.2s ease;
         }
         .promo-banner-arrow:hover {
             background: var(--red);
             border-color: var(--red);
-            transform: translateY(-50%) scale(1.1);
-            box-shadow: 0 6px 20px rgba(200,16,46,0.5);
+        }
+        .promo-banner-arrow:active {
+            background: #A50F28;
         }
         .promo-banner-arrow.prev { left: 16px; }
         .promo-banner-arrow.next { right: 16px; }
@@ -2815,33 +2751,86 @@
         /* Dot Indicators */
         .promo-banner-dots {
             position: absolute;
-            bottom: 14px;
+            bottom: 10px;
             left: 50%;
             transform: translateX(-50%);
             display: flex;
             align-items: center;
-            gap: 7px;
+            gap: 2px;
             z-index: 10;
-            padding: 4px 10px;
-            background: rgba(0,0,0,0.4);
-            backdrop-filter: blur(6px);
+            padding: 2px 6px;
+            background: rgba(18, 18, 22, 0.82);
+            border: 1px solid rgba(255,255,255,0.45);
             border-radius: 99px;
-            border: 1px solid rgba(255,255,255,0.15);
         }
         .banner-dot {
+            width: 44px;
+            height: 44px;
+            border-radius: 99px;
+            background: transparent;
+            border: none;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+        .banner-dot::before {
+            content: '';
+            display: block;
             width: 8px;
             height: 8px;
             border-radius: 99px;
-            background: rgba(255,255,255,0.45);
-            border: none;
-            padding: 0;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+            background: rgba(255,255,255,0.55);
+            transition: width 0.2s ease, background-color 0.2s ease;
         }
-        .banner-dot.active {
+        .banner-dot:hover::before {
+            background: #FFFFFF;
+        }
+        .banner-dot[aria-current='true']::before {
             width: 24px;
             background: #FFFFFF;
-            box-shadow: 0 0 10px rgba(255,255,255,0.85);
+        }
+        .promo-banner-pause {
+            position: absolute;
+            right: 16px;
+            bottom: 12px;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: rgba(18, 18, 22, 0.82);
+            border: 1.5px solid rgba(255,255,255,0.45);
+            color: #FFFFFF;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 10;
+            transition: background-color 0.2s ease, border-color 0.2s ease;
+        }
+        .promo-banner-pause:hover {
+            background: var(--red);
+            border-color: var(--red);
+        }
+        .promo-banner-pause:active {
+            background: #A50F28;
+        }
+        .promo-banner-pause svg {
+            width: 18px;
+            height: 18px;
+        }
+        .promo-banner-pause .icon-play,
+        .promo-banner-pause[aria-pressed='true'] .icon-pause {
+            display: none;
+        }
+        .promo-banner-pause[aria-pressed='true'] .icon-play {
+            display: block;
+        }
+        .promo-banner-arrow:focus-visible,
+        .banner-dot:focus-visible,
+        .promo-banner-pause:focus-visible {
+            outline: 3px solid #FFFFFF;
+            outline-offset: 2px;
         }
 
         @media (max-width: 768px) {
@@ -2853,18 +2842,15 @@
                 aspect-ratio: 16 / 9;
                 min-height: 200px;
             }
-            .promo-banner-overlay {
-                padding: 1.25rem 1.25rem;
+            .promo-banner-arrow.prev { left: 6px; }
+            .promo-banner-arrow.next { right: 6px; }
+            .promo-banner-dots {
+                bottom: 6px;
+                gap: 0;
             }
-            .promo-banner-arrow {
-                width: 34px;
-                height: 34px;
-            }
-            .promo-banner-arrow.prev { left: 8px; }
-            .promo-banner-arrow.next { right: 8px; }
-            .promo-banner-arrow svg {
-                width: 16px;
-                height: 16px;
+            .promo-banner-pause {
+                right: 6px;
+                bottom: 8px;
             }
         }
 
@@ -3399,11 +3385,7 @@
             .filter-btn { min-height: 44px; flex: 1 1 auto; justify-content: center; padding: 0.5rem 0.75rem; }
             .menu-search-input { font-size: 16px; min-height: 46px; }
             .btn-search-clear { width: 28px; height: 28px; right: 10px; }
-            .promo-banner-wrapper { aspect-ratio: auto; min-height: 190px; max-height: none; }
-            .promo-banner-overlay { padding: 1rem; }
-            .promo-banner-title { font-size: 1.1rem; }
-            .promo-banner-desc { font-size: 0.76rem; max-width: 100%; }
-            .promo-banner-btn { min-height: 40px; padding: 0.5rem 1rem; }
+            .promo-banner-wrapper { aspect-ratio: 16 / 9; min-height: 190px; max-height: none; }
             .modal-overlay { align-items: flex-end; padding: 0; }
             .modal-box { max-width: 100%; max-height: min(94dvh, 760px); border-radius: 20px 20px 0 0; padding-bottom: env(safe-area-inset-bottom); }
             .modal-header { padding: 0.85rem 1rem; position: sticky; top: 0; z-index: 2; }
@@ -3607,85 +3589,46 @@
          BANNER PROMO CAROUSEL (MENGGANTIKAN BEKAS BAGIAN ULASAN)
          Dapat diganti oleh pegawai melalui web admin
          ============================================================ --}}
-    <section class="promo-banner-section" aria-label="Banner Promo Angkringan Sekota">
-        <div class="promo-banner-container">
-            <div class="promo-banner-wrapper" id="promoBannerWrap">
-                @php
-                    $activeBanners = isset($banners) ? $banners : collect();
-                @endphp
-
-                @if($profil->tampilkan_banner && $activeBanners->count() > 0)
+    @php
+        $activeBanners = isset($banners) ? $banners : collect();
+    @endphp
+    @if($profil->tampilkan_banner && $activeBanners->isNotEmpty())
+        <section class="promo-banner-section" aria-label="Banner Promo Angkringan Sekota">
+            <div class="promo-banner-container">
+                <div class="promo-banner-wrapper" id="promoBannerWrap" data-autoplay-delay="5000">
                     <div class="promo-banner-track" id="promoBannerTrack">
                         @foreach($activeBanners as $index => $banner)
-                            <div class="promo-banner-slide {{ $index === 0 ? 'active' : '' }}" data-index="{{ $index }}">
-                                @if($banner->link)
-                                    <a href="{{ $banner->link }}" class="promo-banner-card" {!! str_starts_with($banner->link, 'http') ? 'target="_blank" rel="noopener"' : '' !!}>
-                                @else
-                                    <div class="promo-banner-card">
-                                @endif
-
-                                    <img src="{{ $banner->gambar_url }}" alt="{{ $banner->judul ?? 'Banner Promo' }}" class="promo-banner-img" loading="{{ $index === 0 ? 'eager' : 'lazy' }}">
-
-                                    @if($banner->judul || $banner->deskripsi)
-                                        <div class="promo-banner-overlay">
-                                            <div class="promo-banner-content">
-                                                @if($banner->judul)
-                                                    <h3 class="promo-banner-title">{{ $banner->judul }}</h3>
-                                                @endif
-                                                @if($banner->deskripsi)
-                                                    <p class="promo-banner-desc">{{ $banner->deskripsi }}</p>
-                                                @endif
-                                                @if($banner->link)
-                                                    <span class="promo-banner-btn">
-                                                        <span>Lihat Detail</span>
-                                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                                                    </span>
-                                                @endif
-                                            </div>
-                                        </div>
-                                    @endif
-
-                                @if($banner->link)
-                                    </a>
-                                @else
-                                    </div>
-                                @endif
+                            <div class="promo-banner-slide {{ $index === 0 ? 'active' : '' }}" data-index="{{ $index }}" @if($index !== 0) aria-hidden="true" @endif>
+                                <div class="promo-banner-card">
+                                    <img src="{{ $banner->gambar_url }}" alt="Banner promo Angkringan Sekota {{ $index + 1 }}" class="promo-banner-img" loading="{{ $index === 0 ? 'eager' : 'lazy' }}" decoding="async">
+                                </div>
                             </div>
                         @endforeach
                     </div>
 
                     @if($activeBanners->count() > 1)
                         <button type="button" class="promo-banner-arrow prev" id="bannerPrevBtn" aria-label="Banner Sebelumnya">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M15 18l-6-6 6-6"/></svg>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
                         </button>
                         <button type="button" class="promo-banner-arrow next" id="bannerNextBtn" aria-label="Banner Berikutnya">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M9 18l6-6-6-6"/></svg>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg>
                         </button>
 
-                        <div class="promo-banner-dots" id="bannerDotsWrap" role="tablist">
+                        <div class="promo-banner-dots" id="bannerDotsWrap" aria-label="Pilih banner">
                             @foreach($activeBanners as $index => $banner)
-                                <button type="button" class="banner-dot {{ $index === 0 ? 'active' : '' }}" onclick="goToBannerSlide({{ $index }})" aria-label="Slide {{ $index + 1 }}"></button>
+                                <button type="button" class="banner-dot {{ $index === 0 ? 'active' : '' }}" data-index="{{ $index }}" aria-label="Tampilkan banner {{ $index + 1 }}" @if($index === 0) aria-current="true" @endif></button>
                             @endforeach
                         </div>
+
+                        <button type="button" class="promo-banner-pause" id="bannerPauseBtn" aria-label="Jeda banner otomatis" aria-pressed="false">
+                            <svg class="icon-pause" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>
+                            <svg class="icon-play" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg>
+                        </button>
                     @endif
-                @else
-                    <div class="promo-banner-track">
-                        <div class="promo-banner-slide active">
-                            <div class="promo-banner-card">
-                                <img src="{{ asset('images/hero/slide1.jpg') }}" alt="Angkringan Sekota" class="promo-banner-img">
-                                <div class="promo-banner-overlay">
-                                    <div class="promo-banner-content">
-                                        <h3 class="promo-banner-title">Angkringan Sekota Tulungagung</h3>
-                                        <p class="promo-banner-desc">Buka tiap hari 17.00 - 23.00 WIB • Makanan &amp; Wedangan Khas Angkringan</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                @endif
+                </div>
             </div>
-        </div>
-    </section>
+        </section>
+    @endif
 
     <section class="bestsellers" aria-labelledby="home-menu-heading">
         {{-- Watermark logo samar: motif identitas yang sama dengan cap hero, opacity 5.5% (R-20) --}}
@@ -4796,88 +4739,166 @@ document.getElementById('orderNama')?.addEventListener('input', function() {
 // =============================================
 //  PROMO BANNER SLIDER (SEKOTA BANNER)
 // =============================================
-let currentBannerIdx = 0;
-let bannerTimer = null;
-
-function showBannerSlide(idx) {
-    const slides = document.querySelectorAll('.promo-banner-slide');
-    const dots   = document.querySelectorAll('.promo-banner-dots .banner-dot');
-    if (!slides.length) return;
-
-    slides.forEach(s => s.classList.remove('active'));
-    dots.forEach(d => d.classList.remove('active'));
-
-    currentBannerIdx = (idx + slides.length) % slides.length;
-    slides[currentBannerIdx].classList.add('active');
-    if (dots[currentBannerIdx]) {
-        dots[currentBannerIdx].classList.add('active');
-    }
-}
-
-function nextBannerSlide() {
-    showBannerSlide(currentBannerIdx + 1);
-}
-
-function prevBannerSlide() {
-    showBannerSlide(currentBannerIdx - 1);
-}
-
-window.goToBannerSlide = function(idx) {
-    showBannerSlide(idx);
-    resetBannerTimer();
-};
-
-function resetBannerTimer() {
-    clearInterval(bannerTimer);
-    const slides = document.querySelectorAll('.promo-banner-slide');
-    if (slides.length > 1) {
-        bannerTimer = setInterval(nextBannerSlide, 5000);
-    }
-}
-
 (function initPromoBanner() {
     const wrap = document.getElementById('promoBannerWrap');
-    const prev = document.getElementById('bannerPrevBtn');
-    const next = document.getElementById('bannerNextBtn');
     if (!wrap) return;
 
-    if (prev) {
-        prev.addEventListener('click', (e) => {
-            e.stopPropagation();
-            prevBannerSlide();
-            resetBannerTimer();
-        });
+    const slides = Array.from(wrap.querySelectorAll('.promo-banner-slide'));
+    if (slides.length < 2) return;
+
+    const dots = Array.from(wrap.querySelectorAll('.banner-dot'));
+    const prev = document.getElementById('bannerPrevBtn');
+    const next = document.getElementById('bannerNextBtn');
+    const pause = document.getElementById('bannerPauseBtn');
+    const delay = Number(wrap.dataset.autoplayDelay || 5000);
+    const reducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    let current = 0;
+    let timer = null;
+    let paused = reducedMotion;
+    let hovering = false;
+    let focusing = false;
+
+    function visibleIndexes() {
+        return slides.map((slide, index) => slide.hidden ? -1 : index).filter((index) => index !== -1);
     }
-    if (next) {
-        next.addEventListener('click', (e) => {
-            e.stopPropagation();
-            nextBannerSlide();
-            resetBannerTimer();
+
+    function updatePauseButton() {
+        if (!pause) return;
+        pause.setAttribute('aria-pressed', paused ? 'true' : 'false');
+        pause.setAttribute('aria-label', paused ? 'Lanjutkan banner otomatis' : 'Jeda banner otomatis');
+    }
+
+    function render() {
+        slides.forEach((slide, index) => {
+            const active = index === current;
+            slide.classList.toggle('active', active);
+            if (active) {
+                slide.removeAttribute('aria-hidden');
+            } else {
+                slide.setAttribute('aria-hidden', 'true');
+            }
+        });
+        dots.forEach((dot, index) => {
+            const active = index === current;
+            dot.classList.toggle('active', active);
+            if (active) {
+                dot.setAttribute('aria-current', 'true');
+            } else {
+                dot.removeAttribute('aria-current');
+            }
         });
     }
 
-    // Pause on hover
-    wrap.addEventListener('mouseenter', () => clearInterval(bannerTimer));
-    wrap.addEventListener('mouseleave', () => resetBannerTimer());
-
-    // Swipe touch support
-    let touchStartX = 0;
-    let touchEndX = 0;
-    wrap.addEventListener('touchstart', (e) => {
-        touchStartX = e.changedTouches[0].screenX;
-        clearInterval(bannerTimer);
-    }, { passive: true });
-    wrap.addEventListener('touchend', (e) => {
-        touchEndX = e.changedTouches[0].screenX;
-        if (touchEndX < touchStartX - 50) {
-            nextBannerSlide();
-        } else if (touchEndX > touchStartX + 50) {
-            prevBannerSlide();
+    function stop() {
+        if (timer !== null) {
+            clearInterval(timer);
+            timer = null;
         }
-        resetBannerTimer();
+    }
+
+    function start() {
+        stop();
+        if (paused || hovering || focusing || slides.length < 2) return;
+        timer = setInterval(() => move(1), delay);
+    }
+
+    function show(index) {
+        const visible = visibleIndexes();
+        if (!visible.length) {
+            wrap.hidden = true;
+            if (pause) pause.hidden = true;
+            stop();
+            return;
+        }
+        current = visible.includes(index) ? index : visible[0];
+        render();
+    }
+
+    function move(direction) {
+        const visible = visibleIndexes();
+        if (!visible.length) return;
+        const position = visible.indexOf(current);
+        const target = visible[(position + direction + visible.length) % visible.length];
+        show(target);
+        start();
+    }
+
+    dots.forEach((dot) => {
+        dot.addEventListener('click', () => {
+            if (dot.hidden) return;
+            show(Number(dot.dataset.index));
+            start();
+        });
+    });
+
+    if (prev) prev.addEventListener('click', () => move(-1));
+    if (next) next.addEventListener('click', () => move(1));
+
+    if (pause) {
+        pause.addEventListener('click', () => {
+            paused = !paused;
+            updatePauseButton();
+            start();
+        });
+    }
+
+    wrap.addEventListener('mouseenter', () => {
+        hovering = true;
+        stop();
+    });
+    wrap.addEventListener('mouseleave', () => {
+        hovering = false;
+        start();
+    });
+    wrap.addEventListener('focusin', () => {
+        focusing = true;
+        stop();
+    });
+    wrap.addEventListener('focusout', (event) => {
+        if (!wrap.contains(event.relatedTarget)) {
+            focusing = false;
+            start();
+        }
+    });
+
+    let touchStartX = 0;
+    wrap.addEventListener('touchstart', (event) => {
+        touchStartX = event.changedTouches[0].screenX;
+        stop();
+    }, { passive: true });
+    wrap.addEventListener('touchend', (event) => {
+        const touchEndX = event.changedTouches[0].screenX;
+        if (touchEndX < touchStartX - 50) {
+            move(1);
+        } else if (touchEndX > touchStartX + 50) {
+            move(-1);
+        } else {
+            start();
+        }
     }, { passive: true });
 
-    resetBannerTimer();
+    slides.forEach((slide) => {
+        const image = slide.querySelector('.promo-banner-img');
+        if (!image) return;
+        image.addEventListener('error', () => {
+            const index = slides.indexOf(slide);
+            slide.hidden = true;
+            if (dots[index]) dots[index].hidden = true;
+            if (slide.classList.contains('active')) {
+                const visible = visibleIndexes();
+                const nextIndex = visible.find((item) => item > index) ?? visible[0];
+                show(nextIndex);
+                start();
+            } else {
+                render();
+            }
+        });
+    });
+
+    render();
+    updatePauseButton();
+    start();
 })();
 
 // =============================================

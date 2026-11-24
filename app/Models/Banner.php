@@ -9,17 +9,14 @@ class Banner extends Model
     protected $table = 'banners';
 
     protected $fillable = [
-        'judul',
-        'deskripsi',
         'gambar',
-        'link',
         'urutan',
         'is_aktif',
     ];
 
     protected $casts = [
         'is_aktif' => 'boolean',
-        'urutan'   => 'integer',
+        'urutan' => 'integer',
     ];
 
     /**
@@ -27,7 +24,12 @@ class Banner extends Model
      */
     public function scopeAktif($query)
     {
-        return $query->where('is_aktif', 1)->orderBy('urutan', 'asc')->orderBy('id', 'desc');
+        return $query
+            ->where('is_aktif', 1)
+            ->whereNotNull('gambar')
+            ->where('gambar', '<>', '')
+            ->orderBy('urutan', 'asc')
+            ->orderBy('id', 'desc');
     }
 
     /**
@@ -35,7 +37,7 @@ class Banner extends Model
      */
     public function getGambarUrlAttribute(): string
     {
-        if (!$this->gambar) {
+        if (! $this->gambar) {
             return asset('images/hero/slide1.jpg');
         }
 
@@ -47,6 +49,6 @@ class Banner extends Model
             return asset($this->gambar);
         }
 
-        return asset('storage/' . $this->gambar);
+        return asset('storage/'.$this->gambar);
     }
 }
