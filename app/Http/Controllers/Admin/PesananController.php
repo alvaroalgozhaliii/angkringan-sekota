@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\PengaturanTransaksi;
 use App\Models\Transaksi;
+use App\Support\OrderStatus;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -26,6 +27,13 @@ class PesananController extends Controller
 
         if ($request->filled('status') && in_array($request->status, ['selesai', 'batal'], true)) {
             $query->where('status', $request->status);
+        }
+
+        if ($request->filled('grup') && is_string($request->grup)) {
+            $statuses = OrderStatus::grupAntrean()[$request->grup] ?? null;
+            if ($statuses !== null) {
+                $query->whereIn('status', $statuses);
+            }
         }
 
         if ($request->filled('tanggal_mulai')) {

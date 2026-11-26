@@ -29,6 +29,12 @@ class PesananController extends PegawaiController
         if ($request->filled('status') && array_key_exists($request->status, OrderStatus::labels())) {
             $query->where('status', $request->status);
         }
+        if ($request->filled('grup') && is_string($request->grup)) {
+            $statuses = OrderStatus::grupAntrean()[$request->grup] ?? null;
+            if ($statuses !== null) {
+                $query->whereIn('status', $statuses);
+            }
+        }
         if ($request->filled('metode') && in_array($request->metode, ['tunai', 'qris'], true)) {
             $query->where('metode_pembayaran', $request->metode);
         }

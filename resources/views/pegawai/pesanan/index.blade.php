@@ -10,6 +10,13 @@
     </div>
 </div>
 
+@if(is_string(request('grup')) && \App\Support\OrderStatus::labelGrupAntrean(request('grup')))
+    <div class="filter-notice">
+        Menampilkan antrian: <strong>{{ \App\Support\OrderStatus::labelGrupAntrean(request('grup')) }}</strong>.
+        <a href="{{ route('pegawai.pesanan.index') }}" class="action-link">Hapus filter</a>
+    </div>
+@endif
+
 <div class="panel">
     <form method="GET" action="{{ route('pegawai.pesanan.index') }}" class="filter-grid">
         <div class="form-group">
@@ -77,7 +84,7 @@
                         <td>{{ $item->formatted_total }}</td>
                         <td><span class="badge badge-{{ \App\Support\OrderStatus::badge($item->status) }}">{{ $item->status_label }}</span></td>
                         <td>
-                            <a href="{{ route('pegawai.pesanan.show', $item) }}" class="action-link">Detail / Proses →</a>
+                            <a href="{{ route('pegawai.pesanan.show', $item) }}" class="action-link">Detail / Proses</a>
                         </td>
                     </tr>
                 @empty

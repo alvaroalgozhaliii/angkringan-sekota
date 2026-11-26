@@ -60,6 +60,33 @@ final class OrderStatus
         };
     }
 
+    public static function grupAntrean(): array
+    {
+        return [
+            'menunggu_konfirmasi' => [
+                self::MENUNGGU_PERSETUJUAN,
+                self::MENUNGGU_PEMBAYARAN,
+                self::MENUNGGU_VERIFIKASI,
+            ],
+            'dalam_proses' => [
+                self::DIBAYAR,
+                self::DITERIMA,
+                self::DIPROSES,
+                self::DIKIRIM,
+            ],
+            'siap_diambil' => [self::SIAP_DIAMBIL],
+        ];
+    }
+
+    public static function labelGrupAntrean(string $grup): ?string
+    {
+        return [
+            'menunggu_konfirmasi' => 'Menunggu konfirmasi',
+            'dalam_proses' => 'Dalam proses',
+            'siap_diambil' => 'Siap diambil',
+        ][$grup] ?? null;
+    }
+
     public static function transisi(): array
     {
         return [

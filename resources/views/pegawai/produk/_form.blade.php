@@ -6,8 +6,19 @@
     </div>
     <div class="form-group">
         <label class="form-label" for="kategori">Kategori</label>
-        <input id="kategori" name="kategori" type="text" class="form-control" value="{{ old('kategori', $produk?->kategori) }}" placeholder="Mis. Makanan" maxlength="100">
-        <div class="hint">Kosongkan untuk kategori “Lainnya”.</div>
+        @php
+            $kategoriPilihan = ['Makanan', 'Minuman', 'Camilan'];
+            $kategoriSaatIni = old('kategori', $produk?->kategori ?? 'Makanan');
+        @endphp
+        <select id="kategori" name="kategori" class="form-control" required>
+            @foreach($kategoriPilihan as $kat)
+                <option value="{{ $kat }}" {{ strcasecmp((string)$kategoriSaatIni, $kat) === 0 ? 'selected' : '' }}>{{ $kat }}</option>
+            @endforeach
+            @if($kategoriSaatIni && !in_array(strtolower($kategoriSaatIni), ['makanan', 'minuman', 'camilan'], true))
+                <option value="{{ $kategoriSaatIni }}" selected>{{ $kategoriSaatIni }}</option>
+            @endif
+        </select>
+        <div class="hint">Pilih jenis menu: Makanan, Minuman, atau Camilan.</div>
         @error('kategori') <div class="field-error">{{ $message }}</div> @enderror
     </div>
     <div class="form-group">

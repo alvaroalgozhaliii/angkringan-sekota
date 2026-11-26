@@ -65,6 +65,6 @@ class AuthController extends Controller
             ? redirect()->route('admin.pengguna.index')
             : (Auth::user()->isOwner()
                 ? redirect()->route('owner.dashboard')
-                : redirect()->route('pegawai.kasir.index'));
+                : redirect()->route('pegawai.dashboard'));
     }
 }

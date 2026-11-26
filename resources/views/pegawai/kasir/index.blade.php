@@ -2,100 +2,6 @@
 @section('page-title', 'Kasir')
 @section('title', 'Kasir')
 
-@push('styles')
-<style>
-    .qty-stepper {
-        display: inline-flex;
-        align-items: center;
-        background: #fff;
-        border: 1.5px solid var(--border);
-        border-radius: 8px;
-        overflow: hidden;
-        box-shadow: 0 1px 2px rgba(0,0,0,.03);
-        transition: border-color .2s, box-shadow .2s;
-        vertical-align: middle;
-    }
-    .qty-stepper:focus-within {
-        border-color: var(--red);
-        box-shadow: 0 0 0 3px rgba(200,16,46,.1);
-    }
-    .btn-qty {
-        width: 36px;
-        height: 36px;
-        min-width: 36px;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        background: #F9FAFB;
-        color: var(--text);
-        border: none;
-        font-size: 1.15rem;
-        font-weight: 700;
-        line-height: 1;
-        cursor: pointer;
-        user-select: none;
-        touch-action: manipulation;
-        transition: background-color .15s, color .15s;
-    }
-    .btn-qty:hover:not(:disabled) {
-        background: #FEE2E2;
-        color: var(--red);
-    }
-    .btn-qty:active:not(:disabled) {
-        background: #FECACA;
-        color: var(--red-dark);
-    }
-    .btn-qty:focus-visible {
-        outline: 2px solid var(--red);
-        outline-offset: -2px;
-    }
-    .btn-qty:disabled {
-        opacity: 0.35;
-        cursor: not-allowed;
-        background: #F3F4F6;
-    }
-    .qty-stepper .qty-kasir {
-        width: 48px;
-        height: 36px;
-        padding: 0 .25rem;
-        text-align: center;
-        border: none;
-        border-left: 1px solid var(--border);
-        border-right: 1px solid var(--border);
-        border-radius: 0;
-        font-weight: 600;
-        font-size: .92rem;
-        color: var(--text);
-        background: transparent;
-        box-shadow: none;
-        -moz-appearance: textfield;
-    }
-    .qty-stepper .qty-kasir::-webkit-inner-spin-button,
-    .qty-stepper .qty-kasir::-webkit-outer-spin-button {
-        -webkit-appearance: none;
-        margin: 0;
-    }
-    .qty-stepper .qty-kasir:focus {
-        outline: none;
-        background: #FEF2F2;
-        box-shadow: none;
-    }
-    @media (max-width: 768px) {
-        .btn-qty {
-            width: 40px;
-            height: 40px;
-            min-width: 40px;
-            font-size: 1.25rem;
-        }
-        .qty-stepper .qty-kasir {
-            width: 44px;
-            height: 40px;
-            font-size: 1rem;
-        }
-    }
-</style>
-@endpush
-
 @section('content')
 @php
     $itemsLama = [];
@@ -129,7 +35,7 @@
         <div class="kasir-toolbar">
             <div class="kasir-search">
                 <label class="form-label" for="cari-menu">Cari menu</label>
-                <input id="cari-menu" type="search" class="form-control" placeholder="Nama menu" autocomplete="off">
+                <input id="cari-menu" type="search" class="form-control" placeholder="Nama menu..." autocomplete="off">
             </div>
             <div class="kasir-toolbar-meta">
                 <span id="jumlah-menu" aria-live="polite" class="kasir-count">Menampilkan {{ $produk->count() }} menu</span>
@@ -137,39 +43,13 @@
             </div>
         </div>
 
-<<<<<<< HEAD
-        <div class="panel">
-            <div class="panel-title">Pilih Menu ({{ $produk->count() }})</div>
-            @if($produk->isEmpty())
-                <div class="hint">Belum ada produk tayang. Tambahkan produk terlebih dahulu.</div>
-            @else
-                <div class="table-wrap">
-                    <table>
-                        <thead><tr><th>Menu</th><th>Harga</th><th>Stok</th><th style="width:130px;text-align:center">Qty</th></tr></thead>
-                        <tbody>
-                            @foreach($produk as $item)
-                                <tr data-produk data-id="{{ $item->id }}" data-harga="{{ (float) $item->harga }}">
-                                    <td>
-                                        <strong>{{ $item->nama }}</strong>
-                                        <div class="hint">{{ $item->kategori }}</div>
-                                    </td>
-                                    <td>{{ $item->harga_format }}</td>
-                                    <td>{{ $item->stok }}</td>
-                                    <td style="text-align:center">
-                                        <div class="qty-stepper">
-                                            <button type="button" class="btn-qty btn-qty-minus" aria-label="Kurangi jumlah {{ $item->nama }}" data-action="minus" {{ $item->stok <= 0 ? 'disabled' : '' }}>−</button>
-                                            <input type="number" class="form-control qty-kasir" min="0" max="{{ $item->stok }}" step="1" value="0" data-maks="{{ $item->stok }}" inputmode="numeric" aria-label="Jumlah {{ $item->nama }}" {{ $item->stok <= 0 ? 'disabled' : '' }}>
-                                            <button type="button" class="btn-qty btn-qty-plus" aria-label="Tambah jumlah {{ $item->nama }}" data-action="plus" {{ $item->stok <= 0 ? 'disabled' : '' }}>+</button>
-                                        </div>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
-            @endif
+        <div class="kasir-cat-tabs" id="kasir-cat-tabs" role="tablist" aria-label="Filter kategori menu">
+            <button type="button" class="kasir-cat-btn active" data-kategori="semua" role="tab" aria-selected="true">Semua Menu</button>
+            <button type="button" class="kasir-cat-btn" data-kategori="makanan" role="tab" aria-selected="false">Makanan</button>
+            <button type="button" class="kasir-cat-btn" data-kategori="minuman" role="tab" aria-selected="false">Minuman</button>
+            <button type="button" class="kasir-cat-btn" data-kategori="camilan" role="tab" aria-selected="false">Camilan</button>
         </div>
-=======
+
         @if($produk->isEmpty())
             <div class="kasir-empty">
                 <strong>Belum ada menu tayang.</strong>
@@ -191,23 +71,26 @@
                         data-menu
                         data-id="{{ $item->id }}"
                         data-nama="{{ strtolower($item->nama) }}"
+                        data-kategori="{{ strtolower($item->kategori ?? 'makanan') }}"
                         data-harga="{{ (float) $item->harga }}"
                         data-stok="{{ (int) $item->stok }}"
                         data-qty-awal="{{ $qtyAwal }}"
                         {{ $habis ? 'disabled' : '' }}
-                        aria-label="{{ $habis ? $item->nama.', stok habis' : 'Tambah '.$item->nama }}"
+                        aria-label="{{ $habis ? $item->nama.', stok habis' : 'Pilih '.$item->nama }}"
                     >
-                        <span class="menu-tile-top">
-                            <span class="menu-tile-nama">{{ $item->nama }}</span>
+                        <div class="menu-tile-thumb">
+                            <img src="{{ $item->gambar_url }}" alt="{{ $item->nama }}" loading="lazy" onerror="this.onerror=null;this.classList.add('img-fallback');">
                             @if($item->is_best_seller)
                                 <span class="menu-tile-best">Terlaris</span>
                             @endif
-                        </span>
-                        <span class="menu-tile-harga">{{ $item->harga_format }}</span>
-                        <span class="menu-tile-bawah">
-                            <span class="menu-tile-stok">{{ $habis ? 'Stok habis' : 'Stok '.$item->stok }}</span>
-                            <span class="menu-tile-tambah" aria-hidden="true">{{ $habis ? '×' : '+' }}</span>
-                        </span>
+                        </div>
+                        <div class="menu-tile-content">
+                            <span class="menu-tile-nama">{{ $item->nama }}</span>
+                            <div class="menu-tile-bawah">
+                                <span class="menu-tile-harga">{{ $item->harga_format }}</span>
+                                <span class="menu-tile-stok">{{ $habis ? 'Stok habis' : 'Stok '.$item->stok }}</span>
+                            </div>
+                        </div>
                     </button>
                 @endforeach
             </div>
@@ -216,7 +99,6 @@
                 <span>Hapus kata kunci pencarian untuk melihat semua menu.</span>
             </div>
         @endif
->>>>>>> 33dda617376f4c861e8d254db5bceaab96f61929
     </div>
 
     <div class="kasir-tray" id="kasir-tray">
@@ -288,33 +170,49 @@
 
 @push('styles')
 <style>
-    .kasir-panel{padding:1rem}
+    .kasir-panel{padding:1rem;margin-bottom:6rem}
     .page-header .btn-sm,.kasir-toolbar .btn-sm,.checkout-head .btn-sm{min-height:44px}
-    .kasir-toolbar{display:flex;align-items:end;justify-content:space-between;gap:1rem;margin-bottom:1rem}
+    .kasir-toolbar{display:flex;align-items:end;justify-content:space-between;gap:1rem;margin-bottom:.75rem}
     .kasir-search{flex:1 1 320px;max-width:420px}
     .kasir-toolbar-meta{display:flex;align-items:center;gap:.75rem;padding-bottom:.15rem}
     .kasir-count{font-size:.78rem;color:var(--muted)}
-    .kasir-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:.75rem}
-    .menu-tile{min-height:132px;display:flex;flex-direction:column;align-items:stretch;justify-content:space-between;gap:.45rem;text-align:left;background:var(--white);border:1px solid var(--border);border-radius:10px;padding:.85rem;color:var(--text);cursor:pointer;transition:border-color .15s,background .15s,transform .15s}
-    .menu-tile:hover:not(:disabled){border-color:var(--red);background:#FEF2F2;transform:translateY(-1px)}
+
+    /* Category Filter Tabs */
+    .kasir-cat-tabs{display:flex;align-items:center;gap:.5rem;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:.5rem;margin-bottom:1.15rem;scrollbar-width:none}
+    .kasir-cat-tabs::-webkit-scrollbar{display:none}
+    .kasir-cat-btn{padding:.45rem 1.15rem;border-radius:999px;border:1.5px solid var(--border);background:var(--white);color:var(--text);font-size:.82rem;font-weight:600;cursor:pointer;white-space:nowrap;transition:all .18s;min-height:40px;display:inline-flex;align-items:center;justify-content:center}
+    .kasir-cat-btn:hover{border-color:var(--red);color:var(--red);background:#FEF2F2}
+    .kasir-cat-btn.active{background:var(--red);border-color:var(--red);color:#fff;box-shadow:0 2px 8px rgba(200,16,46,.25)}
+    .kasir-cat-btn:focus-visible{outline:2px solid var(--red);outline-offset:2px}
+
+    /* Menu Grid & Cards */
+    .kasir-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(165px,1fr));gap:.85rem}
+    .menu-tile{display:flex;flex-direction:column;align-items:stretch;text-align:left;background:var(--white);border:1.5px solid var(--border);border-radius:12px;overflow:hidden;padding:0;color:var(--text);cursor:pointer;transition:border-color .15s,box-shadow .15s,transform .15s;position:relative}
+    .menu-tile:hover:not(:disabled){border-color:var(--red);background:#FEF2F2;transform:translateY(-2px);box-shadow:0 6px 16px rgba(200,16,46,.08)}
     .menu-tile:active:not(:disabled){transform:translateY(0);background:#FEE2E2}
     .menu-tile:focus-visible{outline:2px solid var(--red);outline-offset:2px}
-    .menu-tile.is-best{border-top:3px solid var(--red)}
-    .menu-tile.is-out{background:#374151;border-color:#374151;color:#F9FAFB;cursor:not-allowed}
-    .menu-tile-top{display:flex;align-items:flex-start;justify-content:space-between;gap:.4rem}
-    .menu-tile-nama{font-size:.88rem;font-weight:700;line-height:1.35;overflow-wrap:anywhere}
-    .menu-tile-best{flex:none;font-size:.65rem;font-weight:700;color:var(--red);background:#FEE2E2;border-radius:4px;padding:.15rem .3rem}
-    .menu-tile.is-out .menu-tile-best{color:#F9FAFB;background:#4B5563}
-    .menu-tile-harga{font-size:.82rem;font-weight:600;color:var(--red)}
-    .menu-tile.is-out .menu-tile-harga{color:#FCA5A5}
-    .menu-tile-bawah{display:flex;align-items:center;justify-content:space-between;gap:.5rem}
-    .menu-tile-stok{font-size:.72rem;color:var(--muted)}
-    .menu-tile.is-out .menu-tile-stok{color:#E5E7EB}
-    .menu-tile-tambah{display:grid;place-items:center;width:30px;height:30px;flex:none;border-radius:8px;background:var(--red);color:var(--white);font-size:1.1rem;font-weight:700;line-height:1}
-    .menu-tile.is-out .menu-tile-tambah{background:#4B5563;color:#D1D5DB}
+    .menu-tile.is-best{border-top:3.5px solid var(--red)}
+    .menu-tile.is-selected{border-color:var(--red);box-shadow:0 0 0 2px var(--red);background:#FFF5F5}
+    .menu-tile.is-out{background:#F9FAFB;border-color:var(--border);cursor:not-allowed}
+    .menu-tile.is-out img{filter:grayscale(90%);opacity:.65}
+
+    .menu-tile-thumb{position:relative;width:100%;aspect-ratio:4/3;background:#F3F4F6;overflow:hidden}
+    .menu-tile-thumb img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .2s}
+    .menu-tile:hover:not(:disabled) .menu-tile-thumb img{transform:scale(1.04)}
+    .menu-tile-best{position:absolute;top:7px;left:7px;font-size:.65rem;font-weight:700;color:#fff;background:var(--red);border-radius:4px;padding:2px 6px;box-shadow:0 2px 4px rgba(0,0,0,.25);z-index:2}
+    .menu-tile-badge{position:absolute;top:7px;right:7px;font-size:.74rem;font-weight:800;color:#fff;background:var(--red);border:1.5px solid #fff;border-radius:12px;padding:2px 7px;box-shadow:0 2px 6px rgba(0,0,0,.3);z-index:2}
+    .menu-tile.is-out .menu-tile-best{background:#4B5563;color:#F9FAFB}
+
+    .menu-tile-content{padding:.75rem;display:flex;flex-direction:column;flex:1;justify-content:space-between;gap:.4rem}
+    .menu-tile-nama{font-size:.88rem;font-weight:700;line-height:1.35;color:var(--text);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+    .menu-tile-bawah{display:flex;align-items:baseline;justify-content:space-between;gap:.4rem;margin-top:auto}
+    .menu-tile-harga{font-size:.84rem;font-weight:700;color:var(--red)}
+    .menu-tile-stok{font-size:.72rem;color:var(--muted);white-space:nowrap}
+    .menu-tile.is-out .menu-tile-stok{color:#DC2626;font-weight:600}
+
     .kasir-empty,.kasir-no-result{display:flex;flex-direction:column;gap:.3rem;padding:2rem 1rem;text-align:center;color:var(--muted);font-size:.85rem}
     .kasir-empty strong,.kasir-no-result strong{color:var(--text)}
-    .kasir-tray{position:fixed;left:0;right:0;bottom:0;z-index:80;display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.7rem max(1rem,calc((100vw - 960px)/2));background:var(--white);border-top:1px solid var(--border);box-shadow:0 -2px 10px rgba(31,41,55,.06)}
+    .kasir-tray{position:fixed;left:var(--sidebar-w,220px);right:0;bottom:0;z-index:45;display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.85rem 1.5rem;background:var(--white);border-top:1px solid var(--border);box-shadow:0 -4px 16px rgba(0,0,0,.08)}
     .kasir-tray-ringkas{display:flex;align-items:baseline;gap:.75rem;min-width:0}
     .kasir-tray-ringkas span{font-size:.8rem;color:var(--muted)}
     .kasir-tray-ringkas strong{font-size:1.05rem;white-space:nowrap}
@@ -332,12 +230,13 @@
     .checkout-item-nama{font-size:.85rem;font-weight:600;overflow-wrap:anywhere}
     .checkout-item-harga{font-size:.75rem;color:var(--muted)}
     .qty-control{display:inline-flex;align-items:center;gap:.3rem}
-    .qty-control button{width:34px;height:34px;border:1px solid var(--border);border-radius:7px;background:var(--white);color:var(--text);font-size:1rem;font-weight:700;cursor:pointer}
+    .qty-control button{width:36px;height:36px;border:1px solid var(--border);border-radius:7px;background:var(--white);color:var(--text);font-size:1.1rem;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;touch-action:manipulation;user-select:none;transition:background-color .15s,color .15s}
     .qty-control button:hover:not(:disabled){border-color:var(--red);color:var(--red);background:#FEF2F2}
+    .qty-control button:active:not(:disabled){background:#FECACA;color:var(--red-dark)}
     .qty-control button:focus-visible,.checkout-hapus:focus-visible,.checkout-head button:focus-visible,.checkout-foot button:focus-visible{outline:2px solid var(--red);outline-offset:2px}
     .qty-control button:disabled{color:#9CA3AF;background:var(--gray-100);cursor:not-allowed}
-    .qty-control span{min-width:24px;text-align:center;font-size:.85rem;font-weight:700}
-    .checkout-hapus{min-height:34px;border:0;background:none;color:var(--red);font-size:.75rem;font-weight:600;cursor:pointer}
+    .qty-control span{min-width:28px;text-align:center;font-size:.9rem;font-weight:700}
+    .checkout-hapus{min-height:36px;border:0;background:none;color:var(--red);font-size:.78rem;font-weight:600;cursor:pointer;padding:0 .5rem}
     .checkout-hapus:hover{text-decoration:underline}
     .checkout-subtotal{font-size:.85rem;font-weight:700;white-space:nowrap}
     .checkout-kosong,.checkout-error{font-size:.82rem;color:var(--muted)}
@@ -350,25 +249,29 @@
     .checkout-total strong{font-size:1.2rem}
     .checkout-kembalian{font-size:.75rem;color:var(--muted);min-height:1rem}
     @media(max-width:900px){
-        .kasir-tray{padding:.65rem 1rem}
+        .kasir-tray{left:0;padding:.75rem 1rem}
         .checkout-modal{width:min(680px,calc(100% - 1rem));max-height:94dvh}
         .checkout-body{max-height:calc(94dvh - 155px)}
     }
     @media(max-width:600px){
-        .kasir-panel{padding:.85rem}
+        .kasir-panel{padding:.75rem;margin-bottom:6.5rem}
         .kasir-toolbar{align-items:stretch;flex-direction:column;gap:.6rem}
         .kasir-search{max-width:none}
-        .kasir-grid{grid-template-columns:repeat(auto-fill,minmax(145px,1fr));gap:.6rem}
-        .menu-tile{min-height:128px;padding:.7rem}
-        .kasir-tray{gap:.6rem;padding:calc(.6rem + env(safe-area-inset-bottom)) .75rem .6rem}
-        .kasir-tray .btn-sm{min-width:150px;justify-content:center}
+        .kasir-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:.6rem}
+        .menu-tile-thumb{aspect-ratio:1/1}
+        .menu-tile-content{padding:.55rem}
+        .menu-tile-nama{font-size:.8rem}
+        .menu-tile-harga{font-size:.78rem}
+        .menu-tile-stok{font-size:.68rem}
+        .kasir-tray{left:0;gap:.6rem;padding:.65rem .85rem calc(.65rem + env(safe-area-inset-bottom))}
+        .kasir-tray .btn-sm{min-width:140px;justify-content:center}
         .checkout-modal{width:100%;max-height:100dvh;border-radius:12px 12px 0 0;margin:auto 0 0}
         .checkout-head,.checkout-body,.checkout-foot{padding-left:.85rem;padding-right:.85rem}
         .checkout-body{max-height:calc(100dvh - 190px)}
         .checkout-item{grid-template-columns:minmax(0,1fr) auto;gap:.45rem}
         .checkout-item .qty-control{grid-column:1}
         .checkout-hapus,.checkout-subtotal{grid-column:2;justify-self:end}
-        .qty-control button{width:44px;height:44px}
+        .qty-control button{width:40px;height:40px;font-size:1.2rem}
         .checkout-hapus{min-height:44px}
         .checkout-grid{grid-template-columns:1fr}
         .checkout-catatan{grid-column:auto}
@@ -404,82 +307,6 @@
     const rupiah = (n) => 'Rp' + new Intl.NumberFormat('id-ID').format(n);
     const keranjang = new Map();
 
-<<<<<<< HEAD
-    function updateStepperState(row) {
-        const input = row.querySelector('.qty-kasir');
-        const btnMinus = row.querySelector('.btn-qty-minus');
-        const btnPlus = row.querySelector('.btn-qty-plus');
-        const maks = Number(input.dataset.maks || 0);
-        const val = Number(input.value) || 0;
-
-        if (maks <= 0) {
-            if (btnMinus) btnMinus.disabled = true;
-            if (btnPlus) btnPlus.disabled = true;
-            input.disabled = true;
-            return;
-        }
-
-        if (btnMinus) btnMinus.disabled = val <= 0;
-        if (btnPlus) btnPlus.disabled = val >= maks;
-    }
-
-    function hitung() {
-        let total = 0;
-        rows.forEach((row) => {
-            const input = row.querySelector('.qty-kasir');
-            const qty = Math.max(0, Number(input.value) || 0);
-            total += Number(row.dataset.harga) * qty;
-            updateStepperState(row);
-        });
-        totalEl.textContent = rupiah(total);
-        if (metode && metode.value === 'qris' && uang) {
-            uang.value = total;
-        }
-        return total;
-    }
-
-    rows.forEach((row) => {
-        const input = row.querySelector('.qty-kasir');
-        const btnMinus = row.querySelector('.btn-qty-minus');
-        const btnPlus = row.querySelector('.btn-qty-plus');
-        const maks = Number(input.dataset.maks || 0);
-
-        if (btnMinus) {
-            btnMinus.addEventListener('click', () => {
-                let current = Number(input.value) || 0;
-                if (current > 0) {
-                    input.value = current - 1;
-                    input.dispatchEvent(new Event('input', { bubbles: true }));
-                }
-            });
-        }
-
-        if (btnPlus) {
-            btnPlus.addEventListener('click', () => {
-                let current = Number(input.value) || 0;
-                if (current < maks) {
-                    input.value = current + 1;
-                    input.dispatchEvent(new Event('input', { bubbles: true }));
-                }
-            });
-        }
-
-        input.addEventListener('input', () => {
-            let val = Number(input.value) || 0;
-            if (val < 0) input.value = 0;
-            if (val > maks) input.value = maks;
-            hitung();
-        });
-
-        input.addEventListener('change', () => {
-            let val = Number(input.value) || 0;
-            if (val < 0) input.value = 0;
-            if (val > maks) input.value = maks;
-            hitung();
-        });
-    });
-
-=======
     tiles.forEach((tile) => {
         const qty = Number(tile.dataset.qtyAwal || 0);
         if (qty > 0 && Number(tile.dataset.stok || 0) > 0) {
@@ -516,6 +343,26 @@
         buka.setAttribute('aria-expanded', modal.open ? 'true' : 'false');
         kosongItem.hidden = keranjang.size > 0;
         daftarItem.replaceChildren();
+
+        // Update tile badges
+        tiles.forEach((tile) => {
+            const id = tile.dataset.id;
+            const item = keranjang.get(id);
+            let badge = tile.querySelector('.menu-tile-badge');
+            if (item && item.qty > 0) {
+                tile.classList.add('is-selected');
+                if (!badge) {
+                    badge = document.createElement('span');
+                    badge.className = 'menu-tile-badge';
+                    const container = tile.querySelector('.menu-tile-thumb') || tile;
+                    container.appendChild(badge);
+                }
+                badge.textContent = item.qty + 'x';
+            } else {
+                tile.classList.remove('is-selected');
+                if (badge) badge.remove();
+            }
+        });
 
         keranjang.forEach((item, id) => {
             const baris = document.createElement('div');
@@ -578,20 +425,39 @@
             : '';
     }
 
+    let currentCategory = 'semua';
+    const catButtons = Array.from(document.querySelectorAll('.kasir-cat-btn'));
+
+    catButtons.forEach((btn) => {
+        btn.addEventListener('click', () => {
+            currentCategory = btn.dataset.kategori;
+            catButtons.forEach((b) => {
+                const active = b === btn;
+                b.classList.toggle('active', active);
+                b.setAttribute('aria-selected', active ? 'true' : 'false');
+            });
+            filterMenu();
+        });
+    });
+
     function filterMenu() {
         if (!grid) return;
-        const kata = cari.value.trim().toLowerCase();
+        const kata = cari ? cari.value.trim().toLowerCase() : '';
         let tampil = 0;
         tiles.forEach((tile) => {
-            const cocok = tile.dataset.nama.includes(kata);
+            const nama = (tile.dataset.nama || '').toLowerCase();
+            const kategori = (tile.dataset.kategori || '').toLowerCase();
+            const cocokKata = !kata || nama.includes(kata);
+            const cocokKat = currentCategory === 'semua' || kategori === currentCategory;
+            const cocok = cocokKata && cocokKat;
             tile.hidden = !cocok;
             if (cocok) tampil++;
         });
-        jumlahMenu.textContent = kata === ''
+        jumlahMenu.textContent = kata === '' && currentCategory === 'semua'
             ? 'Menampilkan ' + tiles.length + ' menu'
             : 'Menampilkan ' + tampil + ' dari ' + tiles.length + ' menu';
-        kosongkan.hidden = kata === '';
-        noResult.hidden = tampil > 0;
+        if (kosongkan) kosongkan.hidden = kata === '';
+        if (noResult) noResult.hidden = tampil > 0;
     }
 
     tiles.forEach((tile) => {
@@ -650,7 +516,6 @@
     });
 
     let uangTunaiSebelumnya = uang.value;
->>>>>>> 33dda617376f4c861e8d254db5bceaab96f61929
     metode.addEventListener('change', () => {
         if (metode.value === 'qris') {
             if (uang.readOnly === false) uangTunaiSebelumnya = uang.value;

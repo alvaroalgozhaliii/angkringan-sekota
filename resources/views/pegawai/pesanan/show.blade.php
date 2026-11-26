@@ -130,7 +130,7 @@
                     <form method="POST" action="{{ route('pegawai.pesanan.verifikasiQris', $transaksi) }}" onsubmit="return confirm('Validasi pembayaran ini? Stok akan dikurangi otomatis.')">
                         @csrf
                         <input type="hidden" name="keputusan" value="valid">
-                        <button class="btn-sm btn-lg btn-green">Validasi bukti — mulai proses</button>
+                        <button class="btn-sm btn-lg btn-green">Validasi bukti dan mulai proses</button>
                     </form>
                     <form method="POST" action="{{ route('pegawai.pesanan.verifikasiQris', $transaksi) }}" onsubmit="return confirm('Tolak pembayaran ini? Pelanggan harus mengunggah ulang bukti bayar.')" style="margin-top:.75rem">
                         @csrf
@@ -153,7 +153,7 @@
                             <label class="form-label" for="uang_diterima">Uang diterima (Rp)</label>
                             <input id="uang_diterima" name="uang_diterima" type="number" min="0" step="1" class="form-control" value="{{ $transaksi->total_harga }}" required>
                         </div>
-                        <button class="btn-sm btn-lg btn-green">Konfirmasi uang diterima — mulai proses</button>
+                        <button class="btn-sm btn-lg btn-green">Konfirmasi uang diterima dan mulai proses</button>
                     </form>
                 @endif
             @endif

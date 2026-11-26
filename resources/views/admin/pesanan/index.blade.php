@@ -10,6 +10,13 @@
     </div>
 </div>
 
+@if(is_string(request('grup')) && \App\Support\OrderStatus::labelGrupAntrean(request('grup')))
+    <div class="filter-notice">
+        Menampilkan antrian: <strong>{{ \App\Support\OrderStatus::labelGrupAntrean(request('grup')) }}</strong>.
+        <a href="{{ route('admin.pesanan.index') }}" class="action-link">Hapus filter</a>
+    </div>
+@endif
+
 <div class="panel">
     <form method="GET" action="{{ route('admin.pesanan.index') }}">
         <div class="order-filters" style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr auto;gap:.75rem;align-items:flex-end">

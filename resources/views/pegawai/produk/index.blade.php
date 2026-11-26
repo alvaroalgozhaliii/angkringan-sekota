@@ -18,7 +18,12 @@
         </div>
         <div class="form-group">
             <label class="form-label">Kategori</label>
-            <input name="kategori" class="form-control" value="{{ request('kategori') }}" placeholder="Mis. Makanan">
+            <select name="kategori" class="form-control">
+                <option value="">Semua kategori</option>
+                @foreach(['Makanan', 'Minuman', 'Camilan'] as $kat)
+                    <option value="{{ $kat }}" {{ strcasecmp((string)request('kategori'), $kat) === 0 ? 'selected' : '' }}>{{ $kat }}</option>
+                @endforeach
+            </select>
         </div>
         <div class="form-group">
             <label class="form-label">Status</label>

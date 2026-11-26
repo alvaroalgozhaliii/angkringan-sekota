@@ -16,6 +16,7 @@ class PegawaiAksesTest extends TestCase
     {
         $pegawai = $this->buatUser('pegawai');
 
+        $this->actingAs($pegawai)->get('/pegawai/dashboard')->assertOk();
         $this->actingAs($pegawai)->get('/pegawai/kasir')->assertOk()
             ->assertDontSee('Dashboard Pegawai')
             ->assertDontSee('Pesan Masuk')

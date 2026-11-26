@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\ProfilAkunController;
 use App\Http\Controllers\Admin\ProfilController;
 use App\Http\Controllers\Admin\UlasanController;
 use App\Http\Controllers\Pegawai\BannerController;
+use App\Http\Controllers\Pegawai\DashboardController as PegawaiDashboardController;
 use App\Http\Controllers\Pegawai\KasirController;
 use App\Http\Controllers\Pegawai\KontenController;
 use App\Http\Controllers\Pegawai\LogController;
@@ -111,6 +112,7 @@ Route::prefix('owner')->name('owner.')
 Route::prefix('pegawai')->name('pegawai.')
     ->middleware([AdminMiddleware::class, 'role:pegawai,super_admin'])
     ->group(function () {
+        Route::get('/dashboard', [PegawaiDashboardController::class, 'index'])->name('dashboard');
         Route::get('/konten', [KontenController::class, 'index'])->name('konten.index');
         Route::put('/konten/halaman', [KontenController::class, 'updateHalaman'])->name('konten.halaman');
         Route::put('/konten/info', [KontenController::class, 'updateInfo'])->name('konten.info');

@@ -1,6 +1,5 @@
 @extends('admin.layouts.app')
 @section('page-title', 'Ulasan Pengunjung')
-@section('page-icon', '⭐')
 @section('title', 'Ulasan Pengunjung')
 
 @section('content')
